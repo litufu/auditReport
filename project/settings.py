@@ -1,8 +1,8 @@
 from docx.oxml.ns import qn
 from docx.enum.style import WD_STYLE_TYPE
 from docx.shared import Pt,Cm
-from docx.shared import Inches,RGBColor
-from docx.enum.text import WD_LINE_SPACING,WD_PARAGRAPH_ALIGNMENT
+from docx.shared import RGBColor
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 
 

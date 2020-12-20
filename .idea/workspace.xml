@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="8" />
+    <option name="CUSTOM_SCOPE_NAME" value="All Places" />
+  </component>
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/project/noteappended.py" description="addParagraph(document, &quot;1、&#9;未经抵销的递延所得税资产&quot;, &quot;paragra..." line="1038" />
+    <bookmark url="file://$PROJECT_DIR$/project/noteappended.py" description="addParagraph(document, &quot;1、&#9;未经抵销的递延所得税资产&quot;, &quot;paragra..." line="1202" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14fb975a-77bd-40a5-b05d-e0409a4de0b1" name="Default Changelist" comment="" />
+    <list default="true" id="14fb975a-77bd-40a5-b05d-e0409a4de0b1" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/computeNo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/project/fsmodel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/changeAndErrorCorrection.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/changeAndErrorCorrection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/combine.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/combine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/default.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/default.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/financialStatements.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/financialStatements.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/fs.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/model.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/project/model.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/noteappended.docx" beforeDir="false" afterPath="$PROJECT_DIR$/project/noteappended.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/noteappended.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/noteappended.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/notes.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/notes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/report.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/report.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/tax.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/tax.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/~$model.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/~$teappended.docx" beforeDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,57 +39,60 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/auditReport$fsmodel.coverage" NAME="fsmodel Coverage Results" MODIFIED="1608431337746" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
+    <SUITE FILE_PATH="coverage/auditReport$noteappended.coverage" NAME="noteappended Coverage Results" MODIFIED="1608456583178" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
+    <SUITE FILE_PATH="coverage/auditReport$notes.coverage" NAME="notes Coverage Results" MODIFIED="1608462377851" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
+    <SUITE FILE_PATH="coverage/auditReport$zipfile.coverage" NAME="zipfile Coverage Results" MODIFIED="1607825001070" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="C:/ProgramData/Anaconda3/Lib" />
+    <SUITE FILE_PATH="coverage/auditReport$main.coverage" NAME="main Coverage Results" MODIFIED="1608462491763" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
+    <SUITE FILE_PATH="coverage/auditReport$changeAndErrorCorrection.coverage" NAME="changeAndErrorCorrection Coverage Results" MODIFIED="1608465433592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
     <SUITE FILE_PATH="coverage/auditReport$lesson2.coverage" NAME="lesson2 Coverage Results" MODIFIED="1604395346681" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/study" />
     <SUITE FILE_PATH="coverage/auditReport$study.coverage" NAME="study Coverage Results" MODIFIED="1603867999606" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/auditReport$utils.coverage" NAME="utils Coverage Results" MODIFIED="1604394870619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
-    <SUITE FILE_PATH="coverage/auditReport$notes.coverage" NAME="notes Coverage Results" MODIFIED="1604284791272" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
-    <SUITE FILE_PATH="coverage/auditReport$noteappended.coverage" NAME="noteappended Coverage Results" MODIFIED="1605320418298" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
-    <SUITE FILE_PATH="coverage/auditReport$combine.coverage" NAME="combine Coverage Results" MODIFIED="1604419000851" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
-    <SUITE FILE_PATH="coverage/auditReport$changeAndErrorCorrection.coverage" NAME="changeAndErrorCorrection Coverage Results" MODIFIED="1604391072960" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
-    <SUITE FILE_PATH="coverage/auditReport$data.coverage" NAME="data Coverage Results" MODIFIED="1604133071231" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
+    <SUITE FILE_PATH="coverage/auditReport$combine.coverage" NAME="combine Coverage Results" MODIFIED="1607357513912" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
+    <SUITE FILE_PATH="coverage/auditReport$data.coverage" NAME="data Coverage Results" MODIFIED="1607864647980" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
     <SUITE FILE_PATH="coverage/auditReport$lesson3.coverage" NAME="lesson3 Coverage Results" MODIFIED="1603877252792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/study" />
-    <SUITE FILE_PATH="coverage/auditReport$report.coverage" NAME="report Coverage Results" MODIFIED="1603934153706" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
-    <SUITE FILE_PATH="coverage/auditReport$tax.coverage" NAME="tax Coverage Results" MODIFIED="1604392391437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
-    <SUITE FILE_PATH="coverage/auditReport$financialStatements.coverage" NAME="financialStatements Coverage Results" MODIFIED="1606050003620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
+    <SUITE FILE_PATH="coverage/auditReport$report.coverage" NAME="report Coverage Results" MODIFIED="1607231524767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
+    <SUITE FILE_PATH="coverage/auditReport$tax.coverage" NAME="tax Coverage Results" MODIFIED="1607356922311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
+    <SUITE FILE_PATH="coverage/auditReport$financialStatements.coverage" NAME="financialStatements Coverage Results" MODIFIED="1608442382493" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/project" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="1740103677">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="14" />
+          <entry key="project.closed" value="22" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.open.time.7" value="7" />
-          <entry key="project.open.time.8" value="4" />
+          <entry key="project.open.time.7" value="13" />
+          <entry key="project.open.time.8" value="7" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="18" />
+          <entry key="project.opened" value="27" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="gitignore" value="1" />
-          <entry key="py" value="68" />
+          <entry key="gitignore" value="2" />
+          <entry key="py" value="147" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="68" />
+          <entry key="PLAIN_TEXT" value="2" />
+          <entry key="Python" value="147" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="gitignore" value="24" />
-          <entry key="py" value="22957" />
+          <entry key="gitignore" value="28" />
+          <entry key="py" value="44825" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="24" />
-          <entry key="Python" value="22957" />
+          <entry key="PLAIN_TEXT" value="28" />
+          <entry key="Python" value="44825" />
         </counts>
       </usages-collector>
     </session>
@@ -70,24 +100,73 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/project/utils.py">
+        <entry file="file://$PROJECT_DIR$/project/noteappended.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8056">
-              <caret line="424" column="60" selection-start-line="424" selection-start-column="60" selection-end-line="424" selection-end-column="60" />
+            <state relative-caret-position="47595">
+              <caret line="2505" column="54" lean-forward="true" selection-start-line="2505" selection-start-column="54" selection-end-line="2505" selection-end-column="54" />
               <folding>
-                <element signature="e#0#33#0" expanded="true" />
-                <marker date="1605918458897" expanded="true" signature="6147:6303" ph="..." />
-                <marker date="1605918458897" expanded="true" signature="14396:14488" ph="..." />
+                <element signature="e#25#50#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/project/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-209">
+              <caret line="19" column="57" lean-forward="true" selection-start-line="19" selection-start-column="57" selection-end-line="19" selection-end-column="57" />
+              <folding>
+                <element signature="e#25#57#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/project/changeAndErrorCorrection.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1862">
-              <caret line="7" column="45" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="45" />
+            <state relative-caret-position="278">
+              <caret line="380" column="10" lean-forward="true" selection-start-line="380" selection-start-column="10" selection-end-line="380" selection-end-column="10" />
+              <folding>
+                <element signature="e#25#50#0" expanded="true" />
+                <marker date="1608465433147" expanded="true" signature="16937:17084" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/project/utils.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="438" selection-start-line="438" selection-end-line="438" />
+              <folding>
+                <element signature="e#0#33#0" expanded="true" />
+                <marker date="1608454006849" expanded="true" signature="6209:6366" ph="..." />
+                <marker date="1608454006849" expanded="true" signature="14512:14607" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/project/constants.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="2994" column="16" selection-start-line="2994" selection-end-line="2994" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/project/combine.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="196" column="30" lean-forward="true" selection-start-line="193" selection-start-column="4" selection-end-line="196" selection-end-column="30" />
+              <folding>
+                <marker date="1608452834185" expanded="true" signature="9796:9906" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,8 +174,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/project/data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1203">
-              <caret line="15" column="24" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="24" />
+            <state relative-caret-position="38">
+              <caret line="2" column="9" selection-start-line="2" selection-start-column="5" selection-end-line="2" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -111,39 +190,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/project/settings.py">
+        <entry file="file://$PROJECT_DIR$/project/financialStatements.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="779">
-              <caret line="41" column="69" selection-start-line="41" selection-start-column="48" selection-end-line="41" selection-end-column="69" />
+            <state relative-caret-position="356">
+              <caret line="615" column="9" selection-start-line="615" selection-start-column="4" selection-end-line="615" selection-end-column="9" />
               <folding>
-                <element signature="e#0#27#0" expanded="true" />
-                <marker date="1605918915262" expanded="true" signature="347:348" ph="..." />
+                <element signature="e#25#50#0" expanded="true" />
+                <marker date="1608456086476" expanded="true" signature="301:302" ph="..." />
+                <marker date="1608456086476" expanded="true" signature="35218:36669" ph="..." />
+                <marker date="1608456086476" expanded="true" signature="37098:37479" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/project/combine.py">
+        <entry file="file://$PROJECT_DIR$/project/fsmodel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3203">
-              <caret line="8" selection-start-line="8" selection-end-line="8" />
+            <state relative-caret-position="90">
+              <caret line="76" column="33" selection-start-line="76" selection-start-column="33" selection-end-line="76" selection-end-column="33" />
               <folding>
-                <element signature="e#25#50#0" expanded="true" />
-                <marker date="1604418992024" expanded="true" signature="9211:9539" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/project/financialStatements.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="366">
-              <caret line="510" column="79" selection-start-line="510" selection-start-column="79" selection-end-line="510" selection-end-column="79" />
-              <folding>
-                <element signature="e#25#50#0" expanded="true" />
-                <marker date="1606050003489" expanded="true" signature="45804:46860" ph="..." />
+                <element signature="e#25#44#0" expanded="true" />
+                <marker date="1608460307036" expanded="true" signature="122:3455" ph="..." />
+                <marker date="1608460307036" expanded="true" signature="207:581" ph="..." />
+                <marker date="1608460307036" expanded="true" signature="2437:2914" ph="..." />
+                <marker date="1608460307036" expanded="true" signature="2925:3417" ph="..." />
               </folding>
             </state>
           </provider>
@@ -160,66 +231,72 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>addParagraph</find>
-      <find>addT</find>
-      <find>本公司</find>
-      <find>&quot;paragraph&quot;</find>
-      <find>line_spacing</find>
-      <find>借款费用</find>
-      <find>increase</find>
-      <find>title</find>
-      <find>&quot;table&quot;</find>
-      <find>本集团</find>
-      <find>addCombineTableTitle</find>
-      <find>setCell</find>
+      <find>加：其他收益</find>
+      <find>addEquityInOtherEntities</find>
+      <find>addContent1</find>
+      <find>addContent5</find>
+      <find>本公司无单项计提减值准备的银行承兑汇票</find>
+      <find>现金流量表补充资料</find>
+      <find>funcDict</find>
+      <find>reportType</find>
+      <find>getAlignAndText</find>
+      <find>context</find>
+      <find>addRisksRelatedToFinancialInstruments</find>
+      <find>type</find>
+      <find>addFs</find>
+      <find>computeNoteNum</find>
+      <find>addFsNote</find>
+      <find>addFormNote</find>
+      <find>addRevenueCost</find>
+      <find>1F737B00</find>
+      <find>checkOneConditon</find>
+      <find>checkCondition</find>
+      <find>addImportantAccountingPoliciesAndAccountingEstimates</find>
       <find>criterion</find>
-      <find>addCombineTitleSpecialReceivable</find>
-      <find>s</find>
-      <find>整个存续期预期信用损失</find>
-      <find>addcontent</find>
-      <find>addLandscapeContent</find>
-      <find>其他应收款</find>
-      <find>paragraph</find>
-      <find>tableCharacter</find>
-      <find>zero</find>
-      <find>PT</find>
-      <find>dot</find>
-      <find>create</find>
-      <find>merge</find>
-      <find>tableSmallCharacter</find>
-      <find>addL</find>
-      <find>addContent</find>
-      <find>cashRecords</find>
+      <find>addHeader</find>
+      <find>reportype</find>
+      <find>合同资产</find>
+      <find>MODELPATH</find>
+      <find>fs_params</find>
+      <find>addNewFinancialInstrumentsChange</find>
+      <find>addNewIncomeCriteria</find>
+      <find>newStandardFuncs</find>
     </findStrings>
     <replaceStrings>
       <replace>print</replace>
       <replace>本公司</replace>
       <replace>&quot;paragraphAfterSpace&quot;</replace>
       <replace>&quot;paidInCapital&quot;:0.00,&quot;preferedStock&quot;:0.00,&quot;perpetualDebt&quot;:0.00,&quot;otherEquityInstruments&quot;:0.00,&quot;capitalReserve&quot;:0.00,&quot;treasuryStock&quot;:0.00,&quot;otherComprehensiveIncome&quot;:0.00,&quot;specialReserve&quot;:0.00,&quot;surplusReserve&quot;:0.00,&quot;generalRiskReserve&quot;:0.00,&quot;undistributedProfit&quot;:0.00,&quot;subtotal&quot;:0.00,&quot;minorityInterests&quot;:0.00,&quot;totalOwnerEquity&quot;:0.00</replace>
+      <replace>path</replace>
     </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/study.py" />
         <option value="$PROJECT_DIR$/study/lesson3.py" />
-        <option value="$PROJECT_DIR$/project/default.py" />
-        <option value="$PROJECT_DIR$/project/constants.py" />
-        <option value="$PROJECT_DIR$/project/main.py" />
-        <option value="$PROJECT_DIR$/project/report.py" />
         <option value="D:/审计/审计小插件/modify_doc_xls/modify.py" />
-        <option value="$PROJECT_DIR$/project/tax.py" />
         <option value="$PROJECT_DIR$/study/lesson2.py" />
-        <option value="$PROJECT_DIR$/project/changeAndErrorCorrection.py" />
-        <option value="$PROJECT_DIR$/project/combine.py" />
         <option value="$PROJECT_DIR$/project/parentCompany.py" />
-        <option value="$PROJECT_DIR$/project/notes.py" />
         <option value="$PROJECT_DIR$/project/data.py" />
-        <option value="$PROJECT_DIR$/project/noteappended.py" />
+        <option value="$PROJECT_DIR$/project/constants.py" />
+        <option value="$PROJECT_DIR$/project/default.py" />
+        <option value="$PROJECT_DIR$/project/report.py" />
+        <option value="$PROJECT_DIR$/project/combine.py" />
+        <option value="$PROJECT_DIR$/project/tax.py" />
         <option value="$PROJECT_DIR$/project/settings.py" />
         <option value="$PROJECT_DIR$/project/utils.py" />
         <option value="$PROJECT_DIR$/project/financialStatements.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/project/noteappended.py" />
+        <option value="$PROJECT_DIR$/project/computeNo.py" />
+        <option value="$PROJECT_DIR$/project/fsmodel.py" />
+        <option value="$PROJECT_DIR$/project/main.py" />
+        <option value="$PROJECT_DIR$/project/notes.py" />
+        <option value="$PROJECT_DIR$/project/changeAndErrorCorrection.py" />
       </list>
     </option>
   </component>
@@ -229,17 +306,21 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="765" />
-    <option name="y" value="95" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="35" />
+    <option name="y" value="5" />
     <option name="width" value="980" />
     <option name="height" value="1040" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -250,13 +331,12 @@
             <path>
               <item name="auditReport" type="b2602c69:ProjectViewProjectNode" />
               <item name="auditReport" type="462c0819:PsiDirectoryNode" />
-              <item name="study" type="462c0819:PsiDirectoryNode" />
+              <item name="project" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -265,6 +345,7 @@
     <property name="last_opened_file_path" value="D:/审计/审计小插件/modify_doc_xls" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -284,8 +365,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.financialStatements">
-    <configuration name="combine" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.changeAndErrorCorrection">
+    <configuration name="changeAndErrorCorrection" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="auditReport" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -298,7 +379,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/project/combine.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/project/changeAndErrorCorrection.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -329,7 +410,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="lesson2" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="auditReport" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -337,12 +418,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/study" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/project" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/study/lesson2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/project/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -373,7 +454,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="utils" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="notes" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="auditReport" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -386,7 +467,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/project/utils.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/project/notes.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -396,19 +477,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.lesson2" />
-      <item itemvalue="Python.combine" />
-      <item itemvalue="Python.utils" />
+      <item itemvalue="Python.main" />
       <item itemvalue="Python.noteappended" />
+      <item itemvalue="Python.notes" />
       <item itemvalue="Python.financialStatements" />
+      <item itemvalue="Python.changeAndErrorCorrection" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.financialStatements" />
+        <item itemvalue="Python.changeAndErrorCorrection" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.notes" />
         <item itemvalue="Python.noteappended" />
-        <item itemvalue="Python.combine" />
-        <item itemvalue="Python.lesson2" />
-        <item itemvalue="Python.utils" />
+        <item itemvalue="Python.financialStatements" />
       </list>
     </recent_temporary>
   </component>
@@ -428,21 +509,22 @@
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4978903" visible="true" weight="0.31367293" />
-      <window_info id="Structure" order="1" sideWeight="0.5021097" side_tool="true" weight="0.27010724" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4957806" visible="true" weight="0.1575067" />
+      <window_info id="Structure" order="1" sideWeight="0.5042194" side_tool="true" weight="0.15884718" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Inspection Results" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32956153" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32956153" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39886847" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3286119" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.398017" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.32956153" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.33002833" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32956153" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -481,45 +563,21 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/project/noteappended.py</url>
-          <line>152</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/project/noteappended.py</url>
-          <line>154</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/project/noteappended.py</url>
-          <line>155</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/project/utils.py</url>
-          <line>410</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/project/utils.py</url>
-          <line>412</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/project/utils.py</url>
-          <line>419</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="args[3]" />
+        <watch expression="args[3]" language="Python" />
+        <watch expression="profitRecords" />
       </configuration>
     </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>args[3]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://D:/pythonproject/venv/Lib/site-packages/docx/styles/styles.py">
@@ -557,24 +615,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://D:/pythonproject/venv/Lib/site-packages/pandas/io/excel/_base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-392">
-          <caret line="303" column="22" selection-start-line="303" selection-start-column="13" selection-end-line="303" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/pythonproject/venv/Lib/site-packages/docx/oxml/text/run.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
           <caret line="103" selection-start-line="103" selection-end-line="103" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project/report.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
         </state>
       </provider>
     </entry>
@@ -596,50 +640,10 @@
     <entry file="file://D:/我的文件/杭州城投/报告合并/检查明细表/check.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/project/tax.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="6" lean-forward="true" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/study/lesson2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="250">
           <caret line="25" column="36" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project/notes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6857">
-          <caret line="1050" column="17" lean-forward="true" selection-start-line="1050" selection-start-column="17" selection-end-line="1050" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project/parentCompany.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project/main.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://D:/pythonproject/venv/Lib/site-packages/xlrd/book.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="475" selection-start-line="475" selection-end-line="475" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project/noteappended.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="19" selection-start-line="19" selection-end-line="19" />
-          <folding>
-            <element signature="e#25#50#0" expanded="true" />
-            <marker date="1605320507319" expanded="true" signature="458:584" ph="..." />
-            <marker date="1605320507319" expanded="true" signature="1912:1913" ph="..." />
-            <marker date="1605320507319" expanded="true" signature="5262:5375" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -650,61 +654,65 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/project/settings.py">
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/zipfile.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="779">
-          <caret line="41" column="69" selection-start-line="41" selection-start-column="48" selection-end-line="41" selection-end-column="69" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-            <marker date="1605918915262" expanded="true" signature="347:348" ph="..." />
-          </folding>
+        <state relative-caret-position="205">
+          <caret line="1206" column="53" lean-forward="true" selection-start-line="1206" selection-start-column="53" selection-end-line="1206" selection-end-column="53" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/project/utils.py">
+    <entry file="file://D:/pythonproject/venv/Lib/site-packages/pandas/io/excel/_xlrd.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8056">
-          <caret line="424" column="60" selection-start-line="424" selection-start-column="60" selection-end-line="424" selection-end-column="60" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-            <marker date="1605918458897" expanded="true" signature="6147:6303" ph="..." />
-            <marker date="1605918458897" expanded="true" signature="14396:14488" ph="..." />
-          </folding>
+        <state relative-caret-position="148">
+          <caret line="43" selection-start-line="43" selection-end-line="43" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/project/changeAndErrorCorrection.py">
+    <entry file="file://D:/pythonproject/venv/Lib/site-packages/pandas/io/excel/_base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1862">
-          <caret line="7" column="45" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="45" />
+        <state relative-caret-position="19">
+          <caret line="438" selection-start-line="438" selection-end-line="438" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/project/constants.py">
+    <entry file="file://D:/pythonproject/venv/Lib/site-packages/xlrd/book.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="473" selection-start-line="473" selection-end-line="473" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/parentCompany.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/project/combine.py">
+    <entry file="file://$PROJECT_DIR$/project/tax.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3203">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="570">
+          <caret line="35" column="26" lean-forward="true" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
           <folding>
-            <element signature="e#25#50#0" expanded="true" />
-            <marker date="1604418992024" expanded="true" signature="9211:9539" ph="..." />
+            <marker date="1608452894511" expanded="true" signature="880:982" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/project/data.py">
+    <entry file="file://$PROJECT_DIR$/project/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1203">
-          <caret line="15" column="24" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="24" />
+        <state relative-caret-position="171">
+          <caret line="9" column="11" lean-forward="true" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+            <marker date="1608454006895" expanded="true" signature="324:325" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/project/default.py">
+    <entry file="file://$PROJECT_DIR$/project/report.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="18" column="8" selection-start-line="18" selection-start-column="8" selection-end-line="18" selection-end-column="8" />
+        <state relative-caret-position="4897">
+          <caret line="294" lean-forward="true" selection-start-line="294" selection-end-line="294" />
+          <folding>
+            <element signature="e#25#50#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -715,13 +723,123 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/project/computeNo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="202" column="39" lean-forward="true" selection-start-line="202" selection-start-column="4" selection-end-line="202" selection-end-column="39" />
+          <folding>
+            <marker date="1608456032886" expanded="true" signature="9841:9842" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/project/financialStatements.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="510" column="79" selection-start-line="510" selection-start-column="79" selection-end-line="510" selection-end-column="79" />
+        <state relative-caret-position="356">
+          <caret line="615" column="9" selection-start-line="615" selection-start-column="4" selection-end-line="615" selection-end-column="9" />
           <folding>
             <element signature="e#25#50#0" expanded="true" />
-            <marker date="1606050003489" expanded="true" signature="45804:46860" ph="..." />
+            <marker date="1608456086476" expanded="true" signature="301:302" ph="..." />
+            <marker date="1608456086476" expanded="true" signature="35218:36669" ph="..." />
+            <marker date="1608456086476" expanded="true" signature="37098:37479" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/fsmodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="76" column="33" selection-start-line="76" selection-start-column="33" selection-end-line="76" selection-end-column="33" />
+          <folding>
+            <element signature="e#25#44#0" expanded="true" />
+            <marker date="1608460307036" expanded="true" signature="122:3455" ph="..." />
+            <marker date="1608460307036" expanded="true" signature="207:581" ph="..." />
+            <marker date="1608460307036" expanded="true" signature="2437:2914" ph="..." />
+            <marker date="1608460307036" expanded="true" signature="2925:3417" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/notes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="59" lean-forward="true" selection-start-line="10" selection-start-column="59" selection-end-line="10" selection-end-column="59" />
+          <folding>
+            <element signature="e#25#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/noteappended.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="47595">
+          <caret line="2505" column="54" lean-forward="true" selection-start-line="2505" selection-start-column="54" selection-end-line="2505" selection-end-column="54" />
+          <folding>
+            <element signature="e#25#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-209">
+          <caret line="19" column="57" lean-forward="true" selection-start-line="19" selection-start-column="57" selection-end-line="19" selection-end-column="57" />
+          <folding>
+            <element signature="e#25#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/constants.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="2994" column="16" selection-start-line="2994" selection-end-line="2994" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="9" selection-start-line="2" selection-start-column="5" selection-end-line="2" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/default.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="18" column="8" selection-start-line="18" selection-start-column="8" selection-end-line="18" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/combine.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="196" column="30" lean-forward="true" selection-start-line="193" selection-start-column="4" selection-end-line="196" selection-end-column="30" />
+          <folding>
+            <marker date="1608452834185" expanded="true" signature="9796:9906" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="438" selection-start-line="438" selection-end-line="438" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+            <marker date="1608454006849" expanded="true" signature="6209:6366" ph="..." />
+            <marker date="1608454006849" expanded="true" signature="14512:14607" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/changeAndErrorCorrection.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="380" column="10" lean-forward="true" selection-start-line="380" selection-start-column="10" selection-end-line="380" selection-end-column="10" />
+          <folding>
+            <element signature="e#25#50#0" expanded="true" />
+            <marker date="1608465433147" expanded="true" signature="16937:17084" ph="..." />
           </folding>
         </state>
       </provider>

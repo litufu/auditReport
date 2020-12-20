@@ -3,46 +3,31 @@
 from docx import Document
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
-from project.data import report_params, notes_params
 from project.settings import setStyle
-from project.utils import to_chinese,addTitle,addTable,addParagraph
+from project.utils import to_chinese,addTitle,addTable,addParagraph,searchRecordItemByName,searchModel
 
-
-# 取值
-criterion = notes_params["criterion"]
-type = report_params["type"]
-companyName = report_params["companyName"]
-reportNo = report_params["reportNo"]
-companyAbbrName = report_params["CompanyAbbrName"]
-reportDate = report_params["reportDate"]
-reportPeriod = report_params["reportPeriod"]
-
-document = Document()
-# 设置中文标题
-setStyle(document)
-styles = document.styles
-
-# ABC公司
-title_company = document.add_paragraph(style="paragraph")
-title_company.add_run(companyName, style="title")
-title_company.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-# 2018年度财务报表附注
-title_period = document.add_paragraph(style="paragraph")
-period = reportPeriod + "财务报表附注"
-title_period.add_run(period, style="title")
-title_period.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-# （除特别说明外，金额单位为人民币元）
-title_currency_unit = document.add_paragraph(style="paragraph")
-currency_unit = "（除特别说明外，金额单位为{}）".format(notes_params["currencyUnit"])
-title_currency_unit.add_run(currency_unit, style="first")
-title_currency_unit.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
-document.add_paragraph()
-
-
+def addHeader(document,context):
+    companyName = context["report_params"]["companyName"]
+    reportPeriod = context["report_params"]["reportPeriod"]
+    # ABC公司
+    title_company = document.add_paragraph(style="paragraph")
+    title_company.add_run(companyName, style="title")
+    title_company.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+    # 2018年度财务报表附注
+    title_period = document.add_paragraph(style="paragraph")
+    period = reportPeriod + "财务报表附注"
+    title_period.add_run(period, style="title")
+    title_period.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+    # （除特别说明外，金额单位为人民币元）
+    title_currency_unit = document.add_paragraph(style="paragraph")
+    currency_unit = "（除特别说明外，金额单位为{}）".format(context["notes_params"]["currencyUnit"])
+    title_currency_unit.add_run(currency_unit, style="first")
+    title_currency_unit.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
+    document.add_paragraph()
 
 # 序号递增
-def increase(content):
-    if type == "单体":
+def increase(content,repotType):
+    if repotType == "单体":
         if len(content["single"]) > 0:
             return True
         else:
@@ -54,7 +39,7 @@ def increase(content):
             return False
 
 # "一、企业的基本情况"
-def addBasic(title):
+def addBasic(document,title,context,comparativeTable):
     # basic title
     addTitle(document, title, 1, False)
     # 1、企业历史沿革、注册地、组织形式和总部地址。
@@ -64,28 +49,133 @@ def addBasic(title):
     # 5、营业期限有限的企业，还应当披露有关其营业期限的信息。
     basic_paragraphs = ["companyIntroduce", "companyBussiness", "companyParent", "companyIssued", "operationPeriod"]
     for content in basic_paragraphs:
-        addParagraph(document, notes_params[content], "paragraph")
+        addParagraph(document, context["notes_params"][content], "paragraph")
     document.add_paragraph()
 
 # 二、	财务报表的编制基础
-def addPreparationBasis(title):
-    addTitle(document, "二、	财务报表的编制基础", 1, False)
+def addPreparationBasis(document,title,context,comparativeTable):
+    addTitle(document, title, 1, False)
     addParagraph(document,
                  "本公司财务报表以持续经营假设为基础，根据实际发生的交易和事项，按照财政部发布的《企业会计准则——基本准则》（财政部令第33号发布、财政部令第76号修订）、于2006年2月15日及其后颁布和修订的具体会计准则、企业会计准则应用指南、企业会计准则解释及其他相关规定（以下合称“企业会计准则”）编制。",
                  "paragraph")
 
 # 三、遵循企业会计准则的声明
-def addStatementOfComplianceWithAccountingStandardsForBusinessEnterprises(title):
+def addStatementOfComplianceWithAccountingStandardsForBusinessEnterprises(document,title,context,comparativeTable):
+    # 报告类型：合并、单体
+    reportType = context["report_params"]["type"]
+    reportDate = context["report_params"]["reportDate"]
+    reportPeriod = context["report_params"]["reportPeriod"]
+
     addTitle(document, title, 1, False)
-    if type == "单体":
+    if reportType == "单体":
         content = "本财务报表符合企业会计准则的要求，真实、完整地反映了本公司{}的财务状况及{}的经营成果和现金流量等有关信息。".format(reportDate, reportPeriod)
         addParagraph(document, content, "paragraph")
     else:
         content = "本财务报表符合企业会计准则的要求，真实、完整地反映了本公司{}的合并及公司财务状况及{}的合并及公司经营成果和现金流量等有关信息。".format(reportDate, reportPeriod)
-    addParagraph(document, content, "paragraph")
+        addParagraph(document, content, "paragraph")
+
+def checkOneConditon(condition,context,comparativeTable):
+    # 公司类型
+    companyType = context["report_params"]["companyType"]
+    # 获取报表
+    assetsRecordsCombine = searchModel(companyType, "合并", "资产表", comparativeTable)
+    liabilitiesRecordsCombine = searchModel(companyType, "合并", "负债表", comparativeTable)
+    profitRecordsCombine = searchModel(companyType, "合并", "利润表", comparativeTable)
+    cashRecordsCombine = searchModel(companyType, "合并", "现金流量表", comparativeTable)
+    assetsRecordsSingle = searchModel(companyType, "单体", "资产表", comparativeTable)
+    liabilitiesRecordsSingle = searchModel(companyType, "单体", "负债表", comparativeTable)
+    profitRecordsSingle = searchModel(companyType, "单体", "利润表", comparativeTable)
+    cashRecordsSingle = searchModel(companyType, "单体", "现金流量表", comparativeTable)
+
+    if "type" in condition:
+        if condition["type"] == "all":
+            return True
+        elif condition["type"] == "IsEqual":
+            if condition["value"] == condition["origin"]:
+                return True
+            else:
+                return False
+        elif condition["type"] == "moreThanZero":
+            if context["report_params"]["type"]=="合并":
+                if condition["origin"] == "assets":
+                    for name in condition["name"]:
+                        record = searchRecordItemByName(name,assetsRecordsCombine)
+                        if not record is None:
+                            if abs(record["startDate"])>0.00 or abs(record["endDate"])>0.00:
+                                return True
+                    return False
+                elif condition["origin"] == "liabilities":
+                    for name in condition["name"]:
+                        record = searchRecordItemByName(name,liabilitiesRecordsCombine)
+                        if not record is None:
+                            if abs(record["startDate"])>0.00 or abs(record["endDate"])>0.00:
+                                return True
+                    return False
+                elif condition["origin"] == "profits":
+                    for name in condition["name"]:
+                        record = searchRecordItemByName(name,profitRecordsCombine)
+                        if not record is None:
+                            if abs(record["startDate"])>0.00 or abs(record["endDate"])>0.00:
+                                return True
+                    return False
+                elif condition["origin"] == "cash":
+                    for name in condition["name"]:
+                        record = searchRecordItemByName(name,cashRecordsCombine)
+                        if not record is None:
+                            if abs(record["startDate"])>0.00 or abs(record["endDate"])>0.00:
+                                return True
+                    return False
+                else:
+                    return True
+            else:
+                if condition["origin"] == "assets":
+                    for name in condition["name"]:
+                        record = searchRecordItemByName(name,assetsRecordsSingle)
+                        if not record is None:
+                            if abs(record["startDate"])>0.00 or abs(record["endDate"])>0.00:
+                                return True
+                    return False
+                elif condition["origin"] == "liabilities":
+                    for name in condition["name"]:
+                        record = searchRecordItemByName(name,liabilitiesRecordsSingle)
+                        if not record is None:
+                            if abs(record["startDate"])>0.00 or abs(record["endDate"])>0.00:
+                                return True
+                    return False
+                elif condition["origin"] == "profits":
+                    for name in condition["name"]:
+                        record = searchRecordItemByName(name,profitRecordsSingle)
+                        if not record is None:
+                            if abs(record["startDate"])>0.00 or abs(record["endDate"])>0.00:
+                                return True
+                    return False
+                elif condition["origin"] == "cash":
+                    for name in condition["name"]:
+                        record = searchRecordItemByName(name,cashRecordsSingle)
+                        if not record is None:
+                            if abs(record["startDate"])>0.00 or abs(record["endDate"])>0.00:
+                                return True
+                    return False
+                else:
+                    return True
+        else:
+            return True
+    else:
+        return True
+
+# 检查是否披露相关会计政策
+def checkCondition(condition,context,comparativeTable):
+    if type(condition).__name__ == "slice":
+        for oneCondition in condition:
+            if checkOneConditon(oneCondition,context,comparativeTable):
+                return True
+        return False
+    else:
+        return checkOneConditon(condition,context,comparativeTable)
 
 # 四、重要会计政策和会计估计
-def addImportantAccountingPoliciesAndAccountingEstimates(title):
+def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,comparativeTable):
+    reportType = context["report_params"]["type"]
     addTitle(document, title, 1, False)
     # 会计期间
     accountPeriod = ["本公司的会计期间分为年度和中期，会计中期指短于一个完整的会计年度的报告期间。本公司会计年度采用公历年度，即每年自1月1日起至12月31日止。"]
@@ -203,31 +293,31 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
         "权益工具是指能证明拥有本公司在扣除所有负债后的资产中的剩余权益的合同。本公司发行（含再融资）、回购、出售或注销权益工具作为权益的变动处理。本公司不确认权益工具的公允价值变动。与权益性交易相关的交易费用从权益中扣减。",
         "本公司对权益工具持有方的各种分配（不包括股票股利），减少股东权益。本公司不确认权益工具的公允价值变动额。"]
     # 存货
-    if "开发产品" in notes_params["inventoryClassification"] or "开发成本" in notes_params["inventoryClassification"]:
+    if "开发产品" in context["notes_params"]["inventoryClassification"] or "开发成本" in context["notes_params"]["inventoryClassification"]:
         # 房地产企业存货
-        invenrory = ["1、存货的分类", "存货主要包括{}和{}等。".format("、".join(notes_params["inventoryClassification"][:-1]),
-                                                       notes_params["inventoryClassification"][-1]),
+        invenrory = ["1、存货的分类", "存货主要包括{}和{}等。".format("、".join(context["notes_params"]["inventoryClassification"][:-1]),
+                                                       context["notes_params"]["inventoryClassification"][-1]),
                      "2、存货取得和发出的计价方法",
                      "存货在取得时按实际成本计价，存货成本包括采购成本、加工成本和其他成本。领用和发出时按{}计价。".format(
-                         notes_params["inventoryDeliveryPricing"]),
+                         context["notes_params"]["inventoryDeliveryPricing"]),
                      "3、房地产开发成本及房地产开发产品",
                      "房地产开发成本及房地产开发产品主要包括土地出让金、基础配套设施支出、建筑安装工程支出、开发项目完工前所发生的符合资本化条件的借款费用及开发过程中的其他相关费用。开发产品成本结转时按实际成本核算；公共配套设施指按政府有关部门批准的公共配套项目如道路等，其所发生的支出列入开发成本，按成本核算对象和成本项目进行明细核算；开发用土地所发生的支出亦列入开发成本核算。",
                      "4、存货可变现净值的确认和跌价准备的计提方法",
                      "可变现净值是指在日常活动中，存货的估计售价减去至完工时估计将要发生的成本、估计的销售费用以及相关税费后的金额。在确定存货的可变现净值时，以取得的确凿证据为基础，同时考虑持有存货的目的以及资产负债表日后事项的影响。",
                      "在资产负债表日，存货按照成本与可变现净值孰低计量。当其可变现净值低于成本时，提取存货跌价准备。存货跌价准备按单个存货项目的成本高于其可变现净值的差额提取。",
                      "计提存货跌价准备后，如果以前减记存货价值的影响因素已经消失，导致存货的可变现净值高于其账面价值的，在原已计提的存货跌价准备金额内予以转回，转回的金额计入当期损益。",
-                     "5、存货的盘存制度为{}。".format(notes_params["inventoryTaking"]),
-                     "6、周转材料按照{}进行摊销。".format(notes_params["turnoverMaterials"])]
+                     "5、存货的盘存制度为{}。".format(context["notes_params"]["inventoryTaking"]),
+                     "6、周转材料按照{}进行摊销。".format(context["notes_params"]["turnoverMaterials"])]
     else:
-        invenrory = ["1、存货的分类", "存货主要包括{}和{}等。".format("、".join(notes_params["inventoryClassification"][:-1]),
-                                                       notes_params["inventoryClassification"][-1]), "2、存货取得和发出的计价方法",
-                     "存货在取得时按实际成本计价，存货成本包括采购成本、加工成本和其他成本。领用和发出时按{}计价。".format(notes_params["inventoryDeliveryPricing"]),
+        invenrory = ["1、存货的分类", "存货主要包括{}和{}等。".format("、".join(context["notes_params"]["inventoryClassification"][:-1]),
+                                                       context["notes_params"]["inventoryClassification"][-1]), "2、存货取得和发出的计价方法",
+                     "存货在取得时按实际成本计价，存货成本包括采购成本、加工成本和其他成本。领用和发出时按{}计价。".format(context["notes_params"]["inventoryDeliveryPricing"]),
                      "3、存货可变现净值的确认和跌价准备的计提方法",
                      "可变现净值是指在日常活动中，存货的估计售价减去至完工时估计将要发生的成本、估计的销售费用以及相关税费后的金额。在确定存货的可变现净值时，以取得的确凿证据为基础，同时考虑持有存货的目的以及资产负债表日后事项的影响。",
                      "在资产负债表日，存货按照成本与可变现净值孰低计量。当其可变现净值低于成本时，提取存货跌价准备。存货跌价准备按单个存货项目的成本高于其可变现净值的差额提取。",
                      "计提存货跌价准备后，如果以前减记存货价值的影响因素已经消失，导致存货的可变现净值高于其账面价值的，在原已计提的存货跌价准备金额内予以转回，转回的金额计入当期损益。",
-                     "4、存货的盘存制度为{}。".format(notes_params["inventoryTaking"]),
-                     "5、周转材料按照{}进行摊销。".format(notes_params["turnoverMaterials"])]
+                     "4、存货的盘存制度为{}。".format(context["notes_params"]["inventoryTaking"]),
+                     "5、周转材料按照{}进行摊销。".format(context["notes_params"]["turnoverMaterials"])]
 
     # 合同资产与合同负债
     contractAssets = [
@@ -249,14 +339,23 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
                           "本公司根据其在合营安排中享有的权利和承担的义务，将合营安排投资分类为合营企业及共同经营。",
                           "合营企业为本公司通过单独主体达成，能够与其他方实施共同控制，且基于法律形式、合同条款及其他事实与情况仅对其净资产享有权利的合营安排，于长期股权投资采用权益法核算。共同经营为本公司未通过单独主体达成的享有该安排相关资产且承担该安排相关负债的合营安排。本公司于合并财务报表中确认其与共同经营中利益份额相关的资产、负债、收入及支出。",
                           "5、长期股权投资减值", "对子公司、合营企业、联营企业的长期股权投资，当其可收回金额低于其账面价值时，账面价值减记至可收回金额。"]
-    # 投资性房地产，默认只能选择成本模式
-    investmentRealEstate = ["投资性房地产是指为赚取租金或资本增值，或两者兼有而持有的房地产。包括已出租的土地使用权、持有并准备增值后转让的土地使用权、已出租的建筑物等。",
+    # 投资性房地产，成本模式
+    investmentRealEstateCost = ["投资性房地产是指为赚取租金或资本增值，或两者兼有而持有的房地产。包括已出租的土地使用权、持有并准备增值后转让的土地使用权、已出租的建筑物等。",
                             "本公司采用成本模式对投资性房地产进行后续计量，并按照与房屋建筑物或土地使用权一致的政策进行折旧或摊销。",
                             "投资性房地产按成本进行初始计量。与投资性房地产有关的后续支出，如果与该资产有关的经济利益很可能流入且其成本能可靠地计量，则计入投资性房地产成本。其他后续支出，在发生时计入当期损益。",
                             "投资性房地产的用途改变为自用或对外出售时，自改变之日起，将该投资性房地产转换为固定资产、无形资产或存货。自用房地产的用途改变为赚取租金或资本增值时，自改变之日起，将固定资产或无形资产转换为投资性房地产。发生转换时，以转换前的账面价值作为转换后的入账价值。",
                             "对投资性房地产的预计使用寿命、预计净残值和折旧(摊销)方法于每年年度终了进行复核并作适当调整。",
                             "当投资性房地产被处置、或者永久退出使用且预计不能从其处置中取得经济利益时，终止确认该项投资性房地产。投资性房地产出售、转让、报废或毁损的处置收入扣除其账面价值和相关税费后计入当期损益。",
                             "当投资性房地产的可收回金额低于其账面价值时，账面价值减记至可收回金额。"]
+    # 投资性房地产，公允价值模式
+    investmentRealEstateFair = ["投资性房地产是指为赚取租金或资本增值，或两者兼有而持有的房地产。包括已出租的土地使用权、持有并准备增值后转让的土地使用权、已出租的建筑物等。",
+                                "本公司采用公允价值模式对投资性房地产进行后续计量。",
+                                "本公司不对投资性房地产计提折旧或进行摊销，在资产负债表日以投资性房地产的公允价值为基础调整其账面价值，公允价值与原账面价值之间的差额计入当期损益。",
+                                "确定投资性房地产的公允价值时，参照活跃市场上同类或类似房地产的现行市场价格；无法取得同类或类似房地产的现行市场价格的，参照活跃市场上同类或类或类似房地产的最近交易价格，并考虑交易情况、交易日期、所在区域等因素，从而对投资性房地产的公允价值作出合理的估计；或基于预计未来获得的租金收益和有关现金流量的现值确定其公允价值。",
+                                "自用房地产或存货转换为投资性房地产时，按照转换当日的公允价值计价，转换当日的公允价值小于原账面价值的，其差额计入当期损益；转换当日的公允价值大于原账面价值的，其差额确认为其他综合收益。投资性房地产转换为自用房地产时，以转换当日的公允价值作为自用房地产的账面价值，公允价值与原账面价值的差额计入当期损益。",
+                                "当投资性房地产被处置、或者永久退出使用且预计不能从其处置中取得经济利益时，终止确认该项投资性房地产。投资性房地产出售、转让、报废或毁损的处置收入扣除其账面价值和相关税费后计入当期损益。"
+                                ]
+    investmentRealEstate = investmentRealEstateCost if context["notes_params"]["measurementModeOfInvestmentRealEstate"]=="成本模式" else investmentRealEstateFair
     # 固定资产
     fixedAssets1 = ["1、固定资产确认条件",
                     "固定资产是指为生产商品、提供劳务、出租或经营管理而持有的，使用寿命超过一个会计年度的有形资产。固定资产仅在与其有关的经济利益很可能流入本公司，且其成本能够可靠地计量时才予以确认。固定资产按成本并考虑预计弃置费用因素的影响进行初始计量。",
@@ -289,37 +388,37 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
         "渔": "",
     }
     comsumeFollowUpExpenditureDesc = "".join(
-        [consumeFollowUpExpenditure[kind] for kind in notes_params["biologicalAssetsCategory"]])
+        [consumeFollowUpExpenditure[kind] for kind in context["notes_params"]["biologicalAssetsCategory"]])
     productFolloUpExpenditureDesc = "".join(
-        [productFolloUpExpenditure[kind] for kind in notes_params["biologicalAssetsCategory"]])
+        [productFolloUpExpenditure[kind] for kind in context["notes_params"]["biologicalAssetsCategory"]])
     if productFolloUpExpenditureDesc != "":
         desc = comsumeFollowUpExpenditureDesc + productFolloUpExpenditureDesc
     else:
         desc = comsumeFollowUpExpenditureDesc
 
-    if "林" in notes_params["biologicalAssetsCategory"]:
+    if "林" in context["notes_params"]["biologicalAssetsCategory"]:
         melancholia = "郁闭或"
     else:
         melancholia = ""
 
-    if "牧" in notes_params["biologicalAssetsCategory"]:
+    if "牧" in context["notes_params"]["biologicalAssetsCategory"]:
         breeding = "、饲养"
     else:
         breeding = ""
 
-    if "消耗性生物资产" in notes_params["biologicalAssets"]:
-        consumeBiologicalAsset = "消耗性生物资产包括{}等。".format("、".join(notes_params["consumptiveBiologicalAssets"]))
+    if "消耗性生物资产" in context["notes_params"]["biologicalAssets"]:
+        consumeBiologicalAsset = "消耗性生物资产包括{}等。".format("、".join(context["notes_params"]["consumptiveBiologicalAssets"]))
     else:
         consumeBiologicalAsset = ""
 
-    if "生产性生物资产" in notes_params["biologicalAssets"]:
-        productBiologicalAsset = "生产性生物资产包括{}等。".format("、".join(notes_params["productiveBiologicalAssets"]))
+    if "生产性生物资产" in context["notes_params"]["biologicalAssets"]:
+        productBiologicalAsset = "生产性生物资产包括{}等。".format("、".join(context["notes_params"]["productiveBiologicalAssets"]))
     else:
         productBiologicalAsset = ""
 
     biologicalAssetsGrowth = "生物资产在{}达到预定生产经营目的后发生的管护{}费用等后续支出，应当计入当期损益。".format(melancholia, breeding)
     biologicalAssets1 = ["1、生物资产分类",
-                         "本公司的生物资产包括{}。{}{}".format("、".join(notes_params["biologicalAssets"]), consumeBiologicalAsset,
+                         "本公司的生物资产包括{}。{}{}".format("、".join(context["notes_params"]["biologicalAssets"]), consumeBiologicalAsset,
                                                     productBiologicalAsset),
                          "生物资产同时满足下列条件时予以确认：(1) 因过去的交易或者事项对其拥有或者控制；(2) 与其有关的经济利益很可能流入公司；(3) 其成本能够可靠计量时予以确认。", "2、生物资产初始计量",
                          "公司取得的生物资产，按照取得时的成本进行初始计量。外购生物资产的成本包括购买价款、相关税费、运输费、保险费以及可直接归属于购买该资产的其他支出。投资者投入的生物资产，按投资合同或协议约定的价值加上应支付的相关税费作为生物资产的入账价值，但合同或协议约定价值不公允的，按公允价值确定实际成本。",
@@ -405,7 +504,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
     # 收入
     # 老收入准则-销售商品收入
     oldSpecificMethodsOfRevenueRecognition = []
-    for key, item in enumerate(notes_params["oldSpecificMethodsOfRevenueRecognition"]):
+    for key, item in enumerate(context["notes_params"]["oldSpecificMethodsOfRevenueRecognition"]):
         title = "（{}）{}".format(key + 1, item[0])
         content = item[1]
         oldSpecificMethodsOfRevenueRecognition.append(title)
@@ -425,7 +524,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
                                      "（1）利息收入金额，按照他人使用本企业货币资金的时间和实际利率计算确定；", "（2）使用费收入金额，按照有关合同或协议约定的收费时间和方法计算确定。"]
     # 新收入准则
     newSpecificMethodsOfRevenueRecognition = []
-    for key, item in enumerate(notes_params["newSpecificMethodsOfRevenueRecognition"]):
+    for key, item in enumerate(context["notes_params"]["newSpecificMethodsOfRevenueRecognition"]):
         title = "（{}）{}".format(key + 1, item[0])
         content = item[1]
         newSpecificMethodsOfRevenueRecognition.append(title)
@@ -444,7 +543,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
                          "本公司已向客户转让商品或服务而有权收取对价的权利 (且该权利取决于时间流逝之外的其他因素) 作为合同资产列示，合同资产以预期信用损失为基础计提减值。本公司拥有的、无条件 (仅取决于时间流逝) 向客户收取对价的权利作为应收款项列示。本公司已收或应收客户对价而应向客户转让商品或服务的义务作为合同负债列示。"]
     # 建造合同
     constructionContract = ["在建造合同的结果能够可靠估计的情况下，于资产负债表日按照完工百分比法确认合同收入和合同费用。合同完工进度按{}确定。".format(
-        notes_params["constructionContractCompletionProgress"]),
+        context["notes_params"]["constructionContractCompletionProgress"]),
         "建造合同的结果能够可靠估计是指同时满足：①合同总收入能够可靠地计量；②与合同相关的经济利益很可能流入企业；③实际发生的合同成本能够清楚地区分和可靠地计量；④合同完工进度和为完成合同尚需发生的成本能够可靠地确定。",
         "如建造合同的结果不能可靠地估计，但合同成本能够收回的，合同收入根据能够收回的实际合同成本予以确认，合同成本在其发生的当期确认为合同费用；合同成本不可能收回的，在发生时立即确认为合同费用，不确认合同收入。使建造合同的结果不能可靠估计的不确定因素不复存在的，按照完工百分比法确定与建造合同有关的收入和费用。",
         "合同预计总成本超过合同总收入的，将预计损失确认为当期费用。",
@@ -504,7 +603,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "text",  # 内容形式：text/table
             "single": accountPeriod,
             "combine": accountPeriod,
-            "condition": "",
+            "condition": {"type":"all"},
         },
         {
             "title": "记账本位币",
@@ -512,7 +611,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "text",  # 内容形式：text/table
             "single": currencySingle,
             "combine": currencyCombine,
-            "condition": "",
+            "condition": {"type":"all"},
         },
         {
             "title": "企业合并",
@@ -520,7 +619,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "text",  # 内容形式：text/table
             "single": [],
             "combine": companyCombine,
-            "condition": "",
+            "condition":{"type":"all"},
         },
         {
             "title": "合并财务报表的编制方法",
@@ -528,7 +627,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "text",  # 内容形式：text/table
             "single": [],
             "combine": consolidatedStatements,
-            "condition": "",
+            "condition": {"type":"all"},
         },
         {
             "title": "合营安排的分类及共同经营的会计处理方法",
@@ -536,7 +635,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "text",  # 内容形式：text/table
             "single": jointVentureArrangement,
             "combine": jointVentureArrangement,
-            "condition": ["长期股权投资-合营企业"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["长期股权投资"]},
         },
         {
             "title": "现金及现金等价物的确定标准",
@@ -544,7 +643,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "text",  # 内容形式：text/table
             "single": cashCriteria,
             "combine": cashCriteria,
-            "condition": "",
+            "condition": {"type":"all"},
         },
         {
             "title": "外币业务和外币报表折算",
@@ -552,7 +651,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "text",  # 内容形式：text/table
             "single": foreignCurrency,
             "combine": foreignCurrency,
-            "condition": ["现金流量表-汇率变动对现金及现金等价物的影响"]
+            "condition": {"type": "moreThanZero", "origin": "cash", "name": ["四、汇率变动对现金及现金等价物的影响"]},
         },
         {
             "title": "",
@@ -560,7 +659,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "text",  # 内容形式：text/table
             "single": [],
             "combine": foreignReport,
-            "condition": ["利润表-其他综合收益-外币报表折算差额"]
+            "condition": {"type": "moreThanZero", "origin": "profits", "name": ["外币财务报表折算差额"]},
         },
         {
             "title": "金融工具",
@@ -568,7 +667,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "text",  # 内容形式：text/table
             "single": oldFinancial,
             "combine": oldFinancial,
-            "condition": ["老金融工具准则"]
+            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "金融工具",
@@ -576,7 +676,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "text",  # 内容形式：text/table
             "single": newFinancial,
             "combine": newFinancial,
-            "condition": ["新金融工具准则"]
+            "condition": {"type": "IsEqual", "value": "新金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "金融工具",
@@ -584,7 +685,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "text",  # 内容形式：text/table
             "single": ["“尚未执行新金融工具准则的公司” 的相关会计政策如下：", *oldFinancial, "“已经执行新金融工具准则的公司” 的相关会计政策如下：", *newFinancial],
             "combine": ["“尚未执行新金融工具准则的公司” 的相关会计政策如下：", *oldFinancial, "“已经执行新金融工具准则的公司” 的相关会计政策如下：", *newFinancial],
-            "condition": ["部分新金融工具准则"]
+            "condition": {"type": "IsEqual", "value": "部分新金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "应收款项",
@@ -594,7 +696,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
                        "对于单项金额重大的应收款项，单独进行减值测试。当存在客观证据表明本公司将无法按应收款项的原有条款收回款项时，计提坏账准备。"],
             "combine": ["应收款项包括应收账款、其他应收款等。", "1、单项金额重大并单独计提坏账准备的应收款项",
                         "对于单项金额重大的应收款项，单独进行减值测试。当存在客观证据表明本公司将无法按应收款项的原有条款收回款项时，计提坏账准备。"],
-            "condition": ["老金融工具准则"]
+            "condition": {"type":"IsEqual","value":"老金融工具准则","origin":context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "",
@@ -603,10 +705,11 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": [],
             "combine": [],
             "table": {"columns": [], "data": [
-                ["单项金额重大的判断依据或金额标准", notes_params["judgmentStandardOfSignificantSingleAmount"]],
+                ["单项金额重大的判断依据或金额标准", context["notes_params"]["judgmentStandardOfSignificantSingleAmount"]],
                 ["单项金额重大并单独计提坏账准备的计提方法", "根据应收款项的预计未来现金流量现值低于其账面价值的差额进行计提。"],
             ]},
-            "condition": ["老金融工具准则"]
+            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "",
@@ -619,7 +722,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
                         "对于单项金额不重大的应收款项，与经单独测试后未减值的应收款项一起按信用风险特征划分为若干组合，根据以前年度与之具有类似信用风险特征的应收款项组合的实际损失率为基础，结合现时情况确定应计提的坏账准备。",
                         "确定组合的依据如下："],
             "table": [],
-            "condition": ["老金融工具准则"]
+            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "",
@@ -627,8 +731,9 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "table",  # 内容形式：text/table
             "single": [],
             "combine": [],
-            "table": {"columns": [], "data": [[item[0], item[1]] for item in notes_params["combinationClassification"]]},
-            "condition": ["老金融工具准则"]
+            "table": {"columns": [], "data": [[item[0], item[1]] for item in context["notes_params"]["combinationClassification"]]},
+            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "",
@@ -637,7 +742,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": ["按组合计提坏账准备的计提方法如下："],
             "combine": ["按组合计提坏账准备的计提方法如下："],
             "table": {},
-            "condition": ["老金融工具准则"]
+            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "",
@@ -645,8 +751,9 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "table",  # 内容形式：text/table
             "single": [],
             "combine": [],
-            "table": {"columns": [], "data": [[item[0], item[2]] for item in notes_params["combinationClassification"]]},
-            "condition": ["老金融工具准则"]
+            "table": {"columns": [], "data": [[item[0], item[2]] for item in context["notes_params"]["combinationClassification"]]},
+            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "",
@@ -655,7 +762,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": ["组合中，采用账龄分析法的计提比例列示如下："],
             "combine": ["组合中，采用账龄分析法的计提比例列示如下："],
             "table": {},
-            "condition": ["老金融工具准则"]
+            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "",
@@ -663,9 +771,10 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "table",  # 内容形式：text/table
             "single": [],
             "combine": [],
-            "table": {"columns": notes_params["badDebtProvisionRatio"][0],
-                      "data": notes_params["badDebtProvisionRatio"][1:]},
-            "condition": ["老金融工具准则"]
+            "table": {"columns": context["notes_params"]["badDebtProvisionRatio"][0],
+                      "data": context["notes_params"]["badDebtProvisionRatio"][1:]},
+            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "",
@@ -674,7 +783,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": ["3、单项金额虽不重大但单独计提坏账准备的应收款项"],
             "combine": ["3、单项金额虽不重大但单独计提坏账准备的应收款项"],
             "table": {},
-            "condition": ["老金融工具准则"]
+            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "",
@@ -684,7 +794,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "combine": ["单项金额虽不重大但单独计提坏账准备的应收款项"],
             "table": {"columns": [], "data": [["单独计提坏账准备的理由", "存在客观证据表明本公司将无法按应收款项的原有条款收回的款项"],
                                              ["单项金额虽不重大但单独计提坏账准备的计提方法", "根据应收款项的预计未来现金流量现值低于其账面价值的差额进行计提"]]},
-            "condition": ["老金融工具准则"]
+            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+                          "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "存货",
@@ -693,7 +804,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": invenrory,
             "combine": invenrory,
             "table": {},
-            "condition": ["无开发成本", "无开发产品"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["存货"]},
         },
         {
             "title": "合同资产和合同负债",
@@ -702,7 +813,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": contractAssets,
             "combine": contractAssets,
             "table": {},
-            "condition": ["新收入准则"]
+            "condition": {"type": "IsEqual", "value": "新收入准则",
+                          "origin": context["notes_params"]["incomeriteria"]}
         },
         {
             "title": "长期股权投资",
@@ -711,7 +823,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": longTermInvestment,
             "combine": longTermInvestment,
             "table": {},
-            "condition": ["长期股权投资"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["长期股权投资"]},
         },
         {
             "title": "投资性房地产",
@@ -720,7 +832,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": investmentRealEstate,
             "combine": investmentRealEstate,
             "table": {},
-            "condition": ["投资性房地产"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["投资性房地产"]},
         },
         {
             "title": "固定资产",
@@ -729,7 +841,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": fixedAssets1,
             "combine": fixedAssets1,
             "table": {},
-            "condition": ["固定资产"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["固定资产"]},
         },
         {
             "title": "",
@@ -737,8 +849,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "table",  # 内容形式：text/table
             "single": [],
             "combine": [],
-            "table": {"columns": notes_params["fixedAssetsCategory"][0], "data": notes_params["fixedAssetsCategory"][1:]},
-            "condition": ["固定资产"]
+            "table": {"columns": context["notes_params"]["fixedAssetsCategory"][0], "data": context["notes_params"]["fixedAssetsCategory"][1:]},
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["固定资产"]},
         },
         {
             "title": "",
@@ -747,7 +859,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": fixedAssets2,
             "combine": fixedAssets2,
             "table": {},
-            "condition": ["固定资产"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["固定资产"]},
         },
         {
             "title": "在建工程",
@@ -756,7 +868,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": constructionInProgress,
             "combine": constructionInProgress,
             "table": {},
-            "condition": ["在建工程"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["在建工程"]},
         },
         {
             "title": "借款费用",
@@ -765,7 +877,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": borrowingCosts,
             "combine": borrowingCosts,
             "table": {},
-            "condition": ["财务费用-利息支出", "存货-利息资本化支出", "在建工程-利息资本化支出"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["短期借款","长期借款","应付债券"]},
         },
         {
             "title": "生物资产",
@@ -774,7 +886,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": biologicalAssets1,
             "combine": biologicalAssets1,
             "table": {},
-            "condition": ["生产性生物资产", "消耗性生物资产"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["生产性生物资产"]},
         },
         {
             "title": "",
@@ -782,9 +894,9 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "table",  # 内容形式：text/table
             "single": [],
             "combine": [],
-            "table": {"columns": notes_params["productiveBiologicalAssetsDepreciation"][0],
-                      "data": notes_params["productiveBiologicalAssetsDepreciation"][1:]},
-            "condition": ["生产性生物资产"]
+            "table": {"columns": context["notes_params"]["productiveBiologicalAssetsDepreciation"][0],
+                      "data": context["notes_params"]["productiveBiologicalAssetsDepreciation"][1:]},
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["生产性生物资产"]},
         },
         {
             "title": "",
@@ -793,7 +905,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": biologicalAssets2,
             "combine": biologicalAssets2,
             "table": {},
-            "condition": ["生产性生物资产", "消耗性生物资产"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["生产性生物资产"]},
         },
         {
             "title": "油气资产",
@@ -802,7 +914,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": OilAndGasAssets,
             "combine": OilAndGasAssets,
             "table": {},
-            "condition": ["油气资产"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["油气资产"]},
         },
         {
             "title": "使用权资产",
@@ -811,7 +923,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": rightToUseAssets1,
             "combine": rightToUseAssets1,
             "table": {},
-            "condition": ["使用权资产"]
+            "condition":{"type":"moreThanZero","origin":"assets","name":["使用权资产"]},
         },
         {
             "title": "",
@@ -819,9 +931,9 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "type": "table",  # 内容形式：text/table
             "single": [],
             "combine": [],
-            "table": {"columns": notes_params["rightToUseAssetsDepreciation"][0],
-                      "data": notes_params["rightToUseAssetsDepreciation"][1:]},
-            "condition": ["使用权资产"]
+            "table": {"columns": context["notes_params"]["rightToUseAssetsDepreciation"][0],
+                      "data": context["notes_params"]["rightToUseAssetsDepreciation"][1:]},
+            "condition":{"type":"moreThanZero","origin":"assets","name":["使用权资产"]},
         },
         {
             "title": "",
@@ -830,7 +942,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": rightToUseAssets2,
             "combine": rightToUseAssets2,
             "table": {},
-            "condition": ["使用权资产"]
+            "condition":{"type":"moreThanZero","origin":"assets","name":["使用权资产"]},
         },
         {
             "title": "无形资产",
@@ -839,7 +951,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": intangibleAssets,
             "combine": intangibleAssets,
             "table": {},
-            "condition": ["无形资产"]
+             "condition": {"type": "moreThanZero", "origin": "assets", "name": ["无形资产"]},
         },
         {
             "title": "长期待摊费用",
@@ -848,7 +960,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": longTermDeferredExpenses,
             "combine": longTermDeferredExpenses,
             "table": {},
-            "condition": ["长期待摊费用"]
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["长期待摊费用"]},
         },
         {
             "title": "长期资产减值",
@@ -857,7 +969,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": impairmentOfLongTermAssets,
             "combine": impairmentOfLongTermAssets,
             "table": {},
-            "condition": ""
+            "condition": {"type":"all"}
         },
         {
             "title": "职工薪酬",
@@ -866,7 +978,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": employeeCompensation,
             "combine": employeeCompensation,
             "table": {},
-            "condition": ""
+            "condition":{"type":"all"}
         },
         {
             "title": "预计负债",
@@ -875,7 +987,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": estimatedLiabilities,
             "combine": estimatedLiabilities,
             "table": {},
-            "condition": ["预计负债"]
+            "condition": {"type": "moreThanZero", "origin": "liabilities", "name": ["预计负债"]},
         },
         {
             "title": "股份支付",
@@ -884,7 +996,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": shareBasedPayment,
             "combine": shareBasedPayment,
             "table": {},
-            "condition": ["股份支付"]
+            "condition": {"type": "IsEqual", "value": "存在",
+                          "origin": context["notes_params"]["shareBasedPayment"]}
         },
         {
             "title": "优先股、永续债等其他金融工具",
@@ -893,7 +1006,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": PreferredStocksPerpetualBonds,
             "combine": PreferredStocksPerpetualBonds,
             "table": {},
-            "condition": ["其他权益工具"]
+            "condition": {"type": "moreThanZero", "origin": "liabilities", "name": ["其他权益工具"]},
         },
         {
             "title": "收入",
@@ -902,7 +1015,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": [*newIncomeCriteria, *newSpecificMethodsOfRevenueRecognition],
             "combine": [*newIncomeCriteria, *newSpecificMethodsOfRevenueRecognition],
             "table": {},
-            "condition": ["新收入准则"]
+            "condition": {"type": "IsEqual", "value": "新收入准则",
+                          "origin": context["notes_params"]["incomeriteria"]}
         },
         {
             "title": "收入",
@@ -913,7 +1027,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "combine": [*sellingGoods, *renderingOfServices, *transferOfTheRightToUseAssets,
                         *oldSpecificMethodsOfRevenueRecognition],
             "table": {},
-            "condition": ["老收入准则"]
+            "condition": {"type": "IsEqual", "value": "老收入准则",
+                          "origin": context["notes_params"]["incomeriteria"]}
         },
         {
             "title": "收入",
@@ -926,27 +1041,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
                         *oldSpecificMethodsOfRevenueRecognition, "“已经执行新收入准则的公司”的相关会计政策如下：", *newIncomeCriteria,
                         *newSpecificMethodsOfRevenueRecognition],
             "table": {},
-            "condition": ["部分新收入准则"]
-        },
-        {
-            "title": "政府补助",
-            "level": 2,
-            "type": "text",  # 内容形式：text/table
-            "single": ["“尚未执行新收入准则的公司”的相关会计政策如下：", *sellingGoods, *renderingOfServices, *transferOfTheRightToUseAssets,
-                       "“已经执行新收入准则的公司”的相关会计政策如下：", *newIncomeCriteria, *newSpecificMethodsOfRevenueRecognition],
-            "combine": ["“尚未执行新收入准则的公司”的相关会计政策如下：", *sellingGoods, *renderingOfServices, *transferOfTheRightToUseAssets,
-                        "“已经执行新收入准则的公司”的相关会计政策如下：", *newIncomeCriteria, *newSpecificMethodsOfRevenueRecognition],
-            "table": {},
-            "condition": ["部分新收入准则"]
-        },
-        {
-            "title": "建造合同",
-            "level": 2,
-            "type": "text",  # 内容形式：text/table
-            "single": constructionContract,
-            "combine": constructionContract,
-            "table": {},
-            "condition": ["建造合同", "老收入准则"]
+            "condition": {"type": "IsEqual", "value": "部分新收入准则",
+                          "origin": context["notes_params"]["incomeriteria"]}
         },
         {
             "title": "政府补助",
@@ -955,7 +1051,10 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": governmentGrants,
             "combine": governmentGrants,
             "table": {},
-            "condition": ["递延收益", "其他收益"]
+            "condition": [
+                {"type": "moreThanZero", "origin": "liabilities", "name": ["递延收益"]},
+                {"type": "moreThanZero", "origin": "profits", "name": ["加：其他收益"]},
+                          ]
         },
         {
             "title": "递延所得税资产和递延所得税负债",
@@ -964,7 +1063,10 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": deferredIncomeTax,
             "combine": deferredIncomeTax,
             "table": {},
-            "condition": "",
+            "condition": [
+                {"type": "moreThanZero", "origin": "assets", "name": ["递延所得税资产"]},
+                {"type": "moreThanZero", "origin": "liabilities", "name": ["递延所得税负债"]},
+                          ]
         },
         {
             "title": "租赁",
@@ -973,7 +1075,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": oldLease,
             "combine": oldLease,
             "table": {},
-            "condition": ["老租赁准则"],
+            "condition": {"type": "IsEqual", "value": "老租赁准则",
+                          "origin": context["notes_params"]["leasingriteria"]}
         },
         {
             "title": "租赁",
@@ -982,7 +1085,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": newLease,
             "combine": newLease,
             "table": {},
-            "condition": ["新租赁准则"],
+            "condition": {"type": "IsEqual", "value": "新租赁准则",
+                          "origin": context["notes_params"]["leasingriteria"]}
         },
         {
             "title": "租赁",
@@ -991,7 +1095,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": partNewLease,
             "combine": partNewLease,
             "table": {},
-            "condition": ["部分新租赁准则"],
+            "condition": {"type": "IsEqual", "value": "部分新租赁准则",
+                          "origin": context["notes_params"]["leasingriteria"]}
         },
         {
             "title": "持有待售",
@@ -1000,7 +1105,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": heldForSale,
             "combine": heldForSale,
             "table": {},
-            "condition": ["持有待售资产"],
+            "condition": {"type": "moreThanZero", "origin": "assets", "name": ["持有待售资产"]},
         },
        {
             "title": "安全生产费",
@@ -1009,7 +1114,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
             "single": safetyProductionCost,
             "combine": safetyProductionCost,
             "table": {},
-            "condition": ["专项储备"],
+            "condition": {"type": "moreThanZero", "origin": "liabilities", "name": ["专项储备"]},
         },
     ]
 
@@ -1018,20 +1123,23 @@ def addImportantAccountingPoliciesAndAccountingEstimates(title):
         cnNum = to_chinese(i)
         title = content["title"]
         contentType = content["type"]
-        if title != "":
-            cntitle = "（{}）{}".format(cnNum, title)
-            addTitle(document, cntitle, 2, True)
-        if contentType == "text":
-            if type == "单体":
-                for single_content in content["single"]:
-                    addParagraph(document, single_content, "paragraph")
+        # 检查是否需要披露
+        if checkCondition(content["condition"],context,comparativeTable):
+            if increase(content,reportType) and title != "":
+                cntitle = "（{}）{}".format(cnNum, title)
+                addTitle(document, cntitle, 2, True)
+            if contentType == "text":
+                if type == "单体":
+                    for single_content in content["single"]:
+                        addParagraph(document, single_content, "paragraph")
+                else:
+                    for combine_content in content["combine"]:
+                        addParagraph(document, combine_content, "paragraph")
             else:
-                for combine_content in content["combine"]:
-                    addParagraph(document, combine_content, "paragraph")
-        else:
-            addTable(document, content["table"])
-        if increase(content) and title != "":
-            i = i + 1
+                addTable(document, content["table"])
+            if increase(content,reportType) and title != "":
+                i = i + 1
+    return i
 
 contents = [
     {"title":"企业的基本情况","func":addBasic},
@@ -1040,17 +1148,31 @@ contents = [
     {"title":"重要会计政策和会计估计","func":addImportantAccountingPoliciesAndAccountingEstimates},
 ]
 
-def addContent():
+#
+def addNoteAccountingPolicy(document,context,comparativeTable):
+    addHeader(document,context)
     i = 1
+    s = 0
     for content in contents:
         cnNum = to_chinese(i)
         title = content["title"]
         cntitle = "{}、{}".format(cnNum, title)
         func = content["func"]
-        func(cntitle)
+        s = func(document,cntitle,context,comparativeTable)
         i = i + 1
+    return s
+
+def test():
+    from project.data import context
+    from project.constants import comparativeTable
+
+    document = Document()
+    # 设置中文标题
+    setStyle(document)
+    addNoteAccountingPolicy(document,context,comparativeTable)
+
+    document.save("notes.docx")
 
 
-addContent()
-
-document.save("notes.docx")
+if __name__ == '__main__':
+    test()

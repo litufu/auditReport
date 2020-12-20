@@ -1,9 +1,10 @@
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-from docx.shared import Pt,Cm
+from docx.shared import Pt
 from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
-from docx.enum.section import WD_ORIENTATION,WD_SECTION_START
+from docx.enum.section import WD_ORIENTATION, WD_SECTION_START
+
 
 # 判断字符串是否为数字
 def is_number(s):
@@ -13,6 +14,7 @@ def is_number(s):
     except Exception:
         pass
     return False
+
 
 def create_element(name):
     return OxmlElement(name)
@@ -114,10 +116,15 @@ def set_cell_border(cell, **kwargs):
                 if key in edge_data:
                     element.set(qn('w:{}'.format(key)), str(edge_data[key]))
 
-_MAPPING = ('零','一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七','十八', '十九')
+
+_MAPPING = ('零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九')
 _P0 = ('', '十', '百', '千',)
 _S4 = 10 ** 4
+
+
 def to_chinese(num):
+    if isinstance(num, str):
+        return 0
     if num < 20:
         return _MAPPING[num]
     else:
@@ -154,8 +161,9 @@ def addParagraph(document, content, paragraphStyle):
     paragraph = document.add_paragraph(style=paragraphStyle)
     paragraph.add_run(content, style="zero")
 
- # 添加表格边框
-def createBorderedTable(document,rowLength,columnLength,innerLine="dotted"):
+
+# 添加表格边框
+def createBorderedTable(document, rowLength, columnLength, innerLine="dotted"):
     table = document.add_table(rowLength, columnLength)
     for cell in table.rows[0].cells:
         set_cell_border(cell, top={"sz": 12, "val": "single", "space": "0"})
@@ -173,11 +181,12 @@ def createBorderedTable(document,rowLength,columnLength,innerLine="dotted"):
     table.autofit = True
     return table
 
+
 # 设置单元格格式
 
-def setCell(cell,cellText,alignment,toFloat=True,style="tableCharacter"):
+def setCell(cell, cellText, alignment, toFloat=True, style="tableCharacter"):
     if is_number(cellText) and toFloat:
-        cellText =  '{:,.2f}'.format(float(cellText))
+        cellText = '{:,.2f}'.format(float(cellText))
     cellString = str(cellText)
     if cellString == "nan":
         cellString = ""
@@ -192,11 +201,12 @@ def setCell(cell,cellText,alignment,toFloat=True,style="tableCharacter"):
     p.add_run(str(cellString), style=style)
 
 
-def setNotToFloatCell(title,cell,j,row,alignment):
+def setNotToFloatCell(title, cell, j, row, alignment):
     if title[j] in ["级次", "序号"]:
         setCell(cell, row[j], alignment, toFloat=False)
     else:
         setCell(cell, row[j], alignment, toFloat=True)
+
 
 # 向表格中添加数据
 '''
@@ -208,13 +218,15 @@ style:
 5：标题居中，其余左对齐
 6：数字靠右，文字靠左，标题居中，第一列靠左
 '''
+
+
 # 仅适用于单行标题
-def addTable(document, table,style=1):
+def addTable(document, table, style=1):
     # 获取标题和单元格
     title = table["columns"]
     cells = table["data"]
-    if len(cells)==0:
-        addParagraph(document,"不适用","paragraph")
+    if len(cells) == 0:
+        addParagraph(document, "不适用", "paragraph")
         return
     columnLength = len(cells[0])
     # 没有标题
@@ -229,20 +241,20 @@ def addTable(document, table,style=1):
         elif style == 2:
             for i, row in enumerate(data):
                 for j, cell in enumerate(table.rows[i].cells):
-                    if j==0 and i!=rowLength-1:
+                    if j == 0 and i != rowLength - 1:
                         setCell(cell, row[j], WD_PARAGRAPH_ALIGNMENT.LEFT)
-                    elif j==0 and i == rowLength-1:
+                    elif j == 0 and i == rowLength - 1:
                         setCell(cell, row[j], WD_PARAGRAPH_ALIGNMENT.CENTER)
                     else:
                         setCell(cell, row[j], WD_PARAGRAPH_ALIGNMENT.RIGHT)
         elif style == 3:
             for i, row in enumerate(data):
                 for j, cell in enumerate(table.rows[i].cells):
-                    if j==0 :
+                    if j == 0:
                         setCell(cell, row[j], WD_PARAGRAPH_ALIGNMENT.LEFT)
                     else:
                         setCell(cell, row[j], WD_PARAGRAPH_ALIGNMENT.RIGHT)
-        elif style==4:
+        elif style == 4:
             for i, row in enumerate(data):
                 for j, cell in enumerate(table.rows[i].cells):
                     setCell(cell, row[j], WD_PARAGRAPH_ALIGNMENT.CENTER)
@@ -250,10 +262,10 @@ def addTable(document, table,style=1):
             for i, row in enumerate(data):
                 for j, cell in enumerate(table.rows[i].cells):
                     setCell(cell, row[j], WD_PARAGRAPH_ALIGNMENT.LEFT)
-        elif style==6:
+        elif style == 6:
             for i, row in enumerate(data):
                 for j, cell in enumerate(table.rows[i].cells):
-                    if j==0 :
+                    if j == 0:
                         setCell(cell, row[j], WD_PARAGRAPH_ALIGNMENT.LEFT)
                     else:
                         if is_number(row[j]):
@@ -274,27 +286,27 @@ def addTable(document, table,style=1):
                     if i == 0:
                         setNotToFloatCell(title, cell, j, row, WD_PARAGRAPH_ALIGNMENT.CENTER)
                     else:
-                        if j==0 and i!=rowLength-1:
+                        if j == 0 and i != rowLength - 1:
                             setNotToFloatCell(title, cell, j, row, WD_PARAGRAPH_ALIGNMENT.LEFT)
-                        elif j==0 and i == rowLength-1:
+                        elif j == 0 and i == rowLength - 1:
                             setNotToFloatCell(title, cell, j, row, WD_PARAGRAPH_ALIGNMENT.CENTER)
                         else:
                             setNotToFloatCell(title, cell, j, row, WD_PARAGRAPH_ALIGNMENT.RIGHT)
-        elif style ==3:
+        elif style == 3:
             for i, row in enumerate(data):
                 for j, cell in enumerate(table.rows[i].cells):
                     if i == 0:
                         setNotToFloatCell(title, cell, j, row, WD_PARAGRAPH_ALIGNMENT.CENTER)
                     else:
-                        if j==0 :
+                        if j == 0:
                             setNotToFloatCell(title, cell, j, row, WD_PARAGRAPH_ALIGNMENT.LEFT)
                         else:
                             setNotToFloatCell(title, cell, j, row, WD_PARAGRAPH_ALIGNMENT.RIGHT)
-        elif style==4:
+        elif style == 4:
             for i, row in enumerate(data):
                 for j, cell in enumerate(table.rows[i].cells):
                     setNotToFloatCell(title, cell, j, row, WD_PARAGRAPH_ALIGNMENT.CENTER)
-        elif style ==5:
+        elif style == 5:
             for i, row in enumerate(data):
                 for j, cell in enumerate(table.rows[i].cells):
                     if i == 0:
@@ -317,7 +329,7 @@ def addTable(document, table,style=1):
 
 
 # 添加众向合并表格，自动合并下一个为空的单元格
-def addCombineTableContent(table,dc,titleLength):
+def addCombineTableContent(table, dc, titleLength):
     for key in range(len(dc["index"])):
         row = key + titleLength
         for j in range(len(dc["columns"])):
@@ -325,10 +337,11 @@ def addCombineTableContent(table,dc,titleLength):
             if str(dc["data"][key][j]) == "nan":
                 cell.merge(table.cell(row - 1, j))
             else:
-                setCell(cell,str(dc["data"][key][j]),WD_PARAGRAPH_ALIGNMENT.LEFT)
+                setCell(cell, str(dc["data"][key][j]), WD_PARAGRAPH_ALIGNMENT.LEFT)
+
 
 # 添加众向合并表格，自动合并下一个为空的单元格
-def addContentToCombineTitle(document,dc,table,titleLength,style=1):
+def addContentToCombineTitle(document, dc, table, titleLength, style=1):
     # 获取标题和单元格
     cells = dc["data"]
     if len(cells) == 0:
@@ -336,10 +349,10 @@ def addContentToCombineTitle(document,dc,table,titleLength,style=1):
         return
     # 没有标题
     data = cells
-    rowLength = len(cells)+titleLength
+    rowLength = len(cells) + titleLength
     if style == 1:
         for i, row in enumerate(data):
-            i = i+titleLength
+            i = i + titleLength
             for j, cell in enumerate(table.rows[i].cells):
                 setCell(cell, row[j], WD_PARAGRAPH_ALIGNMENT.LEFT)
     elif style == 2:
@@ -381,34 +394,40 @@ def addContentToCombineTitle(document,dc,table,titleLength,style=1):
                     else:
                         setCell(cell, row[j], WD_PARAGRAPH_ALIGNMENT.LEFT)
 
+
 # 检查标题左面是否全部为空
-def checkLeftSpace(row,j):
+def checkLeftSpace(row, j):
     for i in range(j):
-        if row[i]!="nan":
+        if row[i] != "nan":
             return False
     return True
 
+
 # 添加合并标题
-def addCombineTableTitle(table,titles):
-    for i,row in enumerate(titles):
-        for j,cellText in enumerate(row):
-            cell = table.cell(i,j)
-            if cellText=="nan" :
-                if j>=1:
-                    if checkLeftSpace(row,j):
+# 左侧单元格空格众向合并，
+def addCombineTableTitle(table, titles):
+    for i, row in enumerate(titles):
+        for j, cellText in enumerate(row):
+            cell = table.cell(i, j)
+            if cellText == "nan":
+                if j >= 1:
+                    if checkLeftSpace(row, j):
                         cell.merge(table.cell(i - 1, j))
                     else:
-                        cell.merge(table.cell(i,j-1))
+                        cell.merge(table.cell(i, j - 1))
                 else:
-                    cell.merge(table.cell(i-1,j))
+                    cell.merge(table.cell(i - 1, j))
             else:
-                setCell(cell,cellText,WD_PARAGRAPH_ALIGNMENT.CENTER)
+                setCell(cell, cellText, WD_PARAGRAPH_ALIGNMENT.CENTER)
+
 
 # 添加横向内容
 '''
 type:合并、单体
 '''
-def addLandscapeContent(document,func,*args):
+
+
+def addLandscapeContent(document, func, *args):
     # 设置横向
     section = document.add_section(start_type=WD_SECTION_START.CONTINUOUS)
     section.orientation = WD_ORIENTATION.LANDSCAPE
@@ -417,7 +436,7 @@ def addLandscapeContent(document,func,*args):
     section.page_height = page_h
 
     # 添加内容
-    func(document,*args)
+    func(document, *args)
 
     # 重新设置为众向
     section = document.add_section(start_type=WD_SECTION_START.CONTINUOUS)
@@ -425,3 +444,33 @@ def addLandscapeContent(document,func,*args):
     page_h, page_w = section.page_width, section.page_height
     section.page_width = page_w
     section.page_height = page_h
+
+
+# 替换名称中的特殊符号☆,△和空格
+def handleName(name):
+    name = name.replace("☆", "")
+    name = name.replace("△", "")
+    name = name.replace("*", "")
+    name = name.replace("#", "")
+    name = name.replace(" ", "")
+    return name
+
+
+# 通过报表名称搜索对应的报表项目(资产负债表/利润表/现金流量表，hasNum表示是否仅搜索有数据的项目
+def searchRecordItemByName(name, records, fillNum=False):
+    for record in records:
+        if fillNum:
+            if handleName(record["name"]) == name and record["fillNum"]:
+                return record
+        else:
+            if handleName(record["name"]) == name:
+                return record
+    return None
+
+
+# 查找模型
+def searchModel(companyType, fsType, table, comparativeTable):
+    for item in comparativeTable:
+        if item["companyType"] == companyType and item["fsType"] == fsType and item["table"] == table:
+            return item["model"]
+    return None
