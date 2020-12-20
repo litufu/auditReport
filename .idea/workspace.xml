@@ -9,28 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="14fb975a-77bd-40a5-b05d-e0409a4de0b1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/computeNo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/project/fsmodel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/changeAndErrorCorrection.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/changeAndErrorCorrection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/combine.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/combine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/constants.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/default.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/default.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/financialStatements.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/financialStatements.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/fs.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/model.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/project/model.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/noteappended.docx" beforeDir="false" afterPath="$PROJECT_DIR$/project/noteappended.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/noteappended.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/noteappended.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/notes.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/notes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/report.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/report.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/tax.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/tax.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/~$model.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/~$teappended.docx" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -99,11 +78,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/project/noteappended.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="47595">
-              <caret line="2505" column="54" lean-forward="true" selection-start-line="2505" selection-start-column="54" selection-end-line="2505" selection-end-column="54" />
+            <state relative-caret-position="44593">
+              <caret line="2347" selection-start-line="2347" selection-end-line="2347" />
               <folding>
                 <element signature="e#25#50#0" expanded="true" />
               </folding>
@@ -112,22 +91,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/project/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-209">
-              <caret line="19" column="57" lean-forward="true" selection-start-line="19" selection-start-column="57" selection-end-line="19" selection-end-column="57" />
-              <folding>
-                <element signature="e#25#57#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/project/changeAndErrorCorrection.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="278">
-              <caret line="380" column="10" lean-forward="true" selection-start-line="380" selection-start-column="10" selection-end-line="380" selection-end-column="10" />
+            <state relative-caret-position="240">
+              <caret line="375" column="35" lean-forward="true" selection-start-line="375" selection-start-column="27" selection-end-line="375" selection-end-column="35" />
               <folding>
                 <element signature="e#25#50#0" expanded="true" />
                 <marker date="1608465433147" expanded="true" signature="16937:17084" ph="..." />
@@ -257,10 +224,10 @@
       <find>reportype</find>
       <find>合同资产</find>
       <find>MODELPATH</find>
-      <find>fs_params</find>
       <find>addNewFinancialInstrumentsChange</find>
       <find>addNewIncomeCriteria</find>
       <find>newStandardFuncs</find>
+      <find>fs_params</find>
     </findStrings>
     <replaceStrings>
       <replace>print</replace>
@@ -294,9 +261,9 @@
         <option value="$PROJECT_DIR$/project/noteappended.py" />
         <option value="$PROJECT_DIR$/project/computeNo.py" />
         <option value="$PROJECT_DIR$/project/fsmodel.py" />
-        <option value="$PROJECT_DIR$/project/main.py" />
         <option value="$PROJECT_DIR$/project/notes.py" />
         <option value="$PROJECT_DIR$/project/changeAndErrorCorrection.py" />
+        <option value="$PROJECT_DIR$/project/main.py" />
       </list>
     </option>
   </component>
@@ -515,7 +482,7 @@
       <window_info anchor="bottom" id="Inspection Results" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3286119" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3286119" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.398017" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -524,7 +491,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.33002833" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.33002833" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32956153" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -770,26 +737,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/project/noteappended.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="47595">
-          <caret line="2505" column="54" lean-forward="true" selection-start-line="2505" selection-start-column="54" selection-end-line="2505" selection-end-column="54" />
-          <folding>
-            <element signature="e#25#50#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-209">
-          <caret line="19" column="57" lean-forward="true" selection-start-line="19" selection-start-column="57" selection-end-line="19" selection-end-column="57" />
-          <folding>
-            <element signature="e#25#57#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/project/constants.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -835,11 +782,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/project/changeAndErrorCorrection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="278">
-          <caret line="380" column="10" lean-forward="true" selection-start-line="380" selection-start-column="10" selection-end-line="380" selection-end-column="10" />
+        <state relative-caret-position="240">
+          <caret line="375" column="35" lean-forward="true" selection-start-line="375" selection-start-column="27" selection-end-line="375" selection-end-column="35" />
           <folding>
             <element signature="e#25#50#0" expanded="true" />
             <marker date="1608465433147" expanded="true" signature="16937:17084" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="20" column="16" lean-forward="true" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
+          <folding>
+            <element signature="e#25#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/noteappended.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44593">
+          <caret line="2347" selection-start-line="2347" selection-end-line="2347" />
+          <folding>
+            <element signature="e#25#50#0" expanded="true" />
           </folding>
         </state>
       </provider>
