@@ -1,12 +1,10 @@
 # -*- coding: UTF-8 -*-
-
-from docx import Document
 import pandas as pd
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
-from project.settings import setStyle
 from project.utils import checkLeftSpace, addTitle, addCombineTableTitle, addContentToCombineTitle, addParagraph, \
-    createBorderedTable, addTable, setCell, addLandscapeContent, to_chinese, searchRecordItemByName, handleName,searchModel
+    createBorderedTable, addTable, setCell, addLandscapeContent, to_chinese, searchRecordItemByName, \
+    handleName,searchModel,set_cell_border
 
 
 # 第一步计算出报表项目编号
@@ -37,7 +35,7 @@ def addCombineTitleSpecialReceivable(titles, table, combineCells):
                     cell.merge(table.cell(i - 1, j))
             else:
                 setCell(cell, cellText, WD_PARAGRAPH_ALIGNMENT.CENTER)
-
+    set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
 
 def addStart(document, context):
     companyType = context["report_params"]["companyType"]
@@ -63,13 +61,11 @@ def addStart(document, context):
             addTitle(document, "六、合并财务报表项目注释", 1, False)
         else:
             addTitle(document, "六、财务报表项目注释", 1, False)
-
     basicDesc = "以下注释项目除特别注明之外，金额单位为{}；期初数指{}年12月31日财务报表数，期末数指{}财务报表数，本期指{}，上期指{}".format(currencyUnit,
                                                                                           int(startYear) - 1,
                                                                                           reportDate, reportPeriod,
                                                                                           lastPeriod)
     addParagraph(document, basicDesc, "paragraph")
-
 
 # （一）货币资金
 def addMonetary(document, num, path, context):
@@ -1689,29 +1685,29 @@ def addCashFlowReplenishment(document, num, path, context):
     reportType = context["report_params"]["type"]
     # 现金流量表补充资料
     addTitle(document, "（{}）现金流量表补充资料".format(to_chinese(num)), 2, True)
-    addTitle(document, "1、按间接法将净利润调节为经营活动现金流量的信息", 2, True)
+    addParagraph(document, "1、按间接法将净利润调节为经营活动现金流量的信息", "paragraph")
     excelTableToWord(document, "现金流量表补充资料", path, style=2)
     if reportType == "合并":
         if context["noteAppend"]["purchaseSubsidiaries"]:
-            addTitle(document, "2、本期支付的取得子公司的现金净额", 2, True)
+            addParagraph(document, "2、本期支付的取得子公司的现金净额", "paragraph")
             excelTableToWord(document, "本期支付的取得子公司的现金净额", path, style=2)
             if context["noteAppend"]["disposalSubsidiaries"]:
-                addTitle(document, "3、本期收到的处置子公司的现金净额", 2, True)
+                addParagraph(document, "3、本期收到的处置子公司的现金净额", "paragraph")
                 excelTableToWord(document, "本期收到的处置子公司的现金净额", path, style=2)
             else:
-                addTitle(document, "3、现金及现金等价物的构成", 2, True)
+                addParagraph(document, "3、现金及现金等价物的构成", "paragraph")
                 excelTableToWord(document, "现金及现金等价物的构成", path, style=2)
         else:
             if context["noteAppend"]["disposalSubsidiaries"]:
-                addTitle(document, "2、本期收到的处置子公司的现金净额", 2, True)
+                addParagraph(document, "2、本期收到的处置子公司的现金净额", "paragraph")
                 excelTableToWord(document, "本期收到的处置子公司的现金净额", path, style=2)
-                addTitle(document, "3、现金及现金等价物的构成", 2, True)
+                addParagraph(document, "3、现金及现金等价物的构成", "paragraph")
                 excelTableToWord(document, "现金及现金等价物的构成", path, style=2)
             else:
-                addTitle(document, "2、现金及现金等价物的构成", 2, True)
+                addParagraph(document, "2、现金及现金等价物的构成", "paragraph")
                 excelTableToWord(document, "现金及现金等价物的构成", path, style=2)
     else:
-        addTitle(document, "2、现金及现金等价物的构成", 2, True)
+        addParagraph(document, "2、现金及现金等价物的构成", "paragraph")
         excelTableToWord(document, "现金及现金等价物的构成", path, style=2)
 
 
@@ -1830,11 +1826,12 @@ funcDict = {
 
 
 # 添加报表附注
-def addFsNote(document, path,context, isAll, assetsRecordsCombine, liabilitiesRecordsCombine, profitRecordsCombine,
+def addFsNote(document, path,context,isAll, assetsRecordsCombine, liabilitiesRecordsCombine, profitRecordsCombine,
               cashRecordsCombine,
               assetsRecordsSingle, liabilitiesRecordsSingle, profitRecordsSingle, cashRecordsSingle):
     # 报告类型
     reportType = context["report_params"]["type"]
+
 
     combines = [assetsRecordsCombine, liabilitiesRecordsCombine, profitRecordsCombine, cashRecordsCombine]
     singles = [assetsRecordsSingle, liabilitiesRecordsSingle, profitRecordsSingle, cashRecordsSingle]
@@ -1904,7 +1901,7 @@ def getLastNum(context, cashRecordsCombine, profitRecordsCombine, cashRecordsSin
             return getReportFormLastNum(profitRecordsSingle)
 
 
-def addOtherNoteAppended(document, path, context, assetsRecordsCombine):
+def addOtherNoteAppended(document, currentpath,parentpath, context, assetsRecordsCombine,comparativeTable):
     companyType = context["report_params"]["companyType"]
     # 报告类型
     reportType = context["report_params"]["type"]
@@ -1920,88 +1917,88 @@ def addOtherNoteAppended(document, path, context, assetsRecordsCombine):
             addTitle(document, "十、资产负债表日后事项", 1, False)
             addEventsAfterBalanceSheetDate(document)
             addTitle(document, "十一、关联方及关联交易", 1, False)
-            addRelationship(document, path, context, assetsRecordsCombine)
+            addRelationship(document, currentpath, context, assetsRecordsCombine)
             addTitle(document, "十二、母公司财务报表主要项目注释", 1, False)
-            addParentCompanyNoteAppended(document)
+            addParentCompanyNoteAppended(document, parentpath, context, comparativeTable)
         else:
             addTitle(document, "八、或有事项", 1, False)
             addParagraph(document, "截止{}，本公司无需要披露的重大或有事项。".format(context["report_params"]["reportDate"]), "paragraph")
             addTitle(document, "九、资产负债表日后事项", 1, False)
             addEventsAfterBalanceSheetDate(document)
             addTitle(document, "十、关联方及关联交易", 1, False)
-            addRelationship(document, path, context, assetsRecordsCombine)
+            addRelationship(document, currentpath, context, assetsRecordsCombine)
             addTitle(document, "十一、母公司财务报表主要项目注释", 1, False)
-            addParentCompanyNoteAppended(document)
+            addParentCompanyNoteAppended(document, parentpath, context, comparativeTable)
 
     else:
         if reportType == "合并":
             addTitle(document, "七、合并范围变更", 1, False)
-            addCombineRangeChange(document, path)
+            addCombineRangeChange(document, currentpath)
             addTitle(document, "八、在其他主体中的权益", 1, False)
-            addEquityInOtherEntities(document, path, context)
+            addEquityInOtherEntities(document, currentpath, context)
             addTitle(document, "九、与金融工具相关的风险", 1, False)
-            addRisksRelatedToFinancialInstruments(document, path,context)
+            addRisksRelatedToFinancialInstruments(document, currentpath,context)
             addTitle(document, "十、公允价值的披露", 1, False)
-            addFairValue(document, path)
+            addFairValue(document, currentpath)
             addTitle(document, "十一、关联方及关联交易", 1, False)
-            addRelationship(document, path, context, assetsRecordsCombine)
+            addRelationship(document, currentpath, context, assetsRecordsCombine)
             if context["noteAppend"]["shareBasedPayment"]:
                 addTitle(document, "十二、股份支付", 1, False)
-                addShareBasedPayment(document, path, context)
+                addShareBasedPayment(document, currentpath, context)
                 addTitle(document, "十三、承诺及或有事项", 1, False)
-                addCommitmentContingency(document, path, context)
+                addCommitmentContingency(document, currentpath, context)
                 addTitle(document, "十四、资产负债表日后事项", 1, False)
                 addEventsAfterBalanceSheetDate(document)
                 addTitle(document, "十五、其他重要事项", 1, False)
-                addOtherImportantEvent(document, path, context)
+                addOtherImportantEvent(document, currentpath, context)
                 addTitle(document, "十六、母公司财务报表主要项目注释", 1, False)
-                addParentCompanyNoteAppended(document)
+                addParentCompanyNoteAppended(document, parentpath, context, comparativeTable)
                 addTitle(document, "十七、其他补充资料", 1, False)
-                addOtherSupplementaryInformation(document, path)
+                addOtherSupplementaryInformation(document, currentpath)
             else:
                 addTitle(document, "十二、承诺及或有事项", 1, False)
-                addCommitmentContingency(document, path, context)
+                addCommitmentContingency(document, currentpath, context)
                 addTitle(document, "十三、资产负债表日后事项", 1, False)
                 addEventsAfterBalanceSheetDate(document)
                 addTitle(document, "十四、其他重要事项", 1, False)
-                addOtherImportantEvent(document, path, context)
+                addOtherImportantEvent(document, currentpath, context)
                 addTitle(document, "十五、母公司财务报表主要项目注释", 1, False)
-                addParentCompanyNoteAppended(document)
+                addParentCompanyNoteAppended(document, parentpath, context, comparativeTable)
                 addTitle(document, "十六、其他补充资料", 1, False)
-                addOtherSupplementaryInformation(document, path)
+                addOtherSupplementaryInformation(document, currentpath)
 
         else:
             addTitle(document, "七、与金融工具相关的风险", 1, False)
-            addRisksRelatedToFinancialInstruments(document, path,context)
+            addRisksRelatedToFinancialInstruments(document, currentpath,context)
             addTitle(document, "八、公允价值的披露", 1, False)
-            addFairValue(document, path)
+            addFairValue(document, currentpath)
             addTitle(document, "九、关联方及关联交易", 1, False)
-            addRelationship(document, path, context, assetsRecordsCombine)
+            addRelationship(document, currentpath, context, assetsRecordsCombine)
             if context["noteAppend"]["shareBasedPayment"]:
                 addTitle(document, "十、股份支付", 1, False)
-                addShareBasedPayment(document, path, context)
+                addShareBasedPayment(document, currentpath, context)
                 addTitle(document, "十一、承诺及或有事项", 1, False)
-                addCommitmentContingency(document, path, context)
+                addCommitmentContingency(document, currentpath, context)
                 addTitle(document, "十二、资产负债表日后事项", 1, False)
                 addEventsAfterBalanceSheetDate(document)
                 addTitle(document, "十三、其他重要事项", 1, False)
-                addOtherImportantEvent(document, path, context)
+                addOtherImportantEvent(document, currentpath, context)
                 addTitle(document, "十四、母公司财务报表主要项目注释", 1, False)
-                addParentCompanyNoteAppended(document)
+                addParentCompanyNoteAppended(document, parentpath, context, comparativeTable)
                 addTitle(document, "十五、其他补充资料", 1, False)
-                addOtherSupplementaryInformation(document, path)
+                addOtherSupplementaryInformation(document, currentpath)
 
             else:
                 addTitle(document, "十、承诺及或有事项", 1, False)
-                addCommitmentContingency(document, path, context)
+                addCommitmentContingency(document, currentpath, context)
                 addTitle(document, "十一、资产负债表日后事项", 1, False)
                 addEventsAfterBalanceSheetDate(document)
                 addTitle(document, "十二、其他重要事项", 1, False)
-                addOtherImportantEvent(document, path, context)
+                addOtherImportantEvent(document, currentpath, context)
                 addTitle(document, "十三、母公司财务报表主要项目注释", 1, False)
-                addParentCompanyNoteAppended(document)
+                addParentCompanyNoteAppended(document, parentpath, context, comparativeTable)
                 addTitle(document, "十四、其他补充资料", 1, False)
-                addOtherSupplementaryInformation(document, path)
+                addOtherSupplementaryInformation(document, currentpath)
 
 
 # 其他补充资料
@@ -2014,8 +2011,25 @@ def addOtherSupplementaryInformation(document, path):
 
 
 # 添加母公司财务报表注释
-def addParentCompanyNoteAppended(document):
-    pass
+def addParentCompanyNoteAppended(document,parentPath,context,comparativeTable):
+    # 公司类型
+    companyType = context["report_params"]["companyType"]
+    assetsRecordsSingle = searchModel(companyType, "单体", "资产表", comparativeTable)
+    liabilitiesRecordsSingle = searchModel(companyType, "单体", "负债表", comparativeTable)
+    profitRecordsSingle = searchModel(companyType, "单体", "利润表", comparativeTable)
+
+    singles = [assetsRecordsSingle, liabilitiesRecordsSingle, profitRecordsSingle]
+    for single in singles:
+        for item in single:
+            if item["name"] == "其中：营业成本":
+                if not searchRecordItemByName("其中：营业收入", profitRecordsSingle) is None:
+                    continue
+            elif item["name"] == "减：营业成本":
+                if not searchRecordItemByName("一、营业收入", profitRecordsSingle) is None:
+                    continue
+            else:
+                if item["noteNum"] != "":
+                    funcDict[handleName(item["name"])](document, item["noteNum"], parentPath, context)
 
 
 def addSegmentInformation(document, path):
@@ -2463,7 +2477,7 @@ def addFormNote(document, path, isAll, assetsRecordsCombine, liabilitiesRecordsC
     # 添加开始
     addStart(document, context)
     # 添加报表项目
-    addFsNote(document, path,context, isAll, assetsRecordsCombine, liabilitiesRecordsCombine, profitRecordsCombine,
+    addFsNote(document, path,context,isAll, assetsRecordsCombine, liabilitiesRecordsCombine, profitRecordsCombine,
               cashRecordsCombine,
               assetsRecordsSingle, liabilitiesRecordsSingle, profitRecordsSingle, cashRecordsSingle)
     # 添加非报表项目
@@ -2496,7 +2510,7 @@ def addFormNote(document, path, isAll, assetsRecordsCombine, liabilitiesRecordsC
 
 # 添加报表附注
 # isAll显示所有的报表项目,主要用于测试环境，生产环境设置为False
-def addNoteAppended(document, path,context, comparativeTable,isAll=True):
+def addNoteAppended(document, currentpath,parentpath,context, comparativeTable,isAll=True):
     # 公司类型
     companyType = context["report_params"]["companyType"]
     # 获取报表
@@ -2509,27 +2523,29 @@ def addNoteAppended(document, path,context, comparativeTable,isAll=True):
     profitRecordsSingle = searchModel(companyType, "单体", "利润表", comparativeTable)
     cashRecordsSingle = searchModel(companyType, "单体", "现金流量表", comparativeTable)
     # 添加报表注释
-    addFormNote(document, path, isAll, assetsRecordsCombine, liabilitiesRecordsCombine, profitRecordsCombine,
+    addFormNote(document, currentpath, isAll, assetsRecordsCombine, liabilitiesRecordsCombine, profitRecordsCombine,
                 cashRecordsCombine,
                 assetsRecordsSingle, liabilitiesRecordsSingle, profitRecordsSingle, cashRecordsSingle, context)
 
     # 添加其他注释
-    addOtherNoteAppended(document, path, context, assetsRecordsCombine)
+    addOtherNoteAppended(document, currentpath,parentpath, context, assetsRecordsCombine,comparativeTable)
 
 def test():
-    from project.data import context
+    from project.data import testcontext
     from project.constants import comparativeTable
     from project.computeNo import computeNo
+    from docx import Document
+    from project.settings import setStyle
 
     # # 根据pandas读取的excle表格数据导入word
     MODELPATH = "D:/auditReport/project/model.xlsx"
     # 计算附注编码
-    computeNo(context, comparativeTable)
+    computeNo(testcontext, comparativeTable)
 
     document = Document()
     # 设置中文标题
     setStyle(document)
-    addNoteAppended(document, MODELPATH,  context,comparativeTable,isAll=True)
+    addNoteAppended(document, MODELPATH, MODELPATH,testcontext,comparativeTable,isAll=True)
     document.save("noteappended.docx")
 
 if __name__ == '__main__':

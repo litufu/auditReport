@@ -1,3 +1,7 @@
+# -*- coding: UTF-8 -*-
+
+import pandas as pd
+
 # 审计报告
 report_params = {
     "type":"合并",#单体、合并
@@ -17,612 +21,10 @@ report_params = {
 }
 
 
-# 财务报表
-fs_params = {
-    "type":"单体",#合并、单体、母公司
-    "assetsRecordsCombine":[
-        {"name":"项            目","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"流动资产：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"货币资金","type":1,"origin":[],"endDate":1230.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△结算备付金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△拆出资金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆交易性金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"以公允价值计量且其变动计入当期损益的金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"衍生金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应收票据","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应收账款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆应收款项融资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"预付款项","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△应收保费","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△应收分保账款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△应收分保合同准备金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其他应收款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△买入返售金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"存货","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：原材料","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"库存商品(产成品)","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆合同资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"持有待售资产","type":1,"origin":[],"endDate":7890.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"一年内到期的非流动资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其他流动资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"流动资产合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"非流动资产：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"△发放贷款和垫款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆债权投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"可供出售金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆其他债权投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"持有至到期投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期应收款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期股权投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆其他权益工具投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆其他非流动金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"投资性房地产","type":1,"origin":[],"endDate":898.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"固定资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"在建工程","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"生产性生物资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"油气资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆使用权资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"无形资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"开发支出","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"商誉","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期待摊费用","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"递延所得税资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其他非流动资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：特准储备物资","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"非流动资产合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"资  产  总  计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-],
-    "assetsRecordssingle":[
-        {"name":"项            目","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"流动资产：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"货币资金","type":1,"origin":[],"endDate":1230.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△结算备付金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△拆出资金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆交易性金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"以公允价值计量且其变动计入当期损益的金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"衍生金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应收票据","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应收账款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆应收款项融资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"预付款项","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△应收保费","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△应收分保账款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△应收分保合同准备金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其他应收款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△买入返售金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"存货","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：原材料","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"库存商品(产成品)","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆合同资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"持有待售资产","type":1,"origin":[],"endDate":7890.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"一年内到期的非流动资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其他流动资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"流动资产合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"非流动资产：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"△发放贷款和垫款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆债权投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"可供出售金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆其他债权投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"持有至到期投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期应收款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期股权投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆其他权益工具投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆其他非流动金融资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"投资性房地产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"固定资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"在建工程","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"生产性生物资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"油气资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆使用权资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"无形资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"开发支出","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"商誉","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期待摊费用","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"递延所得税资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其他非流动资产","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：特准储备物资","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"非流动资产合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"资  产  总  计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-],
-    "liabilitiesRecordsComine":[
-        {"name":"项            目","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"流动负债：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"短期借款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△向中央银行借款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△拆入资金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆交易性金融负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"以公允价值计量且其变动计入当期损益的金融负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"衍生金融负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应付票据","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应付账款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"预收款项","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆合同负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△卖出回购金融资产款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△吸收存款及同业存放","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△代理买卖证券款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△代理承销证券款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应付职工薪酬","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：应付工资","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"应付福利费","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"#其中：职工奖励及福利基金","type":4,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"应交税费","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：应交税金","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他应付款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△应付手续费及佣金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△应付分保账款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"持有待售负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"一年内到期的非流动负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其他流动负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"流动负债合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"非流动负债：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"△保险合同准备金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期借款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应付债券","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：优先股","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"永续债","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆租赁负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期应付款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期应付职工薪酬","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"预计负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"递延收益","type":1,"origin":[],"endDate":5680.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"递延所得税负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他非流动负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：特准储备基金","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"非流动负债合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"负 债 合 计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"所有者权益（或股东权益）：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"实收资本（或股本）","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"国家资本","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"国有法人资本","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"集体资本","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"民营资本","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"外商资本","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"#减：已归还投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"实收资本（或股本）净额","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":True},
-        {"name":"其他权益工具","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：优先股","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"永续债","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"资本公积","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"减：库存股","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他综合收益","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：外币报表折算差额","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"专项储备","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"盈余公积","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：法定公积金","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"任意公积金","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"#储备基金","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"#企业发展基金","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"#利润归还投资","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"△一般风险准备","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"未分配利润","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"归属于母公司所有者权益（或股东权益）合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"*少数股东权益","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"所有者权益（或股东权益）合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"负债和所有者权益（或股东权益）总计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-],
-    "liabilitiesRecordsSingle":[
-        {"name":"项            目","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"流动负债：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"短期借款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△向中央银行借款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△拆入资金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆交易性金融负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"以公允价值计量且其变动计入当期损益的金融负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"衍生金融负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应付票据","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应付账款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"预收款项","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆合同负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△卖出回购金融资产款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△吸收存款及同业存放","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△代理买卖证券款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△代理承销证券款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应付职工薪酬","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：应付工资","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"应付福利费","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"#其中：职工奖励及福利基金","type":4,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"应交税费","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：应交税金","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他应付款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△应付手续费及佣金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△应付分保账款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"持有待售负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"一年内到期的非流动负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其他流动负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"流动负债合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"非流动负债：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"△保险合同准备金","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期借款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"应付债券","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：优先股","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"永续债","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆租赁负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期应付款","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"长期应付职工薪酬","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"预计负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"递延收益","type":1,"origin":[],"endDate":5680.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"递延所得税负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他非流动负债","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：特准储备基金","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"非流动负债合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"负 债 合 计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"所有者权益（或股东权益）：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"实收资本（或股本）","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"国家资本","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"国有法人资本","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"集体资本","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"民营资本","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"外商资本","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"#减：已归还投资","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"实收资本（或股本）净额","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":True},
-        {"name":"其他权益工具","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：优先股","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"永续债","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"资本公积","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"减：库存股","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他综合收益","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：外币报表折算差额","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"专项储备","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"盈余公积","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：法定公积金","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"任意公积金","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"#储备基金","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"#企业发展基金","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"#利润归还投资","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"△一般风险准备","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"未分配利润","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"归属于母公司所有者权益（或股东权益）合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"*少数股东权益","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"所有者权益（或股东权益）合计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"负债和所有者权益（或股东权益）总计","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-],
-    "profitRecordsCombine":[
-        {"name":"项            目","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"一、营业总收入","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"其中：营业收入","type":1,"origin":[],"endDate":1580.00,"startDate":0.00,"display":True,"hasNum":True},
-        {"name":"△利息收入","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△已赚保费","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△手续费及佣金收入","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"二、营业总成本","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"其中：营业成本","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"△利息支出","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△手续费及佣金支出","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△退保金","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△赔付支出净额","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△提取保险责任准备金净额","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△保单红利支出","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△分保费用","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"税金及附加","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"销售费用","type":2,"origin":[],"endDate":560.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"管理费用","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：党建工作经费","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"研发费用","type":2,"origin":[],"endDate":780.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"财务费用","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：利息费用","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"利息收入","type":4,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"汇兑净损失（净收益以“-”号填列）","type":4,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"加：其他收益","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":True},
-        {"name":"投资收益（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：对联营企业和合营企业的投资收益","type":4,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆以摊余成本计量的金融资产终止确认收益","type":5,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"△汇兑收益（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆净敞口套期收益（损失以“-”号填列)","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"公允价值变动收益（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆信用减值损失（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"资产减值损失（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"资产处置收益（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"三、营业利润（亏损以“－”号填列）","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"加：营业外收入","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：政府补助","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"减：营业外支出","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"四、利润总额（亏损总额以“－”号填列）","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"减：所得税费用","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"五、净利润（净亏损以“－”号填列）","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"（一）按所有权归属分类:","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"归属于母公司所有者的净利润","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"*少数股东损益","type":2,"origin":[],"endDate":560.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"（二）按经营持续性分类:","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"持续经营净利润","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"终止经营净利润","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"六、其他综合收益的税后净额","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"归属于母公司所有者的其他综合收益的税后净额","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"（一）不能重分类进损益的其他综合收益","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"重新计量设定受益计划变动额","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"权益法下不能转损益的其他综合收益","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆其他权益工具投资公允价值变动","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆企业自身信用风险公允价值变动","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"（二）将重分类进损益的其他综合收益","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"权益法下可转损益的其他综合收益","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆其他债权投资公允价值变动","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"可供出售金融资产公允价值变动损益","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆金融资产重分类计入其他综合收益的金额","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"持有至到期投资重分类为可供出售金融资产损益","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆其他债权投资信用减值准备","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"现金流量套期储备（现金流量套期损益的有效部分）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"外币财务报表折算差额","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"*归属于少数股东的其他综合收益的税后净额","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"七、综合收益总额","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"归属于母公司所有者的综合收益总额","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"*归属于少数股东的综合收益总额","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"八、每股收益：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":True},
-        {"name":"基本每股收益","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"稀释每股收益","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-],
-    "profitRecordsSingle":[
-        {"name":"项            目","type":"center","origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"一、营业总收入","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"其中：营业收入","type":1,"origin":[],"endDate":1580.00,"startDate":0.00,"display":True,"hasNum":True},
-        {"name":"△利息收入","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△已赚保费","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△手续费及佣金收入","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"二、营业总成本","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"其中：营业成本","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"△利息支出","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△手续费及佣金支出","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△退保金","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△赔付支出净额","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△提取保险责任准备金净额","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△保单红利支出","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"△分保费用","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"税金及附加","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"销售费用","type":2,"origin":[],"endDate":560.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"管理费用","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：党建工作经费","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"研发费用","type":2,"origin":[],"endDate":780.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"财务费用","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：利息费用","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"利息收入","type":4,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"汇兑净损失（净收益以“-”号填列）","type":4,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"加：其他收益","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":True},
-        {"name":"投资收益（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：对联营企业和合营企业的投资收益","type":4,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆以摊余成本计量的金融资产终止确认收益","type":5,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"△汇兑收益（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆净敞口套期收益（损失以“-”号填列)","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"公允价值变动收益（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"☆信用减值损失（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"资产减值损失（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"资产处置收益（损失以“-”号填列）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"三、营业利润（亏损以“－”号填列）","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"加：营业外收入","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"其中：政府补助","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"减：营业外支出","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"四、利润总额（亏损总额以“－”号填列）","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"减：所得税费用","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":True},
-        {"name":"五、净利润（净亏损以“－”号填列）","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"（一）按所有权归属分类:","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"归属于母公司所有者的净利润","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"*少数股东损益","type":2,"origin":[],"endDate":560.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"（二）按经营持续性分类:","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"持续经营净利润","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"终止经营净利润","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"六、其他综合收益的税后净额","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"归属于母公司所有者的其他综合收益的税后净额","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"（一）不能重分类进损益的其他综合收益","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"重新计量设定受益计划变动额","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"权益法下不能转损益的其他综合收益","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆其他权益工具投资公允价值变动","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆企业自身信用风险公允价值变动","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"（二）将重分类进损益的其他综合收益","type":2,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"权益法下可转损益的其他综合收益","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆其他债权投资公允价值变动","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"可供出售金融资产公允价值变动损益","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆金融资产重分类计入其他综合收益的金额","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"持有至到期投资重分类为可供出售金融资产损益","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"☆其他债权投资信用减值准备","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"现金流量套期储备（现金流量套期损益的有效部分）","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"外币财务报表折算差额","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"其他","type":3,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"*归属于少数股东的其他综合收益的税后净额","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"七、综合收益总额","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":False},
-        {"name":"归属于母公司所有者的综合收益总额","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"*归属于少数股东的综合收益总额","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"八、每股收益：","type":0,"origin":[],"endDate":0.00,"startDate":0.00,"display":True,"hasNum":True},
-        {"name":"基本每股收益","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-        {"name":"稀释每股收益","type":1,"origin":[],"endDate":0.00,"startDate":0.00,"display":False,"hasNum":False},
-],
-    "cashRecordsCombine":[
-    {"name": "项              目", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "一、经营活动产生的现金流量：", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "销售商品、提供劳务收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△客户存款和同业存放款项净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△向中央银行借款净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△向其他金融机构拆入资金净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△收到原保险合同保费取得的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△收到再保业务现金净额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△保户储金及投资款净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△处置以公允价值计量且其变动计入当期损益的金融资产净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△收取利息、手续费及佣金的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△拆入资金净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△回购业务资金净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△代理买卖证券收到的现金净额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "收到的税费返还", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "收到其他与经营活动有关的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "经营活动现金流入小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "购买商品、接受劳务支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△客户贷款及垫款净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△存放中央银行和同业款项净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△支付原保险合同赔付款项的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△拆出资金净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△支付利息、手续费及佣金的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△支付保单红利的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "支付给职工及为职工支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "支付的各项税费", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "支付其他与经营活动有关的现金", "type":1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "经营活动现金流出小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "经营活动产生的现金流量净额", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "二、投资活动产生的现金流量：", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "收回投资收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "取得投资收益收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "处置固定资产、无形资产和其他长期资产收回的现金净额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "处置子公司及其他营业单位收到的现金净额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "收到其他与投资活动有关的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "投资活动现金流入小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "购建固定资产、无形资产和其他长期资产支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "投资支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△质押贷款净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "取得子公司及其他营业单位支付的现金净额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "支付其他与投资活动有关的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "投资活动现金流出小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "投资活动产生的现金流量净额", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "三、筹资活动产生的现金流量：", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "吸收投资收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "其中：子公司吸收少数股东投资收到的现金", "type": 2, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "取得借款收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△发行债券收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "收到其他与筹资活动有关的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "筹资活动现金流入小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "偿还债务支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "分配股利、利润或偿付利息支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "其中：子公司支付给少数股东的股利、利润", "type": 2, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "支付其他与筹资活动有关的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "筹资活动现金流出小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "筹资活动产生的现金流量净额", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "四、汇率变动对现金及现金等价物的影响", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "五、现金及现金等价物净增加额", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "加：期初现金及现金等价物余额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "六、期末现金及现金等价物余额", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-],
-    "cashRecordsSingle":[
-    {"name": "项              目", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "一、经营活动产生的现金流量：", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "销售商品、提供劳务收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△客户存款和同业存放款项净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△向中央银行借款净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△向其他金融机构拆入资金净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△收到原保险合同保费取得的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△收到再保业务现金净额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△保户储金及投资款净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△处置以公允价值计量且其变动计入当期损益的金融资产净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△收取利息、手续费及佣金的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△拆入资金净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△回购业务资金净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△代理买卖证券收到的现金净额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "收到的税费返还", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "收到其他与经营活动有关的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "经营活动现金流入小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "购买商品、接受劳务支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△客户贷款及垫款净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△存放中央银行和同业款项净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△支付原保险合同赔付款项的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△拆出资金净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△支付利息、手续费及佣金的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△支付保单红利的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "支付给职工及为职工支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "支付的各项税费", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "支付其他与经营活动有关的现金", "type":1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "经营活动现金流出小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "经营活动产生的现金流量净额", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "二、投资活动产生的现金流量：", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "收回投资收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "取得投资收益收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "处置固定资产、无形资产和其他长期资产收回的现金净额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "处置子公司及其他营业单位收到的现金净额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "收到其他与投资活动有关的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "投资活动现金流入小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "购建固定资产、无形资产和其他长期资产支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "投资支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△质押贷款净增加额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "取得子公司及其他营业单位支付的现金净额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "支付其他与投资活动有关的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "投资活动现金流出小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "投资活动产生的现金流量净额", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "三、筹资活动产生的现金流量：", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "吸收投资收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "其中：子公司吸收少数股东投资收到的现金", "type": 2, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "取得借款收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "△发行债券收到的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "收到其他与筹资活动有关的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "筹资活动现金流入小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "偿还债务支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "分配股利、利润或偿付利息支付的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "其中：子公司支付给少数股东的股利、利润", "type": 2, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "支付其他与筹资活动有关的现金", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":False,"hasNum":False},
-    {"name": "筹资活动现金流出小计", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "筹资活动产生的现金流量净额", "type": "center", "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "四、汇率变动对现金及现金等价物的影响", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "五、现金及现金等价物净增加额", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "加：期初现金及现金等价物余额", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-    {"name": "六、期末现金及现金等价物余额", "type": 0, "origin": [], "endDate": 0.00, "startDate": 0.00,"display":True,"hasNum":False},
-],
-    "ownerRecordsCombine":[
-        {"name":"项            目","type":"center","origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"一、上年年末余额","type":0,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"加：会计政策变更","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"前期差错更正","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"其他","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"二、本年年初余额","type":0,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"三、本期增减变动金额（减少以“-”号填列）","type":0,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"（一）综合收益总额","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"（二）所有者投入和减少资本","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"所有者投入资本","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"其他权益工具持有者投入资本","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"股份支付计入所有者权益的金额","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"其他","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"（三）专项储备提取和使用","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"提取专项储备","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"使用专项储备","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"（四）利润分配","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"提取盈余公积","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"其中：法定公积金","type":3,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"任意公积金","type":4,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"#储备基金","type":4,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"#企业发展基金","type":4,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"#利润归还投资","type":4,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"提取一般风险准备","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"对所有者（或股东）的分配","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":" 其他","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"（五）所有者权益内部结转","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"资本公积转增资本（或股本）","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"盈余公积转增资本（或股本）","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"盈余公积弥补亏损","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"设定受益计划变动额结转留存收益","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"☆其他综合收益结转留存收益","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"其他","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"四、本年年末余额","type":0,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-],
-    "ownerRecordsSingle":[
-        {"name":"项            目","type":"center","origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"一、上年年末余额","type":0,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"加：会计政策变更","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"前期差错更正","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"其他","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"二、本年年初余额","type":0,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"三、本期增减变动金额（减少以“-”号填列）","type":0,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"（一）综合收益总额","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"（二）所有者投入和减少资本","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"所有者投入资本","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"其他权益工具持有者投入资本","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"股份支付计入所有者权益的金额","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"其他","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"（三）专项储备提取和使用","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"提取专项储备","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"使用专项储备","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"（四）利润分配","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"提取盈余公积","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"其中：法定公积金","type":3,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"任意公积金","type":4,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"#储备基金","type":4,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"#企业发展基金","type":4,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"#利润归还投资","type":4,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"提取一般风险准备","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"对所有者（或股东）的分配","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":" 其他","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"（五）所有者权益内部结转","type":1,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-        {"name":"资本公积转增资本（或股本）","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"盈余公积转增资本（或股本）","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"盈余公积弥补亏损","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"设定受益计划变动额结转留存收益","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"☆其他综合收益结转留存收益","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"其他","type":2,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":False},
-        {"name":"四、本年年末余额","type":0,"origin":[],"paidInCapital":0.00,"preferedStock":0.00,"perpetualDebt":0.00,"otherEquityInstruments":0.00,"capitalReserve":0.00,"treasuryStock":0.00,"otherComprehensiveIncome":0.00,"specialReserve":0.00,"surplusReserve":0.00,"generalRiskReserve":0.00,"undistributedProfit":0.00,"subtotal":0.00,"minorityInterests":0.00,"totalOwnerEquity":0.00,"display":True},
-],
-}
+# # 财务报表
+# fs_params = {
+#     "type":"单体",#合并、单体、母公司
+# }
 # 会计政策
 notes_params = {
     "criterion":"新准则",#新准则、老准则、部分新准则
@@ -633,7 +35,7 @@ notes_params = {
     "companyIntroduce":"杭州市城市建设发展集团有限公司(以下简称“公司”或“本公司”)原系经杭州市机构编制委员会杭编〔1993〕70号文和杭州市城乡建设委员会杭建组发〔1993〕216号文批准组建的实行企业化管理的全民所有制事业单位，注册资本2,000万元。2000年8月，根据杭州市财政局杭财基〔2000〕字511号文，本公司增加注册资本300,000万元，增资后注册资本为302,000万元。公司于2001年12月30日在杭州市工商行政管理局登记注册，取得注册号330100000074750的《企业法人营业执照》。2003年6月，根据中共杭州市委〔2003〕58号文，公司股权划转至杭州市城市建设投资集团有限公司(以下简称杭州城投公司)，成为其下属的全资子公司。2017年9月7日由杭州市市场监督管理局换发统一社会信用代码为91330100470102706G的《营业执照》。法定代表人：胥东；注册地址：杭州市江干区新塘路33-35号12、13层。",
     "companyBussiness":"本公司经营范围：服务：经营出资人授权范围内的国有资产，房地产开发、经营； 服务：市政项目建设、管理、咨询，停车设施的技术开发；批发、零售：建筑材料，金属材料，五金交电，装饰材料，木材，机电设备，百货，工艺美术品，包装材料，羊毛，纸张；货物及技术进出口（法律、行政法规禁止的项目除外，法律、行政法规限制的项目取得许可后方可经营）；其他无需报经审批的一切合法项目；含下属分支机构经营范围。",
     "companyParent":"本公司的母公司为杭州市城市建设投资集团有限公司。",
-    "companyIssued":"本公司2019年度财务报告经董事会批准于2020年3月23日对外报出。",
+    "companyIssuedDate":"2020年3月23日",
     "operationPeriod":"营业期限自2004年12月30日至2054年12月29日止。",
     "judgmentStandardOfSignificantSingleAmount":"本公司将同一客户应收款项占年末所属类别应收款项总额10%或以上的应收款项确认为单项金额重大的应收款项。",
     "combinationClassification":[["组合1","除组合2以外的应收款项","账龄分析法"],["组合2","根据业务性质和客户的历史交易情况，认定信用风险不重大的应收款项","不计提坏账"]],
@@ -667,7 +69,7 @@ notes_params = {
         ["建设和移交合同","对于本公司提供基础设施建设服务的，于建设阶段，按照基础设施建设业务的收入所述的会计政策确认相关基础设施建设服务收入和成本，基础设施建设服务收入按照收取或有权收取的对价计量，在确认收入的同时确认合同资产，并对合同安排中的重大融资成分进行会计处理。待拥有无条件收取对价权利时，转入“长期应收款”，待收到业主支付的款项后，进行冲减。"],
     ],
     "constructionContractCompletionProgress":"累计实际发生的合同成本占合同预计总成本的比例",#建造合同完工进度 累计实际发生的合同成本占合同预计总成本的比例/已经完成的合同工作量占合同预计总工作量的比例/实际测定的完工进度
-    "shareBasedPayment":"不存在",#存在/不存在
+    "shareBasedPayment":False,#True/False
 
 
 
@@ -714,8 +116,8 @@ combine = {
     "statementOnInconsistencyOfAccountingPeriodBetweenSubsidiaryCompanyAndParentCompany":"不适用",#（子公司与母公司会计期间不一致的说明
     "majorRestrictionsOnSubsidiariesUseOfEnterpriseGroupAssetsAndSettlementOfEnterpriseGroupDebts":"不适用",#子企业使用企业集团资产和清偿企业集团债务的重大限制
     "structuredSubject":"不适用",#（十三）	纳入合并财务报表范围的结构化主体的相关信息
-    "changesInShareOfOwnerEquityOfParentCompanyInSubsidiaryEnterprises":"不适用",#（十三）	纳入合并财务报表范围的结构化主体的相关信息
-    "theAbilityOfSubsidiaryToTransferFundsToItsParentCompanyIsStrictlyRestricted":"不适用",#（十三）	纳入合并财务报表范围的结构化主体的相关信息
+    "changesInShareOfOwnerEquityOfParentCompanyInSubsidiaryEnterprises":"不适用",#母公司在子企业的所有者权益份额发生变化的情况
+    "theAbilityOfSubsidiaryToTransferFundsToItsParentCompanyIsStrictlyRestricted":"不适用",#子公司向母公司转移资金的能力受到严格限制的情况
 }
 
 noteAppend = {
@@ -724,25 +126,144 @@ noteAppend = {
     "newLeaseCriteria":0,#0:老准则，1：新准则
     "purchaseSubsidiaries":False,#购买子公司
     "disposalSubsidiaries":False,#处置子公司
-    "foreignCurrencyMonetaryItems":True, #外币货币性项目
+    "foreignCurrencyMonetaryItems":False, #外币货币性项目
     "limitAsset":True,  #受限资产
     "shareBasedPayment":True,  #股份支付
     "SegmentInformation":True,  #分部信息
     "relationTransactionPrice":"本公司销售给关联方的产品、向关联方提供劳务、从关联方购买商品、接受关联方劳务价格参考市场价格经双方协商后确定。"
-
-
-
-
-
-
 }
 
-context = {
-        "report_params":report_params,
-        "fs_params":fs_params,
-        "notes_params":notes_params,
-        "standardChange":standardChange,
-        "tax":tax,
-        "combine":combine,
-        "noteAppend":noteAppend,
+# 获取值
+def getValue(name,data):
+    for item in data:
+        if item[0]==name:
+            value = item[1]
+            if isinstance(value,pd.Timestamp):
+                return "{}年{}月{}日".format(value.year,value.month,value.day)
+            elif isinstance(value,float):
+                return "{}".format(round(value, 2))
+            else:
+                value = str.strip(value)
+                if value=="无":
+                    return False
+                elif value=="有":
+                    return True
+                elif value=="是":
+                    return True
+                elif value=="否":
+                    return False
+                elif value.startswith("[") and value.endswith("]"):
+                    return eval(value)
+                else:
+                    return value
+
+def initData(path):
+    df = pd.read_excel(path, sheet_name="基础信息",header=None)
+    dc = df.to_dict("split")
+    data = dc["data"]
+
+    report_params["type"]=getValue("报告类型",data)
+    report_params["companyType"]=getValue("公司类型",data)
+    report_params["reportNo"]=getValue("审计报告编号",data)
+    report_params["companyName"]=getValue("单位名称",data)
+    report_params["CompanyAbbrName"]=getValue("公司简称",data)
+    report_params["reportDate"]=getValue("报表日期",data)
+    report_params["reportPeriod"]=getValue("报表期间",data)
+    report_params["otherInfo"]=getValue("报告中其他信息",data)
+    report_params["internalControlAudit"]=getValue("内部控制审计",data)
+    report_params["keyAuditMatters"]=getValue("关键审计事项",data)
+    report_params["accountFirm"]=getValue("会计师事务所",data)
+    report_params["accountFirmAddr"]=getValue("会计事务所地址",data)
+    report_params["issuanceDate"]=getValue("审计报告日期",data)
+
+    # fs_params["type"] = getValue("本报表类型",data)
+
+    notes_params["tandardssForFinancialInstruments"]=getValue("金融工具准则",data)
+    notes_params["incomeriteria"]=getValue("收入准则",data)
+    notes_params["leasingriteria"]=getValue("租赁准则",data)
+    notes_params["currencyUnit"]=getValue("记账本位币",data)
+    notes_params["companyIntroduce"]=getValue("公司简介",data)
+    notes_params["companyBussiness"]=getValue("经营范围",data)
+    notes_params["companyParent"]=getValue("母公司",data)
+    notes_params["companyIssuedDate"]=getValue("董事会批准日期",data)
+    notes_params["operationPeriod"]=getValue("营业期限",data)
+    notes_params["judgmentStandardOfSignificantSingleAmount"]=getValue("单项金额重大认定标准",data)
+    notes_params["combinationClassification"]=getValue("组合分类依据",data)
+    notes_params["badDebtProvisionRatio"]=getValue("坏账计提比例",data)
+    notes_params["inventoryClassification"]=getValue("存货种类",data)
+    notes_params["inventoryDeliveryPricing"]=getValue("存货发出计价方法",data)
+    notes_params["inventoryTaking"]=getValue("盘点方法",data)
+    notes_params["turnoverMaterials"]=getValue("低值易耗品摊销方法",data)
+    notes_params["measurementModeOfInvestmentRealEstate"]=getValue("投资性房地产核算模式",data)
+    notes_params["fixedAssetsCategory"]=getValue("固定资产折旧政策",data)
+    notes_params["biologicalAssets"]=getValue("生物资产种类",data)
+    notes_params["biologicalAssetsCategory"]=getValue("生物资产分类",data)
+    notes_params["consumptiveBiologicalAssets"]=getValue("消耗性生物资产分类",data)
+    notes_params["productiveBiologicalAssets"]=getValue("生产性生物资产分类",data)
+    notes_params["productiveBiologicalAssetsDepreciation"]=getValue("生产性生物资产折旧方法",data)
+    notes_params["rightToUseAssetsDepreciation"]=getValue("使用权资产折旧方法",data)
+    notes_params["oldSpecificMethodsOfRevenueRecognition"]=getValue("老准则收入确认具体方法",data)
+    notes_params["newSpecificMethodsOfRevenueRecognition"]=getValue("新准则收入确认具体方法",data)
+    notes_params["constructionContractCompletionProgress"]=getValue("建造合同完工进度",data)
+    notes_params["shareBasedPayment"]=getValue("股份支付",data)
+
+    standardChange["implementationOfNewStandardsInThisPeriod"]=getValue("本期执行的新准则",data)
+    standardChange["newFinancialInstrumentsChange"]=getValue("新金融工具准则执行变动",data)
+    standardChange["newIncomeCriteria"]=getValue("新收入准则执行变动",data)
+    standardChange["newLeaseCriteria"]=getValue("新租赁准则执行变动",data)
+    standardChange["incrementalBorrowingRate"]=getValue("增量借款利率",data)
+
+    tax["policy"]=getValue("税收政策",data)
+    tax["taxPreference"]=getValue("税收优惠",data)
+
+    contrastSubjectToNum={
+        "新金融工具准则":1,
+        "老金融工具准则":0,
+        "部分新金融工具准则":1,
+        "部分新收入准则":1,
+        "新收入准则":1,
+        "老收入准则":0,
+        "老租赁准则":0,
+        "新租赁准则":1,
+        "部分新租赁准则":1,
     }
+    noteAppend["newFinancialInstruments"]=contrastSubjectToNum[getValue("金融工具准则",data)]
+    noteAppend["newIncomeCriteria"]=contrastSubjectToNum[getValue("收入准则",data)]
+    noteAppend["newLeaseCriteria"]=contrastSubjectToNum[getValue("租赁准则",data)]
+    noteAppend["purchaseSubsidiaries"]=getValue("购买子公司",data)
+    noteAppend["disposalSubsidiaries"]=getValue("处置子公司",data)
+    noteAppend["foreignCurrencyMonetaryItems"]=getValue("外币货币性项目",data)
+    noteAppend["limitAsset"]=getValue("受限资产",data)
+    noteAppend["shareBasedPayment"]=getValue("股份支付",data)
+    noteAppend["SegmentInformation"]=getValue("分部信息",data)
+    noteAppend["relationTransactionPrice"]=getValue("关联方交易定价",data)
+
+    context = {
+        "report_params": report_params,
+        # "fs_params": fs_params,
+        "notes_params": notes_params,
+        "standardChange": standardChange,
+        "tax": tax,
+        "combine": combine,
+        "noteAppend": noteAppend,
+    }
+    return context
+
+
+testcontext = {
+        "report_params": report_params,
+        # "fs_params": fs_params,
+        "notes_params": notes_params,
+        "standardChange": standardChange,
+        "tax": tax,
+        "combine": combine,
+        "noteAppend": noteAppend,
+    }
+
+
+def test():
+    from project.constants import CURRENTPATH
+    initData(CURRENTPATH)
+
+if __name__ == '__main__':
+    test()

@@ -474,3 +474,39 @@ def searchModel(companyType, fsType, table, comparativeTable):
         if item["companyType"] == companyType and item["fsType"] == fsType and item["table"] == table:
             return item["model"]
     return None
+
+
+# 获取报告附注编码
+def getNoteNum(context,isParent):
+    companyType = context["report_params"]["companyType"]
+    # 报告类型
+    reportType = context["report_params"]["type"]
+
+    if isParent:
+        if companyType == "国有企业":
+            if reportType == "合并":
+                return "十二"
+            else:
+                return "十一"
+        else:
+            if reportType == "合并":
+                if context["noteAppend"]["shareBasedPayment"]:
+                    return "十六"
+                else:
+                    return "十五"
+            else:
+                if context["noteAppend"]["shareBasedPayment"]:
+                    return "十四"
+                else:
+                    return "十三"
+    else:
+        if companyType == "国有企业":
+            if reportType == "合并":
+                return "八"
+            else:
+                return "七"
+        else:
+            if reportType == "合并":
+                return "六"
+            else:
+                return "六"

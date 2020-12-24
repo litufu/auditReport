@@ -36,7 +36,7 @@ assetsRecordsState = [
      "fillNum": True},
     {"name": "存货", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00, "display": False, "hasNum": True,
      "fillNum": True},
-    {"name": "其中：原材料", "type": 2, "origin": [], "endDate": 0.00, "startDate": 0.00, "display": False, "hasNum": False,
+    {"name": "其中：原材料", "type": 2, "origin": [], "endDate": 0.00, "startDate": 0.00, "display": True, "hasNum": False,
      "fillNum": True},
     {"name": "库存商品(产成品)", "type": 3, "origin": [], "endDate": 0.00, "startDate": 0.00, "display": False,
      "hasNum": False, "fillNum": True},
@@ -138,7 +138,7 @@ assetsRecordsStateSingle = [
      "fillNum": True},
     {"name": "存货", "type": 1, "origin": [], "endDate": 0.00, "startDate": 0.00, "display": False, "hasNum": True,
      "fillNum": True},
-    {"name": "其中：原材料", "type": 2, "origin": [], "endDate": 0.00, "startDate": 0.00, "display": False, "hasNum": False,
+    {"name": "其中：原材料", "type": 2, "origin": [], "endDate": 0.00, "startDate": 0.00, "display": True, "hasNum": False,
      "fillNum": True},
     {"name": "库存商品(产成品)", "type": 3, "origin": [], "endDate": 0.00, "startDate": 0.00, "display": False,
      "hasNum": False, "fillNum": True},
@@ -3046,8 +3046,8 @@ contrastSubjects = {
 tables = ["资产表", "负债表", "利润表", "现金流量表", "本期所有者权益变动表", "上期所有者权益变动表"]
 # 根据pandas读取的excle表格数据导入word
 MODELPATH = "D:/auditReport/project/model.xlsx"
-COMBINEPATH = "D:/auditReport/project/model.xlsx"
-SINGLEPATH = "D:/auditReport/project/model.xlsx"
+CURRENTPATH = "D:/auditReport/project/model.xlsx"
+PARENTPATH = "D:/auditReport/project/model.xlsx"
 # 国有企业资产负债表标题行
 balanceTitlesState = ["项            目", "行次", "年末余额", "年初余额", "注释号"]
 # 上市公司资产负债表标题行

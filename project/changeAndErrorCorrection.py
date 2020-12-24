@@ -3,14 +3,13 @@
 from docx import Document
 import pandas as pd
 
-# from project.data import report_params, standardChange
 from project.settings import setStyle
 from project.utils import addLandscapeContent, addTitle, addCombineTableTitle, addCombineTableContent, addParagraph, \
     createBorderedTable, addTable, to_chinese
 
 
 # 首次执行日前后金融资产分类和计量对比表
-def addContent1(document,path,context):
+def addContent1(document, path, context):
     reportType = context["report_params"]["type"]
     # 报告日期
     reportDate = context["report_params"]["reportDate"]
@@ -58,7 +57,7 @@ def addContent1(document,path,context):
 
 
 # 添加新金融工具准则
-def addNewFinancialInstrumentsChange(document, numTitle, path,context):
+def addNewFinancialInstrumentsChange(document, numTitle, path, context):
     reportType = context["report_params"]["type"]
     # 报告日期
     reportDate = context["report_params"]["reportDate"]
@@ -79,7 +78,7 @@ def addNewFinancialInstrumentsChange(document, numTitle, path,context):
     for content in context["standardChange"]["newFinancialInstrumentsChange"]:
         addParagraph(document, content, "paragraph")
     # 首次执行日前后金融资产分类和计量对比表
-    addLandscapeContent(document, addContent1, path,context)
+    addLandscapeContent(document, addContent1, path, context)
 
     # ②首次执行日，原金融资产账面价值调整为按照新金融工具准则的规定进行分类和计量的新金融资产账面价值的调节表
     if companyType == "国有企业":
@@ -154,7 +153,7 @@ def addNewFinancialInstrumentsChange(document, numTitle, path,context):
 
 
 # 添加新收入准则
-def addNewIncomeCriteria(document, numTitle,  path,context):
+def addNewIncomeCriteria(document, numTitle, path, context):
     companyTye = context["report_params"]["companyType"]
     reportType = context["report_params"]["type"]
     # 报告日期
@@ -216,7 +215,7 @@ def addNewIncomeCriteria(document, numTitle,  path,context):
         addTable(document, dc, style=3)
 
 
-def addNewLeaseCriteria(document, numTitle,  path,context):
+def addNewLeaseCriteria(document, numTitle, path, context):
     reportType = context["report_params"]["type"]
     # 报告日期
     reportDate = context["report_params"]["reportDate"]
@@ -262,7 +261,7 @@ def addNewLeaseCriteria(document, numTitle,  path,context):
 
 
 # 入口函数
-def addChange(document, num,context):
+def addChange(document, num, context, path):
     # 公司类型
     companyType = context["report_params"]["companyType"]
     # 报告日期
@@ -271,8 +270,6 @@ def addChange(document, num,context):
     startYear = reportDate[:4]
     # 合并报表还是单体报表
     reportType = context["report_params"]["type"]
-    # 根据pandas读取的excle表格数据导入word
-    path = "D:/auditReport/project/model.xlsx"
 
     if companyType == "国有企业":
         addTitle(document, "五、会计政策、会计估计变更以及差错更正的说明", 1, False)
@@ -308,7 +305,7 @@ def addChange(document, num,context):
             addParagraph(document, ImplementationOfNewStandardsDesc, "paragraph")
             num = 1
             for newStandard in context["standardChange"]["implementationOfNewStandardsInThisPeriod"]:
-                newStandardFuncs[newStandard](document, "{}、执行{}导致的会计政策变更".format(num, newStandard), path,context)
+                newStandardFuncs[newStandard](document, "{}、执行{}导致的会计政策变更".format(num, newStandard), path, context)
 
                 num += 1
         else:
@@ -354,7 +351,8 @@ def addChange(document, num,context):
             addParagraph(document, ImplementationOfNewStandardsDesc, "paragraph")
             num = 1
             for newStandard in context["standardChange"]["implementationOfNewStandardsInThisPeriod"]:
-                newStandardFuncs[newStandard](document, "（{}）执行{}导致的会计政策变更".format(num, newStandard), reportType, startYear,
+                newStandardFuncs[newStandard](document, "（{}）执行{}导致的会计政策变更".format(num, newStandard), reportType,
+                                              startYear,
                                               path)
                 num += 1
         else:
@@ -367,15 +365,18 @@ def addChange(document, num,context):
         addParagraph(document, "3、重要前期差错更正", "paragraph")
         addParagraph(document, "本公司{}年度无应披露的重要前期差错更正。".format(startYear), "paragraph")
 
+
 def test():
-    from project.data import context
+    from project.data import testcontext
+    from project.constants import CURRENTPATH
     document = Document()
     # 设置中文标题
     setStyle(document)
     num = 5
-    addChange(document, num,context)
+    addChange(document, num, testcontext, path=CURRENTPATH)
 
     document.save("change.docx")
+
 
 if __name__ == '__main__':
     test()

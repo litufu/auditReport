@@ -47,9 +47,10 @@ def addBasic(document,title,context,comparativeTable):
     # 3、母公司以及集团总部的名称
     # 4、财务报告的批准报出者和财务报告批准报出日
     # 5、营业期限有限的企业，还应当披露有关其营业期限的信息。
-    basic_paragraphs = ["companyIntroduce", "companyBussiness", "companyParent", "companyIssued", "operationPeriod"]
+    basic_paragraphs = ["companyIntroduce", "companyBussiness", "companyParent", "operationPeriod"]
     for content in basic_paragraphs:
         addParagraph(document, context["notes_params"][content], "paragraph")
+    addParagraph(document, "本公司{}财务报告经董事会批准于{}对外报出。".format(context["report_params"]["reportPeriod"],context["notes_params"]["companyIssuedDate"]), "paragraph")
     document.add_paragraph()
 
 # 二、	财务报表的编制基础
@@ -996,7 +997,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "single": shareBasedPayment,
             "combine": shareBasedPayment,
             "table": {},
-            "condition": {"type": "IsEqual", "value": "存在",
+            "condition": {"type": "IsEqual", "value": True,
                           "origin": context["notes_params"]["shareBasedPayment"]}
         },
         {
@@ -1163,8 +1164,11 @@ def addNoteAccountingPolicy(document,context,comparativeTable):
     return s
 
 def test():
-    from project.data import context
     from project.constants import comparativeTable
+    from project.data import initData
+    from project.constants import CURRENTPATH
+
+    context = initData(CURRENTPATH)
 
     document = Document()
     # 设置中文标题

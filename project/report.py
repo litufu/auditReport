@@ -3,7 +3,6 @@
 from docx import Document
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
-from project.data import report_params
 from project.settings import setStyle
 from project.utils import add_page_number
 
@@ -39,22 +38,11 @@ def getAccountFirmNames(accountFirm):
     return res
 
 
-# 取值
-reportType = report_params["type"]
-companyName = report_params["companyName"]
-reportNo = report_params["reportNo"]
-companyAbbrName = report_params["CompanyAbbrName"]
-reportDate = report_params["reportDate"]
-reportPeriod = report_params["reportPeriod"]
-appellation = getAppellation(companyName)
-accountFirms = getAccountFirmNames(report_params["accountFirm"])
-
-
 # 添加其他信息
-def addOtherInfo(document):
+def addOtherInfo(document,context):
     paragraph4 = document.add_paragraph(style="paragraphAfterSpace")
     paragraph4.add_run(
-        "{}管理层（以下简称管理层）对其他信息负责。其他信息包括年度报告中涵盖的信息，但不包括财务报表和我们的审计报告。".format(report_params["CompanyAbbrName"]),
+        "{}管理层（以下简称管理层）对其他信息负责。其他信息包括年度报告中涵盖的信息，但不包括财务报表和我们的审计报告。".format(context["report_params"]["CompanyAbbrName"]),
         style="zero")
     paragraph4 = document.add_paragraph(style="paragraphAfterSpace")
     paragraph4.add_run("我们对财务报表发表的审计意见不涵盖其他信息，我们也不对其他信息发表任何形式的鉴证结论。", style="zero")
@@ -66,7 +54,8 @@ def addOtherInfo(document):
 
 
 # 添加管理层责任
-def addManagementResponsebility(document):
+def addManagementResponsebility(document,context):
+    companyAbbrName = context["report_params"]["CompanyAbbrName"]
     responsibility1 = [companyAbbrName, "管理层负责按照企业会计准则的规定编制财务报表，使其实现公允反映，并设计、执行和维护必要的内部控制，以使财务报表不存在由于舞弊或错误导致的重大错报。"]
     paragraph7 = document.add_paragraph(style="paragraphAfterSpace")
     paragraph7.add_run("".join(responsibility1), style="zero")
@@ -82,7 +71,8 @@ def addManagementResponsebility(document):
 
 
 # 添加注册会计师责任
-def addCpaResponsibility(document):
+def addCpaResponsibility(document,context):
+    companyAbbrName = context["report_params"]["CompanyAbbrName"]
     paragraph11 = document.add_paragraph(style="paragraphAfterSpace")
     paragraph11.add_run(
         "我们的目标是对财务报表整体是否不存在由于舞弊或错误导致的重大错报获取合理保证，并出具包含审计意见的审计报告。合理保证是高水平的保证，但并不能保证按照审计准则执行的审计在某一重大错报存在时总能发现。错报可能由于舞弊或错误导致，如果合理预期错报单独或汇总起来可能影响财务报表使用者依据财务报表作出的经济决策，则通常认为错报是重大的。",
@@ -96,7 +86,7 @@ def addCpaResponsibility(document):
         "(一) 识别和评估由于舞弊或错误导致的财务报表重大错报风险，设计和实施审计程序以应对这些风险，并获取充分、适当的审计证据，作为发表审计意见的基础。由于舞弊可能涉及串通、伪造、故意遗漏、虚假陈述或凌驾于内部控制之上，未能发现由于舞弊导致的重大错报的风险高于未能发现由于错误导致的重大错报的风险。",
         style="zero")
 
-    if report_params["internalControlAudit"]:
+    if context["report_params"]["internalControlAudit"]:
         paragraph14 = document.add_paragraph(style="paragraphAfterSpace")
         paragraph14.add_run("(二) 了解与审计相关的内部控制，以设计恰当的审计程序。", style="zero")
     else:
@@ -115,15 +105,15 @@ def addCpaResponsibility(document):
     paragraph17 = document.add_paragraph(style="paragraphAfterSpace")
     paragraph17.add_run("(五) 评价财务报表的总体列报、结构和内容，并评价财务报表是否公允反映相关交易和事项。", style="zero")
 
-    if report_params["type"] == "合并":
+    if context["report_params"]["type"] == "合并":
         paragraph17 = document.add_paragraph(style="paragraphAfterSpace")
         paragraph17.add_run("(六) 就{}中实体或业务活动的财务信息获取充分、适当的审计证据，以对财务报表发表审计意见。我们负责指导、监督和执行集团审计，并对审计意见承担全部责任。".format(
-            report_params["CompanyAbbrName"]), style="zero")
+            context["report_params"]["CompanyAbbrName"]), style="zero")
 
     paragraph18 = document.add_paragraph(style="paragraphAfterSpace")
     paragraph18.add_run("我们与治理层就计划的审计范围、时间安排和重大审计发现等事项进行沟通，包括沟通我们在审计中识别出的值得关注的内部控制缺陷。", style="zero")
 
-    if len(report_params["keyAuditMatters"]) > 0:
+    if len(context["report_params"]["keyAuditMatters"]) > 0:
         paragraph18 = document.add_paragraph(style="paragraphAfterSpace")
         paragraph18.add_run("我们还就已遵守与独立性相关的职业道德要求向治理层提供声明，并与治理层沟通可能被合理认为影响我们独立性的所有关系和其他事项，以及相关的防范措施（如适用）。",
                             style="zero")
@@ -134,7 +124,16 @@ def addCpaResponsibility(document):
 
 
 # 审计报告
-def auditReport():
+def auditReport(context):
+    companyName = context["report_params"]["companyName"]
+    companyAbbrName = context["report_params"]["CompanyAbbrName"]
+    reportNo = context["report_params"]["reportNo"]
+    reportType = context["report_params"]["type"]
+    reportDate = context["report_params"]["reportDate"]
+    reportPeriod = context["report_params"]["reportPeriod"]
+    accountFirms = getAccountFirmNames(context["report_params"]["accountFirm"])
+    appellation = getAppellation(companyName)
+
     document = Document()
     # 设置中文标题
 
@@ -186,31 +185,31 @@ def auditReport():
 
     document.add_paragraph()
     # 是否添加关键审计事项
-    if len(report_params["keyAuditMatters"]) == 0:
+    if len(context["report_params"]["keyAuditMatters"]) == 0:
         # 是否添加其他信息
-        if report_params["otherInfo"]:
+        if context["report_params"]["otherInfo"]:
             paragraph4 = document.add_paragraph(style="paragraphAfterSpace")
             paragraph4.add_run("三、其他信息", style="first")
-            addOtherInfo(document)
+            addOtherInfo(document,context)
 
             document.add_paragraph()
             paragraph6 = document.add_paragraph(style="paragraphAfterSpace")
             paragraph6.add_run("四、管理层和治理层对财务报表的责任", style="first")
-            addManagementResponsebility(document)
+            addManagementResponsebility(document,context)
 
             document.add_paragraph()
             paragraph10 = document.add_paragraph(style="paragraphAfterSpace")
             paragraph10.add_run("五、注册会计师对财务报表审计的责任", style="first")
-            addCpaResponsibility(document)
+            addCpaResponsibility(document,context)
         else:
             paragraph6 = document.add_paragraph(style="paragraphAfterSpace")
             paragraph6.add_run("三、管理层和治理层对财务报表的责任", style="first")
-            addManagementResponsebility(document)
+            addManagementResponsebility(document,context)
 
             document.add_paragraph()
             paragraph10 = document.add_paragraph(style="paragraphAfterSpace")
             paragraph10.add_run("四、注册会计师对财务报表审计的责任", style="first")
-            addCpaResponsibility(document)
+            addCpaResponsibility(document,context)
     else:
         # 披露关键审计事项
         paragraph4 = document.add_paragraph(style="paragraphAfterSpace")
@@ -218,7 +217,7 @@ def auditReport():
         paragraph5 = document.add_paragraph(style="paragraphAfterSpace")
         paragraph5.add_run("关键审计事项是我们根据职业判断，认为对本期财务报表审计最为重要的事项。这些事项的应对以对财务报表整体进行审计并形成审计意见为背景，我们不对这些事项单独发表意见。",
                            style="zero")
-        for key, item in enumerate(report_params["keyAuditMatters"]):
+        for key, item in enumerate(context["report_params"]["keyAuditMatters"]):
             paragraph5 = document.add_paragraph(style="paragraphAfterSpace")
             paragraph5.add_run(item["title"], style="zero")
             paragraph5 = document.add_paragraph(style="paragraphAfterSpace")
@@ -232,31 +231,31 @@ def auditReport():
                 paragraph5 = document.add_paragraph(style="paragraphAfterSpace")
                 paragraph5.add_run(response, style="zero")
         # 是否添加其他信息
-        if report_params["otherInfo"]:
+        if context["report_params"]["otherInfo"]:
             document.add_paragraph()
             paragraph4 = document.add_paragraph(style="paragraphAfterSpace")
             paragraph4.add_run("四、其他信息", style="first")
-            addOtherInfo(document)
+            addOtherInfo(document,context)
 
             document.add_paragraph()
             paragraph6 = document.add_paragraph(style="paragraphAfterSpace")
             paragraph6.add_run("五、管理层和治理层对财务报表的责任", style="first")
-            addManagementResponsebility(document)
+            addManagementResponsebility(document,context)
 
             document.add_paragraph()
             paragraph10 = document.add_paragraph(style="paragraphAfterSpace")
             paragraph10.add_run("六、注册会计师对财务报表审计的责任", style="first")
-            addCpaResponsibility(document)
+            addCpaResponsibility(document,context)
         else:
             document.add_paragraph()
             paragraph6 = document.add_paragraph(style="paragraphAfterSpace")
             paragraph6.add_run("四、管理层和治理层对财务报表的责任", style="first")
-            addManagementResponsebility(document)
+            addManagementResponsebility(document,context)
 
             document.add_paragraph()
             paragraph10 = document.add_paragraph(style="paragraphAfterSpace")
             paragraph10.add_run("五、注册会计师对财务报表审计的责任", style="first")
-            addCpaResponsibility(document)
+            addCpaResponsibility(document,context)
 
     document.add_paragraph()
     document.add_paragraph()
@@ -278,14 +277,14 @@ def auditReport():
     cell01.add_run("中国注册会计师：", style="zero")
 
     cell00 = table.cell(1, 0).add_paragraph()
-    cell00.add_run(report_params["accountFirmAddr"], style="zero")
+    cell00.add_run(context["report_params"]["accountFirmAddr"], style="zero")
     cell00.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
     cell11 = table.cell(1, 1).add_paragraph()
     cell11.add_run("中国注册会计师：", style="zero")
 
     cell21 = table.cell(2, 1).add_paragraph()
-    cell21.add_run(report_params["issuanceDate"], style="zero")
+    cell21.add_run(context["report_params"]["issuanceDate"], style="zero")
 
     document.add_section()
     # 给报告添加页码
@@ -294,4 +293,5 @@ def auditReport():
 
 
 if __name__ == '__main__':
-    auditReport()
+    from project.data import testcontext
+    auditReport(testcontext)

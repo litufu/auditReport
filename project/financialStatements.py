@@ -6,7 +6,7 @@ from docx.enum.table import WD_ROW_HEIGHT_RULE
 from docx.shared import Cm
 
 from project.settings import setStyle
-from project.utils import createBorderedTable,setCell,addLandscapeContent,searchModel
+from project.utils import createBorderedTable,setCell,addLandscapeContent,searchModel,getNoteNum,to_chinese,set_cell_border
 
 
 # 获取列标题前部空格数量和排版格式
@@ -71,7 +71,15 @@ def addTableTitle(document,name):
     paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
     paragraph.add_run(name,style="first")
 # 添加表头下一行，表格前一行，如：单位：***公司 单位：元
-def addFirstLine(document,companyName,reportDate,currencyUnit):
+def addFirstLine(document,context):
+
+    # 公司名称
+    companyName = context["report_params"]["companyName"]
+    # 报告日期
+    reportDate = context["report_params"]["reportDate"]
+    # 人民币单位
+    currencyUnit = context["notes_params"]["currencyUnit"]
+
     table = document.add_table(1, 3)
     table.rows[0].height_rule  =WD_ROW_HEIGHT_RULE.EXACTLY
     table.rows[0].height = Cm(0.8)
@@ -97,9 +105,9 @@ def add_last_line(document):
 def setFsHeaderState(table,titles):
     table.cell(0, 0).width = Cm(13)
     table.cell(0, 1).width = Cm(2)
-    table.cell(0, 2).width = Cm(6)
-    table.cell(0, 3).width = Cm(6)
-    table.cell(0, 4).width = Cm(3)
+    table.cell(0, 2).width = Cm(5)
+    table.cell(0, 3).width = Cm(5)
+    table.cell(0, 4).width = Cm(5)
     setCell(table.cell(0, 0), titles[0], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
     setCell(table.cell(0, 1), titles[1], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
     setCell(table.cell(0, 2), titles[2], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
@@ -107,121 +115,124 @@ def setFsHeaderState(table,titles):
     setCell(table.cell(0, 4), titles[4], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
 # 设置国有企业所有者权益表标题
 def setOwnerHeaderState(table,period):
-        table.cell(0, 0).width = Cm(8)
-        table.cell(1, 0).width = Cm(8)
-        table.cell(2, 0).width = Cm(8)
-        table.cell(3, 0).width = Cm(8)
-        table.cell(0, 1).width = Cm(2)
-        table.cell(1, 1).width = Cm(2)
-        table.cell(2, 1).width = Cm(2)
-        table.cell(3, 1).width = Cm(2)
+    table.cell(0, 0).width = Cm(8)
+    table.cell(1, 0).width = Cm(8)
+    table.cell(2, 0).width = Cm(8)
+    table.cell(3, 0).width = Cm(8)
+    table.cell(0, 1).width = Cm(2)
+    table.cell(1, 1).width = Cm(2)
+    table.cell(2, 1).width = Cm(2)
+    table.cell(3, 1).width = Cm(2)
 
-        setCell(table.cell(0,0),"项            目",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(0,1),"行次",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(0,2),period,WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(1,2),"归属于母公司所有者权益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(1,14),"少数股东权益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(1,15),"所有者权益合计",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,2),"实收资本(或股本)",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,3),"其他权益工具",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,6),"资本公积",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,7),"减:库存股",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,8),"其他综合收益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,9),"专项储备",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,10),"盈余公积",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,11),"△一般风险准备",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,12),"未分配利润",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,13),"小计",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(3,3),"优先股",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(3,4),"永续债",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(3,5),"其他",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        # 合并单元格
-        # 第一列
-        for i in range(1,4):
-                table.cell(i,0).merge(table.cell(i-1,0))
-        # 第二列
-        for i in range(1,4):
-                table.cell(i,1).merge(table.cell(i-1,1))
-        # # 第一行
-        for i in range(3,16):
-                table.cell(0,i).merge(table.cell(0,i-1))
-        # 第二行
-        for i in range(13,2,-1):
-                table.cell(1,i).merge(table.cell(1,i-1))
+    setCell(table.cell(0,0),"项            目",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(0,1),"行次",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(0,2),period,WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(1,2),"归属于母公司所有者权益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(1,14),"少数股东权益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(1,15),"所有者权益合计",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,2),"实收资本(或股本)",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,3),"其他权益工具",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,6),"资本公积",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,7),"减:库存股",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,8),"其他综合收益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,9),"专项储备",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,10),"盈余公积",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,11),"△一般风险准备",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,12),"未分配利润",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,13),"小计",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(3,3),"优先股",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(3,4),"永续债",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(3,5),"其他",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    # 合并单元格
+    # 第一列
+    for i in range(1,4):
+            table.cell(i,0).merge(table.cell(i-1,0))
+    # 第二列
+    for i in range(1,4):
+            table.cell(i,1).merge(table.cell(i-1,1))
+    # # 第一行
+    for i in range(3,16):
+            table.cell(0,i).merge(table.cell(0,i-1))
+    # 第二行
+    for i in range(13,2,-1):
+            table.cell(1,i).merge(table.cell(1,i-1))
 
-        # 第三列
-        table.cell(3,2).merge(table.cell(2,2))
-        # 第三行
-        for i in range(4,6):
-                table.cell(2,i).merge(table.cell(2,i-1))
-        # 第七列到十三列
-        for i in range(6,14):
-                table.cell(3,i).merge(table.cell(2,i))
-        # 第十四列到十五列
-        for i in range(14,16):
-                table.cell(2,i).merge(table.cell(1,i))
-                table.cell(3,i).merge(table.cell(2,i))
+    # 第三列
+    table.cell(3,2).merge(table.cell(2,2))
+    # 第三行
+    for i in range(4,6):
+            table.cell(2,i).merge(table.cell(2,i-1))
+    # 第七列到十三列
+    for i in range(6,14):
+            table.cell(3,i).merge(table.cell(2,i))
+    # 第十四列到十五列
+    for i in range(14,16):
+            table.cell(2,i).merge(table.cell(1,i))
+            table.cell(3,i).merge(table.cell(2,i))
+    set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
 # 设置上市公司报表标题
 def setFsHeaderList(table,titles):
     table.cell(0, 0).width = Cm(13)
-    table.cell(0, 1).width = Cm(3)
-    table.cell(0, 2).width = Cm(6)
-    table.cell(0, 3).width = Cm(6)
+    table.cell(0, 1).width = Cm(5)
+    table.cell(0, 2).width = Cm(5)
+    table.cell(0, 3).width = Cm(5)
     setCell(table.cell(0, 0), titles[0], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
     setCell(table.cell(0, 1), titles[1], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
     setCell(table.cell(0, 2), titles[2], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
     setCell(table.cell(0, 3), titles[3], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
 # 设置上市公司合并所有者权益表标题
 def setOwnerHeaderList(table,period):
-        table.cell(0, 0).width = Cm(8)
-        table.cell(1, 0).width = Cm(8)
-        table.cell(2, 0).width = Cm(8)
-        table.cell(3, 0).width = Cm(8)
-        table.cell(0, 1).width = Cm(2)
-        table.cell(1, 1).width = Cm(2)
-        table.cell(2, 1).width = Cm(2)
-        table.cell(3, 1).width = Cm(2)
+    table.cell(0, 0).width = Cm(8)
+    table.cell(1, 0).width = Cm(8)
+    table.cell(2, 0).width = Cm(8)
+    table.cell(3, 0).width = Cm(8)
+    table.cell(0, 1).width = Cm(2)
+    table.cell(1, 1).width = Cm(2)
+    table.cell(2, 1).width = Cm(2)
+    table.cell(3, 1).width = Cm(2)
 
-        setCell(table.cell(0,0),"项            目",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(0,1),period,WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(1,1),"归属于母公司所有者权益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(1,13),"少数股东权益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(1,14),"所有者权益合计",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,1),"实收资本(或股本)",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,2),"其他权益工具",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,5),"资本公积",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,6),"减:库存股",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,7),"其他综合收益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,8),"专项储备",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,9),"盈余公积",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,10),"一般风险准备",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,11),"未分配利润",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(2,12),"小计",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(3,2),"优先股",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(3,3),"永续债",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        setCell(table.cell(3,4),"其他",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
-        # 合并单元格
-        # 第一列
-        for i in range(1,4):
-                table.cell(i,0).merge(table.cell(i-1,0))
-        # # 第一行
-        for i in range(2,15):
-                table.cell(0,i).merge(table.cell(0,i-1))
-        # 第二行
-        for i in range(12,1,-1):
-                table.cell(1,i).merge(table.cell(1,i-1))
-        # 第二列
-        table.cell(3,1).merge(table.cell(2,1))
-        # 第三行
-        for i in range(3,5):
-                table.cell(2,i).merge(table.cell(2,i-1))
-        # 第七列到十二列
-        for i in range(5,13):
-                table.cell(3,i).merge(table.cell(2,i))
-        # 第十三列到十四列
-        for i in range(13,15):
-                table.cell(2,i).merge(table.cell(1,i))
-                table.cell(3,i).merge(table.cell(2,i))
+    setCell(table.cell(0,0),"项            目",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(0,1),period,WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(1,1),"归属于母公司所有者权益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(1,13),"少数股东权益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(1,14),"所有者权益合计",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,1),"实收资本(或股本)",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,2),"其他权益工具",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,5),"资本公积",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,6),"减:库存股",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,7),"其他综合收益",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,8),"专项储备",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,9),"盈余公积",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,10),"一般风险准备",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,11),"未分配利润",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(2,12),"小计",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(3,2),"优先股",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(3,3),"永续债",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    setCell(table.cell(3,4),"其他",WD_PARAGRAPH_ALIGNMENT.CENTER,False,"tableSmallerCharacter")
+    # 合并单元格
+    # 第一列
+    for i in range(1,4):
+            table.cell(i,0).merge(table.cell(i-1,0))
+    # # 第一行
+    for i in range(2,15):
+            table.cell(0,i).merge(table.cell(0,i-1))
+    # 第二行
+    for i in range(12,1,-1):
+            table.cell(1,i).merge(table.cell(1,i-1))
+    # 第二列
+    table.cell(3,1).merge(table.cell(2,1))
+    # 第三行
+    for i in range(3,5):
+            table.cell(2,i).merge(table.cell(2,i-1))
+    # 第七列到十二列
+    for i in range(5,13):
+            table.cell(3,i).merge(table.cell(2,i))
+    # 第十三列到十四列
+    for i in range(13,15):
+            table.cell(2,i).merge(table.cell(1,i))
+            table.cell(3,i).merge(table.cell(2,i))
+
+    set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
  # 设置上市公司单体所有者权益表标题
 def setOwnerHeaderListSingle(table, period):
     table.cell(0, 0).width = Cm(8)
@@ -261,14 +272,22 @@ def setOwnerHeaderListSingle(table, period):
     for i in range(5, 12):
         table.cell(2, i).merge(table.cell(1, i))
 
+    set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
+
 # 添加一行记录
 # 向国有企业报表中添加一行记录
-def addFsTableLineState(table,key,newRecords):
+def addFsTableLineState(table,key,newRecords,num):
+    smallNum = to_chinese(newRecords[key]["noteNum"])
+    if smallNum==0:
+        recordNum = ""
+    else:
+        recordNum = "{}({})".format(num,smallNum)
+
     table.cell(key, 0).width = Cm(13)
     table.cell(key, 1).width = Cm(2)
-    table.cell(key, 2).width = Cm(6)
-    table.cell(key, 3).width = Cm(6)
-    table.cell(key, 4).width = Cm(3)
+    table.cell(key, 2).width = Cm(5)
+    table.cell(key, 3).width = Cm(5)
+    table.cell(key, 4).width = Cm(5)
     setCell(table.cell(key, 0), *getAlignAndText(newRecords[key]["type"], newRecords[key]["name"]), False,
             "tableSmallCharacter")
     setCell(table.cell(key, 1), key, WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
@@ -276,16 +295,22 @@ def addFsTableLineState(table,key,newRecords):
             "tableSmallCharacter")
     setCell(table.cell(key, 3), newRecords[key]["startDate"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
             "tableSmallCharacter")
-    setCell(table.cell(key, 4), newRecords[key]["noteNum"], WD_PARAGRAPH_ALIGNMENT.CENTER, True, "tableSmallCharacter")
+    setCell(table.cell(key, 4),recordNum, WD_PARAGRAPH_ALIGNMENT.CENTER, True, "tableSmallCharacter")
 # 向上市公司报表中添加一行记录
-def addFsTableLineList(table,key,newRecords):
+def addFsTableLineList(table,key,newRecords,num):
+    smallNum = to_chinese(newRecords[key]["noteNum"])
+    if smallNum == 0:
+        recordNum = ""
+    else:
+        recordNum = "{}({})".format(num, smallNum)
+
     table.cell(key, 0).width = Cm(13)
-    table.cell(key, 1).width = Cm(3)
-    table.cell(key, 2).width = Cm(6)
-    table.cell(key, 3).width = Cm(6)
+    table.cell(key, 1).width = Cm(5)
+    table.cell(key, 2).width = Cm(5)
+    table.cell(key, 3).width = Cm(5)
     setCell(table.cell(key, 0), *getAlignAndText(newRecords[key]["type"], newRecords[key]["name"]), False,
             "tableSmallCharacter")
-    setCell(table.cell(key, 1), newRecords[key]["noteNum"], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
+    setCell(table.cell(key, 1), recordNum, WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
     setCell(table.cell(key, 2), newRecords[key]["endDate"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
             "tableSmallCharacter")
     setCell(table.cell(key, 3), newRecords[key]["startDate"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
@@ -375,9 +400,17 @@ def addOsTableLineList(table,key,newRecords,reportType):
 
 
 # 添加国有企业报表
-def addFinancialStatementsState(document,name,titles,oldRecords,companyName,reportDate,currencyUnit,lastSection=True,display=True):
+def addFinancialStatementsState(document,name,titles,oldRecords,context,lastSection=True,display=True):
+    # 报告类型
+    reportType = context["report_params"]["type"]
+    isParent = False
+    if reportType == "合并":
+        if "合并" not in name:
+            isParent = True
+    num = getNoteNum(context, isParent)
+
     addTableTitle(document,name)
-    addFirstLine(document,companyName,reportDate,currencyUnit)
+    addFirstLine(document,context)
     document.add_section(start_type=0)
     newRecords = FilterFsNewRecords(display,oldRecords)
     table = createBorderedTable(document,len(newRecords),5,innerLine="single")
@@ -385,16 +418,24 @@ def addFinancialStatementsState(document,name,titles,oldRecords,companyName,repo
     setFsHeaderState(table,titles)
 
     for key in range(1,len(newRecords)):
-        addFsTableLineState(table, key, newRecords)
+        addFsTableLineState(table, key, newRecords,num)
 
     document.add_section(start_type=0)
     add_last_line(document)
     if lastSection:
         document.add_section()
 # 添加上市公司报表
-def addFinancialStatementsList(document,name,titles,oldRecords,companyName,reportDate,currencyUnit,lastSection=True,display=True):
+def addFinancialStatementsList(document,name,titles,oldRecords,context,lastSection=True,display=True):
+    # 报告类型
+    reportType = context["report_params"]["type"]
+    isParent = False
+    if reportType=="合并":
+        if "合并" not in name:
+            isParent = True
+    num = getNoteNum(context,isParent)
+
     addTableTitle(document,name)
-    addFirstLine(document,companyName,reportDate,currencyUnit)
+    addFirstLine(document,context)
     document.add_section(start_type=0)
     newRecords = FilterFsNewRecords(display,oldRecords)
     table = createBorderedTable(document,len(newRecords),4,innerLine="single")
@@ -402,16 +443,16 @@ def addFinancialStatementsList(document,name,titles,oldRecords,companyName,repor
     setFsHeaderList(table,titles)
 
     for key in range(1,len(newRecords)):
-        addFsTableLineList(table, key, newRecords)
+        addFsTableLineList(table, key, newRecords,num)
 
     document.add_section(start_type=0)
     add_last_line(document)
     if lastSection:
         document.add_section()
 # 添加国有企业所有者权益变动表
-def addOnwerEquityState(document,name,oldRecords,companyName,reportDate,currencyUnit,period,display=True):
+def addOnwerEquityState(document,name,oldRecords,context,period,display=True):
     addTableTitle(document,name)
-    addFirstLine(document,companyName,reportDate,currencyUnit)
+    addFirstLine(document,context)
     document.add_section(start_type=0)
     newRecords = FilterOsNewRecords(display,oldRecords)
     table = createBorderedTable(document,len(newRecords)+3,16,innerLine="single")
@@ -446,9 +487,9 @@ def addOnwerEquityState(document,name,oldRecords,companyName,reportDate,currency
     document.add_section(start_type=0)
     add_last_line(document)
 # 添加上市公司所有者权益变动表
-def addOnwerEquityList(document,name,oldRecords,companyName,reportDate,currencyUnit,period,reportType,display=True):
+def addOnwerEquityList(document,name,oldRecords,context,period,reportType,display=True):
     addTableTitle(document,name)
-    addFirstLine(document,companyName,reportDate,currencyUnit)
+    addFirstLine(document,context)
     document.add_section(start_type=0)
     newRecords = FilterOsNewRecords(display,oldRecords)
     if reportType == "合并":
@@ -512,34 +553,34 @@ def addOnwerEquityList(document,name,oldRecords,companyName,reportDate,currencyU
     document.add_section(start_type=0)
     add_last_line(document)
 # 添加所有者权益变动表
-def addOwnership(document,companyName, reportDate, currencyUnit,companyType,reportType,ownerRecordsCombineThis,ownerRecordsCombineLast,ownerRecordsSingleThis,
+def addOwnership(document,context,companyType,reportType,ownerRecordsCombineThis,ownerRecordsCombineLast,ownerRecordsSingleThis,
                  ownerRecordsSingleLast):
     if companyType == "上市公司":
         if reportType == "合并":
-            addOnwerEquityList(document,"合并所有者权益变动表", ownerRecordsCombineThis, companyName, reportDate, currencyUnit,"本 期 金 额","合并")
+            addOnwerEquityList(document,"合并所有者权益变动表", ownerRecordsCombineThis,context,"本 期 金 额","合并")
             document.add_section()
-            addOnwerEquityList(document,"合并所有者权益变动表（续）", ownerRecordsCombineLast, companyName, reportDate, currencyUnit,"上 期 金 额","合并")
+            addOnwerEquityList(document,"合并所有者权益变动表（续）", ownerRecordsCombineLast, context,"上 期 金 额","合并")
             document.add_section()
-            addOnwerEquityList(document, "所有者权益变动表", ownerRecordsSingleThis, companyName, reportDate, currencyUnit, "本 期 金 额","单体")
+            addOnwerEquityList(document, "所有者权益变动表", ownerRecordsSingleThis, context, "本 期 金 额","单体")
             document.add_section()
-            addOnwerEquityList(document, "所有者权益变动表（续）", ownerRecordsSingleLast, companyName, reportDate, currencyUnit, "上 期 金 额","单体")
+            addOnwerEquityList(document, "所有者权益变动表（续）", ownerRecordsSingleLast, context, "上 期 金 额","单体")
         else:
-            addOnwerEquityList(document, "所有者权益变动表", ownerRecordsSingleThis, companyName, reportDate, currencyUnit, "本 期 金 额","单体")
+            addOnwerEquityList(document, "所有者权益变动表", ownerRecordsSingleThis, context, "本 期 金 额","单体")
             document.add_section()
-            addOnwerEquityList(document, "所有者权益变动表（续）", ownerRecordsSingleLast, companyName, reportDate, currencyUnit, "上 期 金 额","单体")
+            addOnwerEquityList(document, "所有者权益变动表（续）", ownerRecordsSingleLast, context, "上 期 金 额","单体")
     elif companyType == "国有企业":
         if reportType == "合并":
-            addOnwerEquityState(document,"合并所有者权益变动表", ownerRecordsCombineThis, companyName, reportDate, currencyUnit,"本 期 金 额")
+            addOnwerEquityState(document,"合并所有者权益变动表", ownerRecordsCombineThis, context,"本 期 金 额")
             document.add_section()
-            addOnwerEquityState(document,"合并所有者权益变动表（续）", ownerRecordsCombineLast, companyName, reportDate, currencyUnit,"上 期 金 额")
+            addOnwerEquityState(document,"合并所有者权益变动表（续）", ownerRecordsCombineLast, context,"上 期 金 额")
             document.add_section()
-            addOnwerEquityState(document, "所有者权益变动表", ownerRecordsSingleThis, companyName, reportDate, currencyUnit, "本 期 金 额")
+            addOnwerEquityState(document, "所有者权益变动表", ownerRecordsSingleThis, context, "本 期 金 额")
             document.add_section()
-            addOnwerEquityState(document, "所有者权益变动表（续）", ownerRecordsSingleLast, companyName, reportDate, currencyUnit, "上 期 金 额")
+            addOnwerEquityState(document, "所有者权益变动表（续）", ownerRecordsSingleLast, context, "上 期 金 额")
         else:
-            addOnwerEquityState(document, "所有者权益变动表", ownerRecordsSingleThis, companyName, reportDate, currencyUnit, "本 期 金 额")
+            addOnwerEquityState(document, "所有者权益变动表", ownerRecordsSingleThis, context, "本 期 金 额")
             document.add_section()
-            addOnwerEquityState(document, "所有者权益变动表（续）", ownerRecordsSingleLast, companyName, reportDate, currencyUnit, "上 期 金 额")
+            addOnwerEquityState(document, "所有者权益变动表（续）", ownerRecordsSingleLast, context, "上 期 金 额")
 # 添加报表
 def reportForm(document,context,balanceTitles,profitTitles,
                assetsRecordsCombine,liabilitiesRecordsCombine,profitRecordsCombine,cashRecordsCombine,assetsRecordsSingle,
@@ -564,51 +605,43 @@ def reportForm(document,context,balanceTitles,profitTitles,
     if companyType=="国有企业":
         if reportType == "合并":
             # 添加合并资产负债表
-            addFinancialStatementsState(document,"合并资产负债表", balanceTitles, assetsRecordsCombine, companyName, reportDate, currencyUnit)
-            addFinancialStatementsState(document,"合并资产负债表(续)", balanceTitles, liabilitiesRecordsCombine, companyName, reportDate,
-                                   currencyUnit)
-            addFinancialStatementsState(document,"资产负债表", balanceTitles, assetsRecordsSingle, companyName, reportDate, currencyUnit)
-            addFinancialStatementsState(document,"资产负债表(续)", balanceTitles, liabilitiesRecordsSingle, companyName, reportDate,
-                                   currencyUnit)
-            addFinancialStatementsState(document,"合并利润表", profitTitles, profitRecordsCombine, companyName, reportPeriod, currencyUnit)
-            addFinancialStatementsState(document,"利润表", profitTitles, profitRecordsSingle, companyName, reportPeriod, currencyUnit)
-            addFinancialStatementsState(document,"合并现金流量表", profitTitles, cashRecordsCombine, companyName, reportPeriod, currencyUnit)
-            addFinancialStatementsState(document,"现金流量表", profitTitles, cashRecordsSingle, companyName, reportPeriod, currencyUnit,
-                                   lastSection=False)
+            addFinancialStatementsState(document,"合并资产负债表", balanceTitles, assetsRecordsCombine, context)
+            addFinancialStatementsState(document,"合并资产负债表(续)", balanceTitles, liabilitiesRecordsCombine, context)
+            addFinancialStatementsState(document,"资产负债表", balanceTitles, assetsRecordsSingle, context)
+            addFinancialStatementsState(document,"资产负债表(续)", balanceTitles, liabilitiesRecordsSingle, context)
+            addFinancialStatementsState(document,"合并利润表", profitTitles, profitRecordsCombine, context)
+            addFinancialStatementsState(document,"利润表", profitTitles, profitRecordsSingle, context)
+            addFinancialStatementsState(document,"合并现金流量表", profitTitles, cashRecordsCombine, context)
+            addFinancialStatementsState(document,"现金流量表", profitTitles, cashRecordsSingle, context, lastSection=False)
+
         else:
-            addFinancialStatementsState(document,"资产负债表", balanceTitles, assetsRecordsSingle, companyName, reportDate, currencyUnit)
-            addFinancialStatementsState(document,"资产负债表(续)", balanceTitles, liabilitiesRecordsSingle, companyName, reportDate,
-                                   currencyUnit)
-            addFinancialStatementsState(document,"利润表", profitTitles, profitRecordsSingle, companyName, reportPeriod, currencyUnit)
-            addFinancialStatementsState(document,"现金流量表", profitTitles, cashRecordsSingle, companyName, reportPeriod, currencyUnit,
-                                   lastSection=False)
+            addFinancialStatementsState(document,"资产负债表", balanceTitles, assetsRecordsSingle, context)
+            addFinancialStatementsState(document,"资产负债表(续)", balanceTitles, liabilitiesRecordsSingle,context)
+            addFinancialStatementsState(document,"利润表", profitTitles, profitRecordsSingle, context)
+            addFinancialStatementsState(document,"现金流量表", profitTitles, cashRecordsSingle, context,lastSection=False)
+
     elif companyType == "上市公司":
         if reportType == "合并":
-            addFinancialStatementsList(document,"合并资产负债表", balanceTitles, assetsRecordsCombine, companyName, reportDate, currencyUnit)
-            addFinancialStatementsList(document,"合并资产负债表(续)", balanceTitles, liabilitiesRecordsCombine, companyName, reportDate,
-                                   currencyUnit)
-            addFinancialStatementsList(document,"资产负债表", balanceTitles, assetsRecordsSingle, companyName, reportDate, currencyUnit)
-            addFinancialStatementsList(document,"资产负债表(续)", balanceTitles, liabilitiesRecordsSingle, companyName, reportDate,
-                                   currencyUnit)
-            addFinancialStatementsList(document,"合并利润表", profitTitles, profitRecordsCombine, companyName, reportPeriod, currencyUnit)
-            addFinancialStatementsList(document,"利润表", profitTitles, profitRecordsSingle, companyName, reportPeriod, currencyUnit)
-            addFinancialStatementsList(document,"合并现金流量表", profitTitles, cashRecordsCombine, companyName, reportPeriod, currencyUnit)
-            addFinancialStatementsList(document,"现金流量表", profitTitles, cashRecordsSingle, companyName, reportPeriod, currencyUnit,
-                                   lastSection=False)
+            addFinancialStatementsList(document,"合并资产负债表", balanceTitles, assetsRecordsCombine, context)
+            addFinancialStatementsList(document,"合并资产负债表(续)", balanceTitles, liabilitiesRecordsCombine, context)
+            addFinancialStatementsList(document,"资产负债表", balanceTitles, assetsRecordsSingle, context)
+            addFinancialStatementsList(document,"资产负债表(续)", balanceTitles, liabilitiesRecordsSingle, context)
+            addFinancialStatementsList(document,"合并利润表", profitTitles, profitRecordsCombine, context)
+            addFinancialStatementsList(document,"利润表", profitTitles, profitRecordsSingle, context)
+            addFinancialStatementsList(document,"合并现金流量表", profitTitles, cashRecordsCombine, context)
+            addFinancialStatementsList(document,"现金流量表", profitTitles, cashRecordsSingle, context,lastSection=False)
+
         else:
-            addFinancialStatementsList(document,"资产负债表", balanceTitles, assetsRecordsSingle, companyName, reportDate, currencyUnit)
-            addFinancialStatementsList(document,"资产负债表(续)", balanceTitles, liabilitiesRecordsSingle, companyName, reportDate,
-                                   currencyUnit)
-            addFinancialStatementsList(document,"利润表", profitTitles, profitRecordsSingle, companyName, reportPeriod,
-                                   currencyUnit)
-            addFinancialStatementsList(document,"现金流量表", profitTitles, cashRecordsSingle, companyName, reportPeriod,
-                                   currencyUnit,
-                                   lastSection=False)
+            addFinancialStatementsList(document,"资产负债表", balanceTitles, assetsRecordsSingle, context)
+            addFinancialStatementsList(document,"资产负债表(续)", balanceTitles, liabilitiesRecordsSingle, context)
+            addFinancialStatementsList(document,"利润表", profitTitles, profitRecordsSingle, context)
+            addFinancialStatementsList(document,"现金流量表", profitTitles, cashRecordsSingle, context,lastSection=False)
+
 
     else:
         pass
     # 添加所有者权益变动表
-    addLandscapeContent(document, addOwnership,  companyName, reportDate, currencyUnit,companyType, reportType,
+    addLandscapeContent(document, addOwnership,  context,companyType, reportType,
                         ownerRecordsCombineThis,ownerRecordsCombineLast,ownerRecordsSingleThis,ownerRecordsSingleLast)
 
 
@@ -643,13 +676,20 @@ def addFs(document,context,comparativeTable,balanceTitlesState,balanceTitlesList
 
 
 def test():
-    from project.data import context
-    from project.constants import comparativeTable, balanceTitlesState,balanceTitlesList, profitTitlesState, profitTitlesList
+    from project.data import testcontext
+    from project.constants import comparativeTable, tables, contrastSubjects, CURRENTPATH, PARENTPATH, \
+        balanceTitlesState, balanceTitlesList, profitTitlesState, profitTitlesList
+    from project.fsmodel import fillTable
+    from project.computeNo import computeNo
 
     document = Document()
     # 设置中文标题
     setStyle(document)
-    addFs(document, context, comparativeTable,  balanceTitlesState, balanceTitlesList,profitTitlesState, profitTitlesList)
+    # 填充报表数据
+    fillTable(testcontext, comparativeTable, tables, contrastSubjects, CURRENTPATH, PARENTPATH)
+    # 计算附注编码
+    computeNo(testcontext, comparativeTable)
+    addFs(document, testcontext, comparativeTable,  balanceTitlesState, balanceTitlesList,profitTitlesState, profitTitlesList)
 
     document.save("fs.docx")
 

@@ -68,13 +68,13 @@ def fillTable(context,comparativeTable,tables,contrastSubjects,combinePath,singl
         fillData(companyType, "单体", comparativeTable, singlePath, tables, contrastSubjects)
 
 def test():
-    from project.data import context
+    from project.data import testcontext
     from project.constants import comparativeTable, MODELPATH, tables, contrastSubjects
 
     # 公司类型
-    companyType = context["report_params"]["companyType"]
+    companyType = testcontext["report_params"]["companyType"]
     # 报表类型:合并，单体
-    fsType = context["fs_params"]["type"]
+    fsType = "合并"
     # 测试报表项目差
     # testSubjectAllIn(comparativeTable,MODELPATH)
     #     根据报表填充项目
