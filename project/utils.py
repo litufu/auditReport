@@ -419,6 +419,7 @@ def addCombineTableTitle(table, titles):
                     cell.merge(table.cell(i - 1, j))
             else:
                 setCell(cell, cellText, WD_PARAGRAPH_ALIGNMENT.CENTER)
+    set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
 
 
 # 添加横向内容
