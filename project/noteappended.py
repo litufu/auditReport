@@ -4,7 +4,7 @@ from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 from project.utils import checkLeftSpace, addTitle, addCombineTableTitle, addContentToCombineTitle, addParagraph, \
     createBorderedTable, addTable, setCell, addLandscapeContent, to_chinese, searchRecordItemByName, \
-    handleName,searchModel,set_cell_border
+    handleName,searchModel,set_cell_border,df_sort
 
 
 # 第一步计算出报表项目编号
@@ -16,7 +16,11 @@ def filterDateFrame(sheetName, xlsxPath,conditions=("期末数","期初数")):
         return df
     s = False
     for condition in conditions:
-        s = s | (df[condition].abs() > 0)
+        try:
+            s = s | (df[condition].abs() > 0)
+        except Exception as e:
+            print(e)
+            return df
     df1 = df[s]
     return df1
 
@@ -25,8 +29,11 @@ def dfToWord(document,df, style):
     dc = df.to_dict("split")
     addTable(document, dc, style=style)
 
-def excelTableToWord(document, sheetName, xlsxPath, style,conditions=("期末数","期初数")):
+def excelTableToWord(document, sheetName, xlsxPath, style,conditions=("期末数","期初数"),sort=False,sort_index_name="项目",sort_column_name="本期数",last_values=("其他","合计")):
     df = filterDateFrame(sheetName, xlsxPath, conditions)
+    df = df.replace("—","  ", regex=True)
+    if sort:
+        df = df_sort(df,index_name=sort_index_name,column_name=sort_column_name,last_names=last_values)
     dc = df.to_dict("split")
     addTable(document, dc, style=style)
 
@@ -420,7 +427,7 @@ def addAccountsReceivable(document, num, path, context):
             excelTableToWord(document, "期末单项计提坏账准备的应收账款", path, style=2,conditions=("账面余额",))
 
             addParagraph(document, "2、采用组合计提坏账准备的应收账款", "paragraph")
-            df = filterDateFrame("采用组合计提坏账准备的应收账款",path,conditions=("期末余额","期初余额"))
+            df = filterDateFrame("采用组合计提坏账准备的应收账款新金融工具",path,conditions=("期末余额","期初余额"))
             if len(df)>0:
                 dc = df.to_dict("split")
                 titles = [["组合名称", "期末数", "nan", "nan", "期初数", "nan", "nan"],
@@ -435,7 +442,7 @@ def addAccountsReceivable(document, num, path, context):
 
                 for row in dc["data"][:-1]:
                     combinationName = row[0]
-                    addParagraph(document, "{}:".format(row[0]), "paragraph")
+                    addParagraph(document, "{}新金融工具:".format(row[0]), "paragraph")
                     df = pd.read_excel(path, sheet_name=combinationName)
                     dc = df.to_dict("split")
                     titles = [["项目", "期末数", "nan", "nan", "期初数", "nan", "nan"],
@@ -864,10 +871,10 @@ def addAssetsHeldForSale(document, num, path, context):
     excelTableToWord(document, "持有待售资产的基本情况", path, style=2,conditions=("期末账面价值",))
     addParagraph(document, "2、持有待售资产减值准备情况", "paragraph")
     excelTableToWord(document, "持有待售资产减值准备情况", path, style=2,conditions=("期初余额","期末余额"))
-    addParagraph(document, "3、与持有待售的非流动资产或处置组有关的其他综合收益累计金额", "paragraph")
-    excelTableToWord(document, "与持有待售的非流动资产或处置组有关的其他综合收益累计金额", path, style=2,conditions=("其他综合收益累计金额",))
-    addParagraph(document, "4、本期不再划分为持有待售类别或从持有待售处置组中移除的情况", "paragraph")
-    excelTableToWord(document, "本期不再划分为持有待售类别或从持有待售处置组中移除的情况", path, style=2,conditions=("影响金额",))
+    # addParagraph(document, "3、与持有待售的非流动资产或处置组有关的其他综合收益累计金额", "paragraph")
+    # excelTableToWord(document, "与持有待售的非流动资产或处置组有关的其他综合收益累计金额", path, style=2,conditions=("其他综合收益累计金额",))
+    # addParagraph(document, "4、本期不再划分为持有待售类别或从持有待售处置组中移除的情况", "paragraph")
+    # excelTableToWord(document, "本期不再划分为持有待售类别或从持有待售处置组中移除的情况", path, style=2,conditions=("影响金额",))
 
 
 # （十三）一年内到期的非流动资产
@@ -890,29 +897,17 @@ def addOtherCurrentAssets(document, num, path, context):
 def addDebtInvestment(document, num, path, context):
     addTitle(document, "（{}）债权投资".format(to_chinese(num)), 2, True)
     addParagraph(document, "1、明细情况", "paragraph")
-    df = filterDateFrame("债权投资期末数",path,conditions=("初始成本",))
-    if len(df)>0:
-        dc = df.to_dict("split")
-        titles = [["项  目", "期末数", "nan", "nan", "nan", "nan"],
-                  ["nan", "初始成本", "利息调整", "应计利息", "减值准备", "账面价值"]]
-        titleLength = len(titles)
-        rowLength = len(dc["index"]) + titleLength
-        columnLength = len(dc["columns"])
-        table = createBorderedTable(document, rowLength, columnLength)
-        addCombineTableTitle(table, titles)
-        addContentToCombineTitle(document, dc, table, titleLength, style=2)
-        addParagraph(document, "（续）", "paragraph")
-    df = filterDateFrame("债权投资期初数", path, conditions=("初始成本",))
-    if len(df)>0:
-        dc = df.to_dict("split")
-        titles = [["项  目", "期初数", "nan", "nan", "nan", "nan"],
-                  ["nan", "初始成本", "利息调整", "应计利息", "减值准备", "账面价值"]]
-        titleLength = len(titles)
-        rowLength = len(dc["index"]) + titleLength
-        columnLength = len(dc["columns"])
-        table = createBorderedTable(document, rowLength, columnLength)
-        addCombineTableTitle(table, titles)
-        addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    df = pd.read_excel(path, sheet_name="债权投资")
+    dc = df.to_dict("split")
+    titles = [["项  目", "期末数", "nan", "nan", "期初数", "nan", "nan"],
+              ["nan", "账面余额", "减值准备", "账面价值", "账面余额", "减值准备", "账面价值"]]
+    titleLength = len(titles)
+    rowLength = len(dc["index"]) + titleLength
+    columnLength = len(dc["columns"])
+    table = createBorderedTable(document, rowLength, columnLength)
+    addCombineTableTitle(table, titles)
+    addContentToCombineTitle(document, dc, table, titleLength, style=2)
+
     addParagraph(document, "2、债权投资减值准备", "paragraph")
     df = filterDateFrame("债权投资减值准备", path, conditions=("第一阶段", "第二阶段", "第三阶段"))
     if len(df)>0:
@@ -928,7 +923,7 @@ def addDebtInvestment(document, num, path, context):
     else:
         addParagraph(document, "不适用", "paragraph")
     addParagraph(document, "3、期末重要的债权投资", "paragraph")
-    excelTableToWord(document, "期末重要的债权投资", path, style=2)
+    excelTableToWord(document, "期末重要的债权投资", path, style=2,conditions=("面值",))
 
 
 # （十六）可供出售金融资产
@@ -1083,7 +1078,7 @@ def addContent1(document, reportType, startYear, path):
     df = filterDateFrame("长期股权投资子公司明细情况", path)
     if len(df)>0:
         addParagraph(document, "（1）子公司", "paragraph")
-        addLongTermEquityInvestmentOther(document, df)
+        dfToWord(document,df,style=2)
         df = filterDateFrame("长期股权投资合营企业明细情况", path)
         if len(df)>0:
             addParagraph(document, "（2）合营企业", "paragraph")
@@ -1101,6 +1096,7 @@ def addContent1(document, reportType, startYear, path):
             else:
                 addParagraph(document, "不适用", "paragraph")
     else:
+        df = filterDateFrame("长期股权投资合营企业明细情况", path)
         if len(df)>0:
             addParagraph(document, "（1）合营企业", "paragraph")
             addLongTermEquityInvestmentOther(document, df)
@@ -1111,6 +1107,7 @@ def addContent1(document, reportType, startYear, path):
             else:
                 addParagraph(document, "不适用", "paragraph")
         else:
+            df = filterDateFrame("长期股权投资联营企业明细情况", path)
             if len(df)>0:
                 addParagraph(document, "（1）联营企业", "paragraph")
                 addLongTermEquityInvestmentOther(document, df)
@@ -1190,13 +1187,13 @@ def addInvestmentRealEstate(document, num, path, context):
     if context["notes_params"]["measurementModeOfInvestmentRealEstate"] == "成本模式":
         if companyType == "国有企业":
             addParagraph(document, "1、采用成本计量模式的投资性房地产", "paragraph")
-            excelTableToWord(document, "采用成本计量模式的投资性房地产国有企业", path, style=2)
+            excelTableToWord(document, "采用成本计量模式的投资性房地产国有企业", path, style=3)
         else:
             addParagraph(document, "1、采用成本计量模式的投资性房地产", "paragraph")
-            excelTableToWord(document, "采用成本计量模式的投资性房地产上市公司", path, style=2,conditions=("合计",))
+            excelTableToWord(document, "采用成本计量模式的投资性房地产上市公司", path, style=3,conditions=("合计",))
     else:
         addParagraph(document, "1、采用公允价值计量模式的投资性房地产", "paragraph")
-        excelTableToWord(document, "采用公允价值计量模式的投资性房地产", path, style=2,conditions=("合计",))
+        excelTableToWord(document, "采用公允价值计量模式的投资性房地产", path, style=3,conditions=("合计",))
     addParagraph(document, "2、未办妥产权证书的投资性房地产金额及原因", "paragraph")
     excelTableToWord(document, "未办妥产权证书的投资性房地产金额及原因", path, style=2,conditions=("账面价值",))
 
@@ -1209,9 +1206,9 @@ def addFixedAssets(document, num, path, context):
     addParagraph(document, "1、固定资产", "paragraph")
     addParagraph(document, "（1）固定资产情况", "paragraph")
     if companyType == "上市公司":
-        excelTableToWord(document, "固定资产情况上市公司", path, style=2,conditions=("合计",))
+        excelTableToWord(document, "固定资产情况上市公司", path, style=3,conditions=("合计",))
     else:
-        excelTableToWord(document, "固定资产情况国有企业", path, style=2)
+        excelTableToWord(document, "固定资产情况国有企业", path, style=3)
     addParagraph(document, "（2）暂时闲置的固定资产情况", "paragraph")
     excelTableToWord(document, "暂时闲置的固定资产情况", path, style=2,conditions=("账面原值",))
     addParagraph(document, "（3）通过经营租赁租出的固定资产", "paragraph")
@@ -1267,9 +1264,9 @@ def addProductiveBiologicalAssets(document, num, path, context):
 
     addTitle(document, "（{}）生产性生物资产".format(to_chinese(num)), 2, True)
     if companyType == "上市公司":
-        excelTableToWord(document, "生产性生物资产上市公司", path, style=2,conditions=("合计",))
+        excelTableToWord(document, "生产性生物资产上市公司", path, style=3,conditions=("合计",))
     else:
-        excelTableToWord(document, "生产性生物资产国有企业", path, style=2)
+        excelTableToWord(document, "生产性生物资产国有企业", path, style=3)
 
 
 def addOilAndGasAssets(document, num, path, context):
@@ -1277,9 +1274,9 @@ def addOilAndGasAssets(document, num, path, context):
 
     addTitle(document, "（{}）油气资产".format(to_chinese(num)), 2, True)
     if companyType == "上市公司":
-        excelTableToWord(document, "油气资产上市公司", path, style=2,conditions=("合计",))
+        excelTableToWord(document, "油气资产上市公司", path, style=3,conditions=("合计",))
     else:
-        excelTableToWord(document, "油气资产国有企业", path, style=2)
+        excelTableToWord(document, "油气资产国有企业", path, style=3)
 
 
 def addRightToUseAssets(document, num, path, context):
@@ -1287,9 +1284,9 @@ def addRightToUseAssets(document, num, path, context):
 
     addTitle(document, "（{}）使用权资产".format(to_chinese(num)), 2, True)
     if companyType == "上市公司":
-        excelTableToWord(document, "使用权资产上市公司", path, style=2,conditions=("合计",))
+        excelTableToWord(document, "使用权资产上市公司", path, style=3,conditions=("合计",))
     else:
-        excelTableToWord(document, "使用权资产国有企业", path, style=2)
+        excelTableToWord(document, "使用权资产国有企业", path, style=3)
 
 
 def addIntangibleAssets(document, num, path, context):
@@ -1298,9 +1295,9 @@ def addIntangibleAssets(document, num, path, context):
     addTitle(document, "（{}）无形资产".format(to_chinese(num)), 2, True)
     addParagraph(document, "1、明细情况", "paragraph")
     if companyType == "上市公司":
-        excelTableToWord(document, "无形资产上市公司", path, style=2,conditions=("合计",))
+        excelTableToWord(document, "无形资产上市公司", path, style=3,conditions=("合计",))
     else:
-        excelTableToWord(document, "无形资产国有企业", path, style=2)
+        excelTableToWord(document, "无形资产国有企业", path, style=3)
     addParagraph(document, "2、未办妥产权证书的土地使用权情况", "paragraph")
     excelTableToWord(document, "未办妥产权证书的土地使用权情况", path, style=2,conditions=("账面价值",))
 
@@ -1374,14 +1371,14 @@ def addDeferredTax(document, num, path, context):
 # 其他非流动资产
 def addOtherNonCurrentAssets(document, num, path, context):
     addTitle(document, "（{}）其他非流动资产".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "其他非流动资产", path, style=2)
+    excelTableToWord(document, "其他非流动资产", path, style=2,sort=True,sort_column_name="期末数")
 
 
 # 短期借款
 def addShortTermLoan(document, num, path, context):
     addTitle(document, "（{}）短期借款".format(to_chinese(num)), 2, True)
     addParagraph(document, "1、	明细情况", "paragraph")
-    excelTableToWord(document, "短期借款明细情况", path, style=2)
+    excelTableToWord(document, "短期借款明细情况", path, style=2,sort=True,sort_column_name="期末数")
     addParagraph(document, "2、已逾期未偿还的短期借款情况", "paragraph")
     excelTableToWord(document, "已逾期未偿还的短期借款情况", path, style=2,conditions=("期末数",))
 
@@ -1389,7 +1386,7 @@ def addShortTermLoan(document, num, path, context):
 # 交易性金融负债
 def addTradingFinancialLiabilities(document, num, path, context):
     addTitle(document, "（{}）交易性金融负债".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "交易性金融负债", path, style=2)
+    excelTableToWord(document, "交易性金融负债", path, style=2,sort=True,sort_column_name="期末数")
 
 
 # 以公允价值计量且其变动计入当期损益的金融负债
@@ -1419,10 +1416,14 @@ def addAccountsPayable(document, num, path, context):
 
 def addDepositReceived(document, num, path, context):
     addTitle(document, "（{}）预收款项".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "预收款项", path, style=2)
+    companyType = context["report_params"]["companyType"]
+    if companyType=="国有企业":
+        excelTableToWord(document, "预收款项账龄表", path, style=2)
+    else:
+        excelTableToWord(document, "预收款项", path, style=2)
     df = filterDateFrame("账龄一年以上重要的预收款项", path, conditions=("期末数",))
     if len(df) > 0:
-        addParagraph(document, "其中：账龄超过1年的重要应付账款", "paragraph")
+        addParagraph(document, "其中：账龄超过1年的重要预收款项", "paragraph")
         dfToWord(document, df, style=2)
 
 
@@ -1443,7 +1444,7 @@ def addEmployeeCompensationPayable(document, num, path, context):
 
 def addTaxPayable(document, num, path, context):
     addTitle(document, "（{}）应交税费".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "应交税费", path, style=2,conditions=("期初数","本期应交","本期已交","期末数"))
+    excelTableToWord(document, "应交税费", path, style=2,conditions=("期初数","本期应交","本期已交","期末数"),sort=True,sort_column_name="期末数")
 
 
 def addOtherAccountsPayable(document, num, path, context):
@@ -1478,7 +1479,7 @@ def addLiabilitiesHeldForSale(document, num, path, context):
 
 def addNonCurrentLiabilitiesDueWithinOneYear(document, num, path, context):
     addTitle(document, "（{}）一年内到期的非流动负债".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "一年内到期的非流动负债", path, style=2)
+    excelTableToWord(document, "一年内到期的非流动负债", path, style=2,sort=True,sort_column_name="期末数")
 
 
 # 其他流动负债
@@ -1495,7 +1496,7 @@ def addOtherCurrentLiabilities(document, num, path, context):
     startYear = reportDate[:4]
 
     addTitle(document, "（{}）其他流动负债".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "其他流动负债", path, style=2)
+    excelTableToWord(document, "其他流动负债", path, style=2,sort=True,sort_column_name="期末数")
     df = filterDateFrame("短期应付债券", path, conditions=("面值",))
     if len(df) > 0:
         addLandscapeContent(document, addContent3, type, startYear, path)
@@ -1504,7 +1505,7 @@ def addOtherCurrentLiabilities(document, num, path, context):
 # 长期借款
 def addLongTermLoan(document, num, path, context):
     addTitle(document, "（{}）长期借款".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "长期借款", path, style=2)
+    excelTableToWord(document, "长期借款", path, style=2,sort=True,sort_column_name="期末数")
 
 
 def addBondsPayable(document, num, path, context):
@@ -1515,10 +1516,11 @@ def addBondsPayable(document, num, path, context):
 
     addTitle(document, "（{}）应付债券".format(to_chinese(num)), 2, True)
     addParagraph(document, "1、明细情况", "paragraph")
-    excelTableToWord(document, "应付债券", path, style=2)
+    excelTableToWord(document, "应付债券", path, style=2,sort=True,sort_column_name="期末数")
 
     def addContent4(document, reportType, startYear, path):
         df = filterDateFrame("应付债券的增减变动",path,conditions=("面值",))
+        df = df_sort(df,index_name="债券名称",column_name="期末数")
         addParagraph(document, "2、应付债券增减变动（不包括划分为金融负债的优先股、永续债等其他金融工具）", "paragraph")
         dfToWord(document,df,style=2)
 
@@ -1557,9 +1559,9 @@ def addLongTermAccountsPayable(document, num, path, context):
     df = pd.read_excel(path, sheet_name="长期应付款汇总")
     dfToWord(document,df,style=2)
     addParagraph(document, "1、长期应付款", "paragraph")
-    excelTableToWord(document, "长期应付款", path, style=2)
+    excelTableToWord(document, "长期应付款", path, style=2,sort=True,sort_column_name="期末数")
     addParagraph(document, "2、专项应付款", "paragraph")
-    excelTableToWord(document, "专项应付款", path, style=2)
+    excelTableToWord(document, "专项应付款", path, style=2,sort=True,sort_column_name="期末数")
 
 
 def addLongTermEmployeeCompensationPayable(document, num, path, context):
@@ -1577,7 +1579,7 @@ def addLongTermEmployeeCompensationPayable(document, num, path, context):
 
 def addEstimatedLiabilities(document, num, path, context):
     addTitle(document, "（{}）预计负债".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "预计负债", path, style=2)
+    excelTableToWord(document, "预计负债", path, style=2,sort=True,sort_column_name="期末数")
 
 
 def addDeferredIncome(document, num, path, context):
@@ -1591,7 +1593,7 @@ def addDeferredIncome(document, num, path, context):
 
 def addOtherNonCurrentLiabilities(document, num, path, context):
     addTitle(document, "（{}）其他非流动负债".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "其他非流动负债", path, style=2)
+    excelTableToWord(document, "其他非流动负债", path, style=2,sort=True,sort_column_name="期末数")
 
 
 def addEquity(document, num, path, context):
@@ -1673,7 +1675,9 @@ def addSurplusReserve(document, num, path, context):
 
 def addUndistributedProfit(document, num, path, context):
     addTitle(document, "（{}）未分配利润".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "未分配利润", path, style=2,conditions=("本期数","上年同期数"))
+    # df = pd.read_excel(path, sheet_name="未分配利润")
+    # dfToWord(document, df, style=3)
+    excelTableToWord(document, "未分配利润", path, style=3,conditions=("本期数","上年同期数"))
 
 
 def addRevenueCost(document, num, path, context):
@@ -1690,6 +1694,7 @@ def addRevenueCost(document, num, path, context):
     addContentToCombineTitle(document, dc, table, titleLength, style=2)
     addParagraph(document, "1、主营业务收入和主营业务成本", "paragraph")
     df = filterDateFrame("主营业务收入与主营业务成本",path,conditions=("本期收入","本期成本","上年同期收入","上年同期成本"))
+    df = df_sort(df,column_name="本期收入")
     if len(df)>0:
         dc = df.to_dict("split")
         titles = [["项  目", "本期数", "nan", "上年同期数", "nan"],
@@ -1704,6 +1709,7 @@ def addRevenueCost(document, num, path, context):
         addParagraph(document, "不适用", "paragraph")
     addParagraph(document, "2、其他业务收入和其他业务成本", "paragraph")
     df = filterDateFrame("其他业务收入与其他业务成本", path, conditions=("本期收入", "本期成本", "上年同期收入", "上年同期成本"))
+    df = df_sort(df, column_name="本期收入")
     if len(df)>0:
         dc = df.to_dict("split")
         titles = [["项  目", "本期数", "nan", "上年同期数", "nan"],
@@ -1720,22 +1726,22 @@ def addRevenueCost(document, num, path, context):
 
 def addTaxesAndSurcharges(document, num, path, context):
     addTitle(document, "（{}）税金及附加".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "税金及附加", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "税金及附加", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addsellingExpenses(document, num, path, context):
     addTitle(document, "（{}）销售费用".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "销售费用", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "销售费用", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addAdministrativeExpenses(document, num, path, context):
     addTitle(document, "（{}）管理费用".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "管理费用", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "管理费用", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addRDExpenses(document, num, path, context):
     addTitle(document, "（{}）研发费用".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "研发费用", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "研发费用", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addFinancialExpenses(document, num, path, context):
@@ -1750,42 +1756,42 @@ def addOtherIncome(document, num, path, context):
 
 def addincomeFromInvestment(document, num, path, context):
     addTitle(document, "（{}）投资收益".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "投资收益", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "投资收益", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addNetExposureHedgingGains(document, num, path, context):
     addTitle(document, "（{}）净敞口套期收益".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "净敞口套期收益", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "净敞口套期收益", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addIncomeFromChangesInFairValue(document, num, path, context):
     addTitle(document, "（{}）公允价值变动收益".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "公允价值变动损益", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "公允价值变动损益", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addCreditImpairmentLoss(document, num, path, context):
     addTitle(document, "（{}）信用减值损失".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "信用减值损失", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "信用减值损失", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addassetsImpairmentLoss(document, num, path, context):
     addTitle(document, "（{}）资产减值损失".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "资产减值损失", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "资产减值损失", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addIncomeFromAssetDisposal(document, num, path, context):
     addTitle(document, "（{}）资产处置收益".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "资产处置收益", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "资产处置收益", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addNonOperatingIncome(document, num, path, context):
     addTitle(document, "（{}）营业外收入".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "营业外收入", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "营业外收入", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addNonOperatingExpenses(document, num, path, context):
     addTitle(document, "（{}）营业外支出".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "营业外支出", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "营业外支出", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addIncomeTaxExpenses(document, num, path, context):
@@ -1793,37 +1799,37 @@ def addIncomeTaxExpenses(document, num, path, context):
     addParagraph(document, "1、明细情况", "paragraph")
     excelTableToWord(document, "所得税费用", path, style=2,conditions=("本期数","上年同期数"))
     addParagraph(document, "2、会计利润与所得税费用调整过程", "paragraph")
-    excelTableToWord(document, "会计利润与所得税费用调整过程", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "会计利润与所得税费用调整过程", path, style=3,conditions=("本期数","上年同期数"))
 
 
 def addOtherCashReceivedRelatedToOperatingActivities(document, num, path, context):
     addTitle(document, "（{}）收到其他与经营活动有关的现金".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "收到其他与经营活动有关的现金", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "收到其他与经营活动有关的现金", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addOtherCashPaymentsRelatedToOperatingActivities(document, num, path, context):
     addTitle(document, "（{}）支付其他与经营活动有关的现金".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "支付其他与经营活动有关的现金", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "支付其他与经营活动有关的现金", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addOtherCashReceivedRelatedToInvestmentActivities(document, num, path, context):
     addTitle(document, "（{}）收到其他与投资活动有关的现金".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "收到其他与投资活动有关的现金", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "收到其他与投资活动有关的现金", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addOtherCashPaymentsRelatedToInvestmentActivities(document, num, path, context):
     addTitle(document, "（{}）支付其他与投资活动有关的现金".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "支付其他与投资活动有关的现金", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "支付其他与投资活动有关的现金", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addOtherCashReceivedRelatedToFinancingActivities(document, num, path, context):
     addTitle(document, "（{}）收到其他与筹资活动有关的现金".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "收到其他与筹资活动有关的现金", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "收到其他与筹资活动有关的现金", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 def addOtherCashPaymentsRelatedToFinancingActivities(document, num, path, context):
     addTitle(document, "（{}）支付其他与筹资活动有关的现金".format(to_chinese(num)), 2, True)
-    excelTableToWord(document, "支付其他与筹资活动有关的现金", path, style=2,conditions=("本期数","上年同期数"))
+    excelTableToWord(document, "支付其他与筹资活动有关的现金", path, style=2,conditions=("本期数","上年同期数"),sort=True)
 
 
 # addTitle(document, "（七十七）每股收益", 2, True)
@@ -1867,9 +1873,16 @@ def addCashFlowReplenishment(document, num, path, context):
     reportType = context["report_params"]["type"]
     # 现金流量表补充资料
     addTitle(document, "（{}）现金流量表补充资料".format(to_chinese(num)), 2, True)
-    addParagraph(document, "1、按间接法将净利润调节为经营活动现金流量的信息", "paragraph")
-    df = pd.read_excel(path,sheet_name="现金流量表补充资料")
-    dfToWord(document,df,style=2)
+    addParagraph(document, "1、现金流量表补充资料", "paragraph")
+    addParagraph(document, "将净利润调节为经营活动现金流量", "paragraph")
+    excelTableToWord(document, "将净利润调节为经营活动现金流量", path, style=2, conditions=("本期数","上年同期数"))
+    addParagraph(document, "不涉及现金收支的重大投资和筹资活动", "paragraph")
+    excelTableToWord(document, "不涉及现金收支的重大投资和筹资活动", path, style=2, conditions=("本期数", "上年同期数"))
+    addParagraph(document, "现金及现金等价物净变动情况", "paragraph")
+    excelTableToWord(document, "现金及现金等价物净变动情况", path, style=2, conditions=("本期数", "上年同期数"))
+
+    # df1 = pd.read_excel(path, sheet_name="现金及现金等价物的构成")
+    df1 = filterDateFrame("现金及现金等价物的构成",path)
     if reportType == "合并":
         if context["noteAppend"]["purchaseSubsidiaries"]:
             df = filterDateFrame("本期支付的取得子公司的现金净额",path,conditions=("本期数",))
@@ -1883,7 +1896,8 @@ def addCashFlowReplenishment(document, num, path, context):
                     dfToWord(document, df, style=2)
             else:
                 addParagraph(document, "3、现金及现金等价物的构成", "paragraph")
-                excelTableToWord(document, "现金及现金等价物的构成", path, style=2)
+                dfToWord(document, df1, style=2)
+                # excelTableToWord(document, "现金及现金等价物的构成", path, style=2)
         else:
             if context["noteAppend"]["disposalSubsidiaries"]:
                 df = filterDateFrame("本期收到的处置子公司的现金净额", path, conditions=("本期数",))
@@ -1892,13 +1906,13 @@ def addCashFlowReplenishment(document, num, path, context):
                     dfToWord(document, df, style=2)
 
                 addParagraph(document, "3、现金及现金等价物的构成", "paragraph")
-                excelTableToWord(document, "现金及现金等价物的构成", path, style=2)
+                dfToWord(document, df1, style=2)
             else:
                 addParagraph(document, "2、现金及现金等价物的构成", "paragraph")
-                excelTableToWord(document, "现金及现金等价物的构成", path, style=2)
+                dfToWord(document, df1, style=2)
     else:
         addParagraph(document, "2、现金及现金等价物的构成", "paragraph")
-        excelTableToWord(document, "现金及现金等价物的构成", path, style=2)
+        dfToWord(document, df1, style=2)
 
 
 def addForeignCurrencyMonetaryItems(document, num, path):
@@ -2090,6 +2104,14 @@ def getLastNum(context, cashRecordsCombine, profitRecordsCombine, cashRecordsSin
         else:
             return getReportFormLastNum(profitRecordsSingle)
 
+# # 或有事项
+# def addContingencies(document, currentpath, context):
+#     addParagraph(document, "(一) 未决诉讼", "paragraph")
+#
+#     addParagraph(document, "(二) 对外担保", "paragraph")
+#     addParagraph(document, "1、为关联方提供的担保事项详见本财务报表附注十之说明。", "paragraph")
+#     addParagraph(document, "2、公司及子公司为非关联方提供的担保事项", "paragraph")
+
 
 def addOtherNoteAppended(document, currentpath,parentpath, context, assetsRecordsCombine,comparativeTable):
     companyType = context["report_params"]["companyType"]
@@ -2117,8 +2139,6 @@ def addOtherNoteAppended(document, currentpath,parentpath, context, assetsRecord
             addEventsAfterBalanceSheetDate(document)
             addTitle(document, "十、关联方及关联交易", 1, False)
             addRelationship(document, currentpath, context, assetsRecordsCombine)
-            addTitle(document, "十一、母公司财务报表主要项目注释", 1, False)
-            addParentCompanyNoteAppended(document, parentpath, context, comparativeTable)
 
     else:
         if reportType == "合并":
@@ -2173,9 +2193,7 @@ def addOtherNoteAppended(document, currentpath,parentpath, context, assetsRecord
                 addEventsAfterBalanceSheetDate(document)
                 addTitle(document, "十三、其他重要事项", 1, False)
                 addOtherImportantEvent(document, currentpath, context)
-                addTitle(document, "十四、母公司财务报表主要项目注释", 1, False)
-                addParentCompanyNoteAppended(document, parentpath, context, comparativeTable)
-                addTitle(document, "十五、其他补充资料", 1, False)
+                addTitle(document, "十四、其他补充资料", 1, False)
                 addOtherSupplementaryInformation(document, currentpath)
 
             else:
@@ -2185,9 +2203,7 @@ def addOtherNoteAppended(document, currentpath,parentpath, context, assetsRecord
                 addEventsAfterBalanceSheetDate(document)
                 addTitle(document, "十二、其他重要事项", 1, False)
                 addOtherImportantEvent(document, currentpath, context)
-                addTitle(document, "十三、母公司财务报表主要项目注释", 1, False)
-                addParentCompanyNoteAppended(document, parentpath, context, comparativeTable)
-                addTitle(document, "十四、其他补充资料", 1, False)
+                addTitle(document, "十三、其他补充资料", 1, False)
                 addOtherSupplementaryInformation(document, currentpath)
 
 
@@ -2755,7 +2771,7 @@ def addRelatedPartyTransactions(document, path, context):
             dfToWord(document, df2, style=2)
 
     addTitle(document, "5、关联方资金拆借", 2, True)
-    df = pd.read_excel(path,sheet_name="关联方资金拆借")
+    df = filterDateFrame("关联方资金拆借", path, conditions=("拆借金额", ))
     dfToWord(document,df,style=2)
 
 
@@ -2858,15 +2874,17 @@ def test():
     from project.settings import setStyle
 
     # # 根据pandas读取的excle表格数据导入word
-    MODELPATH = "D:/auditReport/project/model.xlsx"
+    MODELPATH = "D:/auditReport/project/nationalmodel.xlsx"
     # 计算附注编码
     computeNo(testcontext, comparativeTable)
 
     document = Document()
     # 设置中文标题
     setStyle(document)
-    # addNotesReceivable(document, 1, MODELPATH, testcontext)
-    addNoteAppended(document, MODELPATH, MODELPATH,testcontext,comparativeTable,isAll=True)
+    df = pd.DataFrame()
+    addLongTermEquityInvestmentOther(document, df)
+    # addInvestmentRealEstate(document, 1, MODELPATH, testcontext)
+    # addNoteAppended(document, MODELPATH, MODELPATH,testcontext,comparativeTable,isAll=True)
     document.save("noteappended.docx")
 
 if __name__ == '__main__':

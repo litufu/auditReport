@@ -28,6 +28,7 @@ def fillData(companyType, fsType, comparativeTable, path, tables, contrastSubjec
         if model is None:
             raise Exception("表格名称必须为：{}".format(tables))
         for item in dc["data"]:
+            #TODO:与财务费用利息收入相区分
             name = handleName(item[0])
             record = searchRecordItemByName(name, model, fillNum=True)
             if companyType == "上市公司":

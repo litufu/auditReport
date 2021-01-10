@@ -9,7 +9,7 @@ from project.utils import addLandscapeContent, addTitle, addCombineTableTitle, a
 
 
 # 首次执行日前后金融资产分类和计量对比表
-def addContent1(document, path, context):
+def addContent1(document, currentpath,parentpath, context):
     reportType = context["report_params"]["type"]
     # 报告日期
     reportDate = context["report_params"]["reportDate"]
@@ -24,7 +24,7 @@ def addContent1(document, path, context):
     if reportType == "合并":
         # 添加合并报表影响
         addParagraph(document, "对本集团的影响：".format(startYear), "paragraph")
-        df = pd.read_excel(path, sheet_name="合并首次执行日前后金融资产分类和计量对比表")
+        df = pd.read_excel(currentpath, sheet_name="首次执行日前后金融资产分类和计量对比表")
         dc = df.to_dict("split")
         titles = [["原金融工具准则", "nan", "nan", "新金融工具准则 ", "nan", "nan"], ["项目", "计量类别", "账面价值", "项目", "计量类别", "账面价值"]]
         titleLength = len(titles)
@@ -35,7 +35,7 @@ def addContent1(document, path, context):
         addCombineTableContent(table, dc, titleLength)
         #     添加母公司影响
         addParagraph(document, "对本公司的影响：".format(startYear), "paragraph")
-        df = pd.read_excel(path, sheet_name="单体首次执行日前后金融资产分类和计量对比表")
+        df = pd.read_excel(parentpath, sheet_name="首次执行日前后金融资产分类和计量对比表")
         dc = df.to_dict("split")
         titles = [["原金融工具准则", "nan", "nan", "新金融工具准则 ", "nan", "nan"], ["项目", "计量类别", "账面价值", "项目", "计量类别", "账面价值"]]
         titleLength = len(titles)
@@ -45,7 +45,7 @@ def addContent1(document, path, context):
         addCombineTableTitle(table, titles)
         addCombineTableContent(table, dc, titleLength)
     else:
-        df = pd.read_excel(path, sheet_name="单体首次执行日前后金融资产分类和计量对比表")
+        df = pd.read_excel(currentpath, sheet_name="首次执行日前后金融资产分类和计量对比表")
         dc = df.to_dict("split")
         titles = [["原金融工具准则", "nan", "nan", "新金融工具准则 ", "nan", "nan"], ["项目", "计量类别", "账面价值", "项目", "计量类别", "账面价值"]]
         titleLength = len(titles)
@@ -57,7 +57,7 @@ def addContent1(document, path, context):
 
 
 # 添加新金融工具准则
-def addNewFinancialInstrumentsChange(document, numTitle, path, context):
+def addNewFinancialInstrumentsChange(document, numTitle, currentpath,parentpath, context):
     reportType = context["report_params"]["type"]
     # 报告日期
     reportDate = context["report_params"]["reportDate"]
@@ -78,7 +78,7 @@ def addNewFinancialInstrumentsChange(document, numTitle, path, context):
     for content in context["standardChange"]["newFinancialInstrumentsChange"]:
         addParagraph(document, content, "paragraph")
     # 首次执行日前后金融资产分类和计量对比表
-    addLandscapeContent(document, addContent1, path, context)
+    addLandscapeContent(document, addContent1, currentpath,parentpath, context)
 
     # ②首次执行日，原金融资产账面价值调整为按照新金融工具准则的规定进行分类和计量的新金融资产账面价值的调节表
     if companyType == "国有企业":
@@ -88,18 +88,18 @@ def addNewFinancialInstrumentsChange(document, numTitle, path, context):
     if reportType == "合并":
         # 添加合并报表
         addParagraph(document, "对本集团的影响：".format(startYear), "paragraph")
-        df = pd.read_excel(path, sheet_name="合并新旧金融工具调节表")
+        df = pd.read_excel(currentpath, sheet_name="新旧金融工具调节表")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
         #     添加单体报表
         addParagraph(document, "对本公司的影响：".format(startYear),
                      "paragraph")
-        df = pd.read_excel(path, sheet_name="单体新旧金融工具调节表")
+        df = pd.read_excel(parentpath, sheet_name="新旧金融工具调节表")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
     else:
         #     添加单体报表
-        df = pd.read_excel(path, sheet_name="单体新旧金融工具调节表")
+        df = pd.read_excel(currentpath, sheet_name="新旧金融工具调节表")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
 
@@ -112,18 +112,18 @@ def addNewFinancialInstrumentsChange(document, numTitle, path, context):
         # 添加合并影响
         addParagraph(document, "对本集团的影响：".format(startYear),
                      "paragraph")
-        df = pd.read_excel(path, sheet_name="合并金融资产减值准备调节表")
+        df = pd.read_excel(currentpath, sheet_name="金融资产减值准备调节表")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
         #     添加单体影响
         addParagraph(document, "对本公司的影响： ".format(startYear),
                      "paragraph")
-        df = pd.read_excel(path, sheet_name="单体金融资产减值准备调节表")
+        df = pd.read_excel(parentpath, sheet_name="金融资产减值准备调节表")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
     else:
         # 添加单体影响
-        df = pd.read_excel(path, sheet_name="单体金融资产减值准备调节表")
+        df = pd.read_excel(currentpath, sheet_name="金融资产减值准备调节表")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
 
@@ -136,24 +136,24 @@ def addNewFinancialInstrumentsChange(document, numTitle, path, context):
         # 添加合并影响
         addParagraph(document, "对本集团的影响： ",
                      "paragraph")
-        df = pd.read_excel(path, sheet_name="合并新金融工具准则对期初留存收益和其他综合收益的影响")
+        df = pd.read_excel(currentpath, sheet_name="新金融工具准则对期初留存收益和其他综合收益的影响")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
         #     添加单体影响
         addParagraph(document, "对本公司的影响： ",
                      "paragraph")
-        df = pd.read_excel(path, sheet_name="单体新金融工具准则对期初留存收益和其他综合收益的影响")
+        df = pd.read_excel(parentpath, sheet_name="新金融工具准则对期初留存收益和其他综合收益的影响")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
     else:
         #  添加单体影响
-        df = pd.read_excel(path, sheet_name="单体新金融工具准则对期初留存收益和其他综合收益的影响")
+        df = pd.read_excel(currentpath, sheet_name="新金融工具准则对期初留存收益和其他综合收益的影响")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
 
 
 # 添加新收入准则
-def addNewIncomeCriteria(document, numTitle, path, context):
+def addNewIncomeCriteria(document, numTitle, currentpath,parentpath, context):
     companyTye = context["report_params"]["companyType"]
     reportType = context["report_params"]["type"]
     # 报告日期
@@ -175,12 +175,21 @@ def addNewIncomeCriteria(document, numTitle, path, context):
         addParagraph(document, "①对{}年1月1日财务报表的影响：".format(startYear), "paragraph")
     if reportType == "合并":
         # 添加合并报表
-        df = pd.read_excel(path, sheet_name="新收入准则对期初合并财务报表的影响")
+        # 添加合并影响
+        addParagraph(document, "对本集团的影响： ",
+                     "paragraph")
+        df = pd.read_excel(currentpath, sheet_name="新收入准则对期初财务报表的影响")
+        dc = df.to_dict("split")
+        addTable(document, dc, style=3)
+        #     添加单体影响
+        addParagraph(document, "对本公司的影响： ",
+                     "paragraph")
+        df = pd.read_excel(parentpath, sheet_name="新收入准则对期初财务报表的影响")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
     else:
         # 添加单体报表
-        df = pd.read_excel(path, sheet_name="新收入准则对期初单体财务报表的影响")
+        df = pd.read_excel(parentpath, sheet_name="新收入准则对期初财务报表的影响")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
     # ②对2019年末资产负债表的影响
@@ -190,12 +199,20 @@ def addNewIncomeCriteria(document, numTitle, path, context):
         addParagraph(document, "②对{}年末资产负债表的影响：".format(startYear), "paragraph")
     if reportType == "合并":
         # 添加合并报表
-        df = pd.read_excel(path, sheet_name="新收入准则对年末合并资产负债表的影响")
+        addParagraph(document, "对本集团的影响： ",
+                     "paragraph")
+        df = pd.read_excel(currentpath, sheet_name="新收入准则对期末资产负债表的影响")
+        dc = df.to_dict("split")
+        addTable(document, dc, style=3)
+        #     添加单体影响
+        addParagraph(document, "对本公司的影响： ",
+                     "paragraph")
+        df = pd.read_excel(parentpath, sheet_name="新收入准则对期末资产负债表的影响")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
     else:
         # 添加单体报表
-        df = pd.read_excel(path, sheet_name="新收入准则对年末单体资产负债表的影响")
+        df = pd.read_excel(parentpath, sheet_name="新收入准则对期末资产负债表的影响")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
     # ③对2019年度利润表的影响
@@ -205,17 +222,25 @@ def addNewIncomeCriteria(document, numTitle, path, context):
         addParagraph(document, "③对{}年末利润表的影响：".format(startYear), "paragraph")
     if reportType == "合并":
         # 添加合并报表
-        df = pd.read_excel(path, sheet_name="新收入准则对合并利润表的影响")
+        addParagraph(document, "对本集团的影响： ",
+                     "paragraph")
+        df = pd.read_excel(currentpath, sheet_name="新收入准则对利润表的影响")
+        dc = df.to_dict("split")
+        addTable(document, dc, style=3)
+        #     添加单体影响
+        addParagraph(document, "对本公司的影响： ",
+                     "paragraph")
+        df = pd.read_excel(parentpath, sheet_name="新收入准则对利润表的影响")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
     else:
         # 添加单体报表
-        df = pd.read_excel(path, sheet_name="新收入准则对利润表的影响")
+        df = pd.read_excel(parentpath, sheet_name="新收入准则对利润表的影响")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
 
 
-def addNewLeaseCriteria(document, numTitle, path, context):
+def addNewLeaseCriteria(document, numTitle, currentpath,parentpath, context):
     reportType = context["report_params"]["type"]
     # 报告日期
     reportDate = context["report_params"]["reportDate"]
@@ -236,12 +261,20 @@ def addNewLeaseCriteria(document, numTitle, path, context):
     addParagraph(document, "上述会计政策变更对{}年1月1日财务报表的影响".format(startYear), "paragraph")
     if reportType == "合并":
         # 添加合并报表
-        df = pd.read_excel(path, sheet_name="新租赁准则对期初合并报表的影响")
+        addParagraph(document, "对本集团的影响： ",
+                     "paragraph")
+        df = pd.read_excel(currentpath, sheet_name="新租赁准则对期初报表的影响")
+        dc = df.to_dict("split")
+        addTable(document, dc, style=3)
+        #     添加单体影响
+        addParagraph(document, "对本公司的影响： ",
+                     "paragraph")
+        df = pd.read_excel(parentpath, sheet_name="新租赁准则对期初报表的影响")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
     else:
         # 添加单体报表
-        df = pd.read_excel(path, sheet_name="新租赁准则对期初单体报表的影响")
+        df = pd.read_excel(parentpath, sheet_name="新租赁准则对期初报表的影响")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
     addParagraph(document, "公司于{}年1月1日计入资产负债表的租赁负债所采用的增量借款利率的加权平均值为{}%。".format(startYear, context["standardChange"][
@@ -249,19 +282,27 @@ def addNewLeaseCriteria(document, numTitle, path, context):
     if reportType == "合并":
         addParagraph(document, "于{}年1月1日,本集团及本公司将原租赁准则下披露的尚未支付的最低经营租赁付款额调整为新租赁准则下确认的租赁负债的调节表如下：".format(startYear),
                      "paragraph")
-        df = pd.read_excel(path, sheet_name="合并最低经营租赁付款额与租赁负债调节表")
+        addParagraph(document, "对本集团的影响： ",
+                     "paragraph")
+        df = pd.read_excel(currentpath, sheet_name="最低经营租赁付款额与租赁负债调节表")
+        dc = df.to_dict("split")
+        addTable(document, dc, style=3)
+        #     添加单体影响
+        addParagraph(document, "对本公司的影响： ",
+                     "paragraph")
+        df = pd.read_excel(parentpath, sheet_name="最低经营租赁付款额与租赁负债调节表")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
     else:
         addParagraph(document, "于{}年1月1日,本公司将原租赁准则下披露的尚未支付的最低经营租赁付款额调整为新租赁准则下确认的租赁负债的调节表如下：".format(startYear),
                      "paragraph")
-        df = pd.read_excel(path, sheet_name="单体最低经营租赁付款额与租赁负债调节表")
+        df = pd.read_excel(parentpath, sheet_name="最低经营租赁付款额与租赁负债调节表")
         dc = df.to_dict("split")
         addTable(document, dc, style=3)
 
 
 # 入口函数
-def addChange(document, num, context, path):
+def addChange(document, num, context, currentpath,parentpath):
     # 公司类型
     companyType = context["report_params"]["companyType"]
     # 报告日期
@@ -305,7 +346,7 @@ def addChange(document, num, context, path):
             addParagraph(document, ImplementationOfNewStandardsDesc, "paragraph")
             num = 1
             for newStandard in context["standardChange"]["implementationOfNewStandardsInThisPeriod"]:
-                newStandardFuncs[newStandard](document, "{}、执行{}导致的会计政策变更".format(num, newStandard), path, context)
+                newStandardFuncs[newStandard](document, "{}、执行{}导致的会计政策变更".format(num, newStandard), currentpath,parentpath, context)
 
                 num += 1
         else:
@@ -351,9 +392,8 @@ def addChange(document, num, context, path):
             addParagraph(document, ImplementationOfNewStandardsDesc, "paragraph")
             num = 1
             for newStandard in context["standardChange"]["implementationOfNewStandardsInThisPeriod"]:
-                newStandardFuncs[newStandard](document, "（{}）执行{}导致的会计政策变更".format(num, newStandard), reportType,
-                                              startYear,
-                                              path)
+                newStandardFuncs[newStandard](document, "{}、执行{}导致的会计政策变更".format(num, newStandard), currentpath,
+                                              parentpath, context)
                 num += 1
         else:
             addParagraph(document, "本公司{}年度无应披露的会计政策变更。".format(startYear),
@@ -368,12 +408,12 @@ def addChange(document, num, context, path):
 
 def test():
     from project.data import testcontext
-    from project.constants import CURRENTPATH
+    from project.constants import CURRENTPATH,PARENTPATH
     document = Document()
     # 设置中文标题
     setStyle(document)
     num = 5
-    addChange(document, num, testcontext, path=CURRENTPATH)
+    addChange(document, num, testcontext, CURRENTPATH,PARENTPATH)
 
     document.save("change.docx")
 

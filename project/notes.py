@@ -166,7 +166,7 @@ def checkOneConditon(condition,context,comparativeTable):
 
 # 检查是否披露相关会计政策
 def checkCondition(condition,context,comparativeTable):
-    if type(condition).__name__ == "slice":
+    if type(condition).__name__ == "list":
         for oneCondition in condition:
             if checkOneConditon(oneCondition,context,comparativeTable):
                 return True
@@ -732,7 +732,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "type": "table",  # 内容形式：text/table
             "single": [],
             "combine": [],
-            "table": {"columns": [], "data": [[item[0], item[1]] for item in context["notes_params"]["combinationClassification"]]},
+            "table": {"columns": [], "data": [[item[0], item[1]] for item in context["notes_params"]["combinationClassification"]]} if len(context["notes_params"]["combinationClassification"])>0 else {},
             "condition": {"type": "IsEqual", "value": "老金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
@@ -752,7 +752,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "type": "table",  # 内容形式：text/table
             "single": [],
             "combine": [],
-            "table": {"columns": [], "data": [[item[0], item[2]] for item in context["notes_params"]["combinationClassification"]]},
+            "table": {"columns": [], "data": [[item[0], item[2]] for item in context["notes_params"]["combinationClassification"]]} if len(context["notes_params"]["combinationClassification"])>0 else {},
             "condition": {"type": "IsEqual", "value": "老金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
@@ -773,7 +773,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "single": [],
             "combine": [],
             "table": {"columns": context["notes_params"]["badDebtProvisionRatio"][0],
-                      "data": context["notes_params"]["badDebtProvisionRatio"][1:]},
+                      "data": context["notes_params"]["badDebtProvisionRatio"][1:]} if len(context["notes_params"]["badDebtProvisionRatio"])>0 else {},
             "condition": {"type": "IsEqual", "value": "老金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
@@ -850,7 +850,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "type": "table",  # 内容形式：text/table
             "single": [],
             "combine": [],
-            "table": {"columns": context["notes_params"]["fixedAssetsCategory"][0], "data": context["notes_params"]["fixedAssetsCategory"][1:]},
+            "table": {"columns": context["notes_params"]["fixedAssetsCategory"][0], "data": context["notes_params"]["fixedAssetsCategory"][1:]} if len(context["notes_params"]["fixedAssetsCategory"])>0 else {},
             "condition": {"type": "moreThanZero", "origin": "assets", "name": ["固定资产"]},
         },
         {
@@ -896,7 +896,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "single": [],
             "combine": [],
             "table": {"columns": context["notes_params"]["productiveBiologicalAssetsDepreciation"][0],
-                      "data": context["notes_params"]["productiveBiologicalAssetsDepreciation"][1:]},
+                      "data": context["notes_params"]["productiveBiologicalAssetsDepreciation"][1:]}
+            if len(context["notes_params"]["productiveBiologicalAssetsDepreciation"])>0 else {},
             "condition": {"type": "moreThanZero", "origin": "assets", "name": ["生产性生物资产"]},
         },
         {
@@ -933,7 +934,8 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "single": [],
             "combine": [],
             "table": {"columns": context["notes_params"]["rightToUseAssetsDepreciation"][0],
-                      "data": context["notes_params"]["rightToUseAssetsDepreciation"][1:]},
+                      "data": context["notes_params"]["rightToUseAssetsDepreciation"][1:]}
+            if len(context["notes_params"]["rightToUseAssetsDepreciation"])>0 else {},
             "condition":{"type":"moreThanZero","origin":"assets","name":["使用权资产"]},
         },
         {
@@ -1130,7 +1132,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
                 cntitle = "（{}）{}".format(cnNum, title)
                 addTitle(document, cntitle, 2, True)
             if contentType == "text":
-                if type == "单体":
+                if reportType == "单体":
                     for single_content in content["single"]:
                         addParagraph(document, single_content, "paragraph")
                 else:

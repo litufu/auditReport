@@ -22,8 +22,11 @@ def addTax(document,context,path):
     for content in context["tax"]["policy"]:
         addParagraph(document, content, "paragraph")
     addTitle(document, "（二）税收优惠及批文", 2, True)
-    for content in context["tax"]["taxPreference"]:
-        addParagraph(document, content, "paragraph")
+    if len(context["tax"]["taxPreference"])==0:
+        addParagraph(document, "无。", "paragraph")
+    else:
+        for content in context["tax"]["taxPreference"]:
+            addParagraph(document, content, "paragraph")
 
 def test():
     from project.data import testcontext

@@ -4,7 +4,7 @@ import pandas as pd
 
 # 审计报告
 report_params = {
-    "type":"合并",#单体、合并
+    "type":"单体",#单体、合并
     "companyType": "国有企业",  # 国有企业、上市公司
     "reportNo":"亚会A审字（2020）0580号",
     "companyName":"杭州市城市建设发展集团有限公司",

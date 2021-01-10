@@ -28,68 +28,75 @@ def addContent3(document,context,startYear,path):
     dc = df.to_dict("split")
     addTable(document, dc, style=6)
 
-# （四）重要非全资子企业情况
+# （四）子公司所采用的会计政策与母公司不一致的，母公司编制合并财务报表的处理方法。
 def addContent4(document,context,startYear,path):
-    addTitle(document, "（四）重要非全资子企业情况", 2, True)
-    df = pd.read_excel(path, sheet_name="重要非全资子企业少数股东-国有企业")
-    dc = df.to_dict("split")
-    if len(dc["data"])==0:
-        addParagraph(document, "不适用", "paragraph")
-    else:
-        addParagraph(document,"1、少数股东","paragraph")
-        addTable(document, dc, style=6)
-        addParagraph(document,"2、主要财务信息","paragraph")
-        # 资产负债信息
-        addParagraph(document, "（1）资产和负债情况", "paragraph")
-        df = pd.read_excel(path, sheet_name="重要非全资子企业期末资产负债-国有企业")
-        dc = df.to_dict("split")
-        if len(dc["data"])==0:
-            addParagraph(document, "不适用", "paragraph")
-        else:
-            titles = [["单位名称", "期末数", "nan", "nan", "nan", "nan", "nan"],
-                      ["nan", "流动资产", "非流动资产", "资产合计", "流动负债", "非流动负债", "负债合计"]]
-            titleLength = len(titles)
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTableTitle(table, titles)
-            addContentToCombineTitle(document, dc, table, titleLength, style=3)
-            addParagraph(document, "(续上表)：".format(startYear), "paragraph")
-            df = pd.read_excel(path, sheet_name="重要非全资子企业期初资产负债-国有企业")
-            dc = df.to_dict("split")
-            titles = [["单位名称", "期初数", "nan", "nan", "nan", "nan", "nan"],
-                      ["nan", "流动资产", "非流动资产", "资产合计", "流动负债", "非流动负债", "负债合计"]]
-            titleLength = len(titles)
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTableTitle(table, titles)
-            addContentToCombineTitle(document, dc, table, titleLength, style=3)
+    addTitle(document, "（四）子公司所采用的会计政策与母公司不一致的说明", 2, True)
+    addParagraph(document, "不适用", "paragraph")
 
-        # 损益及现金流信息
-        addParagraph(document, "（2）损益和现金流量情况", "paragraph")
-        df = pd.read_excel(path, sheet_name="重要非全资子企业本期损益和现金流量情况-国有企业")
-        dc = df.to_dict("split")
-        if len(dc["data"])==0:
-            addParagraph(document, "不适用", "paragraph")
-        else:
-            titles = [["单位名称", "本期数", "nan", "nan", "nan"], ["nan", "营业收入", "净利润", "综合收益总额", "经营活动现金流量"]]
-            titleLength = len(titles)
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTableTitle(table, titles)
-            addContentToCombineTitle(document, dc, table, titleLength, style=3)
-            addParagraph(document, "(续上表)：".format(startYear), "paragraph")
-            df = pd.read_excel(path, sheet_name="重要非全资子企业上期损益和现金流量情况-国有企业")
-            dc = df.to_dict("split")
-            titles = [["单位名称", "上期数", "nan", "nan", "nan"], ["nan", "营业收入", "净利润", "综合收益总额", "经营活动现金流量"]]
-            titleLength = len(titles)
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTableTitle(table, titles)
-            addContentToCombineTitle(document, dc, table, titleLength, style=3)
+
+
+# # （四）重要非全资子企业情况
+# def addContent4(document,context,startYear,path):
+#     addTitle(document, "（四）重要非全资子企业情况", 2, True)
+#     df = pd.read_excel(path, sheet_name="重要非全资子企业少数股东-国有企业")
+#     dc = df.to_dict("split")
+#     if len(dc["data"])==0:
+#         addParagraph(document, "不适用", "paragraph")
+#     else:
+#         addParagraph(document,"1、少数股东","paragraph")
+#         addTable(document, dc, style=6)
+#         addParagraph(document,"2、主要财务信息","paragraph")
+#         # 资产负债信息
+#         addParagraph(document, "（1）资产和负债情况", "paragraph")
+#         df = pd.read_excel(path, sheet_name="重要非全资子企业期末资产负债-国有企业")
+#         dc = df.to_dict("split")
+#         if len(dc["data"])==0:
+#             addParagraph(document, "不适用", "paragraph")
+#         else:
+#             titles = [["单位名称", "期末数", "nan", "nan", "nan", "nan", "nan"],
+#                       ["nan", "流动资产", "非流动资产", "资产合计", "流动负债", "非流动负债", "负债合计"]]
+#             titleLength = len(titles)
+#             rowLength = len(dc["index"]) + titleLength
+#             columnLength = len(dc["columns"])
+#             table = createBorderedTable(document, rowLength, columnLength)
+#             addCombineTableTitle(table, titles)
+#             addContentToCombineTitle(document, dc, table, titleLength, style=3)
+#             addParagraph(document, "(续上表)：".format(startYear), "paragraph")
+#             df = pd.read_excel(path, sheet_name="重要非全资子企业期初资产负债-国有企业")
+#             dc = df.to_dict("split")
+#             titles = [["单位名称", "期初数", "nan", "nan", "nan", "nan", "nan"],
+#                       ["nan", "流动资产", "非流动资产", "资产合计", "流动负债", "非流动负债", "负债合计"]]
+#             titleLength = len(titles)
+#             rowLength = len(dc["index"]) + titleLength
+#             columnLength = len(dc["columns"])
+#             table = createBorderedTable(document, rowLength, columnLength)
+#             addCombineTableTitle(table, titles)
+#             addContentToCombineTitle(document, dc, table, titleLength, style=3)
+#
+#         # 损益及现金流信息
+#         addParagraph(document, "（2）损益和现金流量情况", "paragraph")
+#         df = pd.read_excel(path, sheet_name="重要非全资子企业本期损益和现金流量情况-国有企业")
+#         dc = df.to_dict("split")
+#         if len(dc["data"])==0:
+#             addParagraph(document, "不适用", "paragraph")
+#         else:
+#             titles = [["单位名称", "本期数", "nan", "nan", "nan"], ["nan", "营业收入", "净利润", "综合收益总额", "经营活动现金流量"]]
+#             titleLength = len(titles)
+#             rowLength = len(dc["index"]) + titleLength
+#             columnLength = len(dc["columns"])
+#             table = createBorderedTable(document, rowLength, columnLength)
+#             addCombineTableTitle(table, titles)
+#             addContentToCombineTitle(document, dc, table, titleLength, style=3)
+#             addParagraph(document, "(续上表)：".format(startYear), "paragraph")
+#             df = pd.read_excel(path, sheet_name="重要非全资子企业上期损益和现金流量情况-国有企业")
+#             dc = df.to_dict("split")
+#             titles = [["单位名称", "上期数", "nan", "nan", "nan"], ["nan", "营业收入", "净利润", "综合收益总额", "经营活动现金流量"]]
+#             titleLength = len(titles)
+#             rowLength = len(dc["index"]) + titleLength
+#             columnLength = len(dc["columns"])
+#             table = createBorderedTable(document, rowLength, columnLength)
+#             addCombineTableTitle(table, titles)
+#             addContentToCombineTitle(document, dc, table, titleLength, style=3)
 
 
 # （五）子公司与母公司会计期间不一致的说明
@@ -146,7 +153,7 @@ def addContent8(document,context,startYear,path):
     if len(dc["data"])==0:
         addParagraph(document, "不适用", "paragraph")
     else:
-        titles = [["公司名称","合并日","合并日确定依据","账面净资产","交易对价","实际控制人","本年初至合并日的相关情况","nan","nan","nan"],["nan","nan","nan","nan","nan","nan","收入","净利润","现金净增加额","经营活动现金流量净额"]]
+        titles = [["公司名称","合并日","合并日确定依据","合并日账面净资产","交易对价","实际控制人","本年初至合并日的相关情况","nan","nan","nan"],["nan","nan","nan","nan","nan","nan","收入","净利润","现金净增加额","经营活动现金流量净额"]]
         titleLength = len(titles)
         rowLength = len(dc["index"]) + titleLength
         columnLength = len(dc["columns"])
@@ -168,30 +175,31 @@ def addContent10(document,context,startYear,path):
 # （十一）本年发生的吸收合并
 def addContent11(document,context,startYear,path):
     addTitle(document, "（十一）本年发生的吸收合并", 2, True)
-    df = pd.read_excel(path, sheet_name="本年发生的反向购买-国有企业")
+    df = pd.read_excel(path, sheet_name="本年发生的吸收合并-国有企业")
     dc = df.to_dict("split")
     addTable(document, dc, style=6)
-# （十二）子企业使用企业集团资产和清偿企业集团债务的重大限制
+# （十二）子公司向母公司转移资金的能力受到严格限制的情况
 def addContent12(document,context,startYear,path):
-    addTitle(document, "（十二）子企业使用企业集团资产和清偿企业集团债务的重大限制", 2, True)
-    addParagraph(document,context["combine"]["majorRestrictionsOnSubsidiariesUseOfEnterpriseGroupAssetsAndSettlementOfEnterpriseGroupDebts"],"paragraph")
+    addTitle(document, "（十二）子公司向母公司转移资金的能力受到严格限制的情况", 2, True)
+    addParagraph(document,context["combine"]["theAbilityOfSubsidiaryToTransferFundsToItsParentCompanyIsStrictlyRestricted"],"paragraph")
+
+# # （十二）子企业使用企业集团资产和清偿企业集团债务的重大限制
+# def addContent12(document,context,startYear,path):
+#     addTitle(document, "（十二）子企业使用企业集团资产和清偿企业集团债务的重大限制", 2, True)
+#     addParagraph(document,context["combine"]["majorRestrictionsOnSubsidiariesUseOfEnterpriseGroupAssetsAndSettlementOfEnterpriseGroupDebts"],"paragraph")
 # （十三）纳入合并财务报表范围的结构化主体的相关信息
 def addContent13(document,context,startYear,path):
     addTitle(document, "（十三）纳入合并财务报表范围的结构化主体的相关信息", 2, True)
     addParagraph(document,context["combine"]["structuredSubject"],"paragraph")
 # （十四）母公司在子企业的所有者权益份额发生变化的情况
-def addContent14(document,context,startYear,path):
-    addTitle(document, "（十四）母公司在子企业的所有者权益份额发生变化的情况", 2, True)
-    ownerEquityChange = context["combine"]["changesInShareOfOwnerEquityOfParentCompanyInSubsidiaryEnterprises"]
-    addParagraph(document,ownerEquityChange,"paragraph")
+# def addContent14(document,context,startYear,path):
+#     addTitle(document, "（十四）母公司在子企业的所有者权益份额发生变化的情况", 2, True)
+#     ownerEquityChange = context["combine"]["changesInShareOfOwnerEquityOfParentCompanyInSubsidiaryEnterprises"]
+#     addParagraph(document,ownerEquityChange,"paragraph")
     # if ownerEquityChange != "不适用":
     #     df = pd.read_excel(path, sheet_name="母公司在子企业的所有者权益份额发生变化的情况-国有企业")
     #     dc = df.to_dict("split")
     #     addTable(document, dc, style=6)
-# （十五）子公司向母公司转移资金的能力受到严格限制的情况
-def addContent15(document,context,startYear,path):
-    addTitle(document, "（十五）子公司向母公司转移资金的能力受到严格限制的情况", 2, True)
-    addParagraph(document,context["combine"]["theAbilityOfSubsidiaryToTransferFundsToItsParentCompanyIsStrictlyRestricted"],"paragraph")
 
 def addContent(document,context,startYear,path):
     addContent1(document,context,startYear,path)
@@ -207,8 +215,8 @@ def addContent(document,context,startYear,path):
     addContent11(document,context,startYear,path)
     addContent12(document,context,startYear,path)
     addContent13(document,context,startYear,path)
-    addContent14(document,context,startYear,path)
-    addContent15(document,context,startYear,path)
+    # addContent14(document,context,startYear,path)
+    # addContent15(document,context,startYear,path)
 
 def addCombine(document,path,context):
     # 报告日期

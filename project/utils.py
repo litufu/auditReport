@@ -1,3 +1,4 @@
+import pandas as pd
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
@@ -186,7 +187,11 @@ def createBorderedTable(document, rowLength, columnLength, innerLine="dotted"):
 
 def setCell(cell, cellText, alignment, toFloat=True, style="tableCharacter"):
     if is_number(cellText) and toFloat:
-        cellText = '{:,.2f}'.format(float(cellText))
+        f = float(cellText)
+        if abs(f)<1e-7:
+            cellText=""
+        else:
+            cellText = '{:,.2f}'.format(float(cellText))
     cellString = str(cellText)
     if cellString == "nan":
         cellString = ""
@@ -511,3 +516,31 @@ def getNoteNum(context,isParent):
                 return "六"
             else:
                 return "六"
+
+
+# 排序
+# 合计最后一行，其他项目倒数第二行，其他项目按照column_name的从大到小排列
+def df_sort(df,index_name="项目",column_name="本期数",last_names=("其他","合计")):
+    '''
+
+    :param df: 要排序的df
+    :param index_name: 条件列，如项目
+    :param column_name: 值列，从大到小排列
+    :param last_names: 条件列中不参与排序的值
+    :return: 排序后的结果
+    '''
+    last_condition = False
+    first_conditon = True
+    try:
+        for name in last_names:
+            last_condition = last_condition | df[index_name].str.contains(name)
+            first_conditon = first_conditon & (~(df[index_name].str.contains(name)))
+    except Exception as e:
+        return df
+    df_last = df[last_condition]
+    df_first = df[first_conditon]
+    df_first = df_first.sort_values(by=column_name, ascending=False)
+    df_all = pd.concat([df_first, df_last], ignore_index=True)
+    return df_all
+
+

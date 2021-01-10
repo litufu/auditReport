@@ -682,6 +682,9 @@ def test():
     from project.fsmodel import fillTable
     from project.computeNo import computeNo
 
+    CURRENTPATH = "D:/我的文件2021/义务2020年审/义乌市粮食收储有限公司TB及附注/0义乌市粮食收储有限公司.xlsx"
+    PARENTPATH = "D:/我的文件2021/义务2020年审/义乌市粮食收储有限公司TB及附注/0义乌市粮食收储有限公司.xlsx"
+
     document = Document()
     # 设置中文标题
     setStyle(document)
