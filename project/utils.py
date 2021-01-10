@@ -407,6 +407,13 @@ def checkLeftSpace(row, j):
             return False
     return True
 
+# # 检查标题左面是否全部为空
+def checkTableLeftSpace(row, j):
+    for i in range(j):
+        if row[i] != "":
+            return False
+    return True
+
 
 # 添加合并标题
 # 左侧单元格空格众向合并，
@@ -517,6 +524,67 @@ def getNoteNum(context,isParent):
             else:
                 return "六"
 
+# 是否向上合并单元格
+def isCombine(i, j, combineCells):
+    for cell in combineCells:
+        if i == cell[0] and j == cell[1]:
+            return True
+    return False
+
+# 为表格添加合并标题，指定列向上合并
+def addCombineTitleSpecialReceivable(titles, table, combineCells):
+    for i, row in enumerate(titles):
+        for j, cellText in enumerate(row):
+            cell = table.cell(i, j)
+            if cellText == "nan":
+                # 最后一列，最后一行
+                if isCombine(i, j, combineCells):
+                    cell.merge(table.cell(i - 1, j))
+                    continue
+                if j >= 1:
+                    if checkLeftSpace(row, j):
+                        cell.merge(table.cell(i - 1, j))
+                    else:
+                        cell.merge(table.cell(i, j - 1))
+                else:
+                    cell.merge(table.cell(i - 1, j))
+            else:
+                setCell(cell, cellText, WD_PARAGRAPH_ALIGNMENT.CENTER)
+    set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
+
+# 替换表格内容空白回车
+def replace_doc_table(titles,table):
+    for key,row in enumerate(table.rows):  # 遍历表格中的所有行
+        if key> len(titles)-1:
+            return
+        for cell in row.cells:  # 遍历行中的所有单元格
+            newText = cell.text.replace('\n','')
+            cell.text = ""
+            setCell(cell, newText, WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallerCharacter")
+
+
+# 为表格添加合并标题，指定列向上合并,合并所有者权益变动表表头
+def combineTitles(titles, table, combineCells,lastLine):
+    for i, row in enumerate(titles):
+
+        for j, cellText in enumerate(row):
+            cell = table.cell(i, j)
+            if cellText == "":
+                if lastLine and i==len(titles)-1:
+                    cell.merge(table.cell(i - 1, j))
+                # 最后一列，最后一行
+                if isCombine(i, j, combineCells):
+                    cell.merge(table.cell(i - 1, j))
+                    continue
+                if j >= 1:
+                    if checkTableLeftSpace(row, j):
+                        cell.merge(table.cell(i - 1, j))
+                    else:
+                        cell.merge(table.cell(i, j - 1))
+                else:
+                    cell.merge(table.cell(i - 1, j))
+    replace_doc_table(titles,table)
+    set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
 
 # 排序
 # 合计最后一行，其他项目倒数第二行，其他项目按照column_name的从大到小排列

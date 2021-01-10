@@ -4,7 +4,7 @@ from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 from project.utils import checkLeftSpace, addTitle, addCombineTableTitle, addContentToCombineTitle, addParagraph, \
     createBorderedTable, addTable, setCell, addLandscapeContent, to_chinese, searchRecordItemByName, \
-    handleName,searchModel,set_cell_border,df_sort
+    handleName,searchModel,df_sort,addCombineTitleSpecialReceivable
 
 
 # 第一步计算出报表项目编号
@@ -37,26 +37,7 @@ def excelTableToWord(document, sheetName, xlsxPath, style,conditions=("期末数
     dc = df.to_dict("split")
     addTable(document, dc, style=style)
 
-# 为表格添加合并标题，指定列向上合并
-def addCombineTitleSpecialReceivable(titles, table, combineCells):
-    for i, row in enumerate(titles):
-        for j, cellText in enumerate(row):
-            cell = table.cell(i, j)
-            if cellText == "nan":
-                # 最后一列，最后一行
-                if isCombine(i, j, combineCells):
-                    cell.merge(table.cell(i - 1, j))
-                    continue
-                if j >= 1:
-                    if checkLeftSpace(row, j):
-                        cell.merge(table.cell(i - 1, j))
-                    else:
-                        cell.merge(table.cell(i, j - 1))
-                else:
-                    cell.merge(table.cell(i - 1, j))
-            else:
-                setCell(cell, cellText, WD_PARAGRAPH_ALIGNMENT.CENTER)
-    set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
+
 
 def addStart(document, context):
     companyType = context["report_params"]["companyType"]
@@ -207,12 +188,7 @@ def addNotesReceivable(document, num, path, context):
 # 应收账款
 
 
-# 是否向上合并单元格
-def isCombine(i, j, combineCells):
-    for cell in combineCells:
-        if i == cell[0] and j == cell[1]:
-            return True
-    return False
+
 
 # 应收账款其他项目路
 def addAccountsReceivableOther(document,path):
@@ -1874,12 +1850,15 @@ def addCashFlowReplenishment(document, num, path, context):
     # 现金流量表补充资料
     addTitle(document, "（{}）现金流量表补充资料".format(to_chinese(num)), 2, True)
     addParagraph(document, "1、现金流量表补充资料", "paragraph")
-    addParagraph(document, "将净利润调节为经营活动现金流量", "paragraph")
-    excelTableToWord(document, "将净利润调节为经营活动现金流量", path, style=2, conditions=("本期数","上年同期数"))
-    addParagraph(document, "不涉及现金收支的重大投资和筹资活动", "paragraph")
-    excelTableToWord(document, "不涉及现金收支的重大投资和筹资活动", path, style=2, conditions=("本期数", "上年同期数"))
-    addParagraph(document, "现金及现金等价物净变动情况", "paragraph")
-    excelTableToWord(document, "现金及现金等价物净变动情况", path, style=2, conditions=("本期数", "上年同期数"))
+    try:
+        addParagraph(document, "将净利润调节为经营活动现金流量", "paragraph")
+        excelTableToWord(document, "将净利润调节为经营活动现金流量", path, style=2, conditions=("本期数","上年同期数"))
+        addParagraph(document, "不涉及现金收支的重大投资和筹资活动", "paragraph")
+        excelTableToWord(document, "不涉及现金收支的重大投资和筹资活动", path, style=2, conditions=("本期数", "上年同期数"))
+        addParagraph(document, "现金及现金等价物净变动情况", "paragraph")
+        excelTableToWord(document, "现金及现金等价物净变动情况", path, style=2, conditions=("本期数", "上年同期数"))
+    except Exception as e:
+        excelTableToWord(document, "现金流量表补充资料", path, style=2, conditions=("本期数", "上年同期数"))
 
     # df1 = pd.read_excel(path, sheet_name="现金及现金等价物的构成")
     df1 = filterDateFrame("现金及现金等价物的构成",path)
