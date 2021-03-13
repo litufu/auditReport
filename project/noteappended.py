@@ -4,25 +4,12 @@ from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
 from project.utils import checkLeftSpace, addTitle, addCombineTableTitle, addContentToCombineTitle, addParagraph, \
     createBorderedTable, addTable, setCell, addLandscapeContent, to_chinese, searchRecordItemByName, \
-    handleName,searchModel,df_sort,addCombineTitleSpecialReceivable
+    handleName,searchModel,df_sort,addCombineTitleSpecialReceivable,filterDateFrame
 
 
 # 第一步计算出报表项目编号
 # 第二步显示所有编号的项目
-# 根据条件过滤df
-def filterDateFrame(sheetName, xlsxPath,conditions=("期末数","期初数")):
-    df = pd.read_excel(xlsxPath, sheet_name=sheetName)
-    if len(conditions)==0:
-        return df
-    s = False
-    for condition in conditions:
-        try:
-            s = s | (df[condition].abs() > 0)
-        except Exception as e:
-            print(e)
-            return df
-    df1 = df[s]
-    return df1
+
 
 # 根据df生成报告
 def dfToWord(document,df, style):
@@ -183,11 +170,6 @@ def addNotesReceivable(document, num, path, context):
 
         addParagraph(document, "9、本期实际核销的应收票据情况", "paragraph")
         excelTableToWord(document, "本期实际核销的应收票据情况新金融工具准则", path, style=2,conditions=("核销金额",))
-
-
-# 应收账款
-
-
 
 
 # 应收账款其他项目路
@@ -806,7 +788,7 @@ def addInventory(document, num, path, context):
         addParagraph(document, "3、确定可变现净值的具体依据、本期转回或转销存货跌价准备的原因", "paragraph")
         excelTableToWord(document, "确定可变现净值的具体依据", path, style=2,conditions=())
 
-        df = filterDateFrame("存货期末余额中借款费用资本化情况", path)
+        df = filterDateFrame("存货期末余额中借款费用资本化情况", path,conditions=("期末借款资本化余额",))
         if len(df) > 0:
             addParagraph(document, "4、存货期末余额中借款费用资本化情况：", "paragraph")
             dfToWord(document, df, style=2)
@@ -1066,6 +1048,7 @@ def addContent1(document, reportType, startYear, path):
             else:
                 addParagraph(document, "不适用", "paragraph")
         else:
+            df = filterDateFrame("长期股权投资联营企业明细情况", path)
             if len(df)>0:
                 addParagraph(document, "（2）联营企业", "paragraph")
                 addLongTermEquityInvestmentOther(document, df)
@@ -1323,10 +1306,10 @@ def addDeferredTax(document, num, path, context):
     else:
         addParagraph(document, "不适用", "paragraph")
 
-    df = filterDateFrame("未经抵销的递延所得税资产", path, conditions=("期末递延所得税负债", "期初递延所得税负债"))
+    addParagraph(document, "2、未经抵销的递延所得税负债", "paragraph")
+    df = filterDateFrame("未经抵销的递延所得税负债", path, conditions=("期末递延所得税负债", "期初递延所得税负债"))
     if len(df)>0:
-        addParagraph(document, "2、未经抵销的递延所得税负债", "paragraph")
-        df = pd.read_excel(path, sheet_name="未经抵销的递延所得税负债")
+        # df = pd.read_excel(path, sheet_name="未经抵销的递延所得税负债")
         dc = df.to_dict("split")
         titles = [["项  目", "期末数", "nan", "期初数", "nan"],
                   ["nan", "应纳税暂时性差异", "递延所得税负债", "应纳税暂时性差异", "递延所得税负债"]]
@@ -1353,7 +1336,7 @@ def addOtherNonCurrentAssets(document, num, path, context):
 # 短期借款
 def addShortTermLoan(document, num, path, context):
     addTitle(document, "（{}）短期借款".format(to_chinese(num)), 2, True)
-    addParagraph(document, "1、	明细情况", "paragraph")
+    addParagraph(document, "1、明细情况", "paragraph")
     excelTableToWord(document, "短期借款明细情况", path, style=2,sort=True,sort_column_name="期末数")
     addParagraph(document, "2、已逾期未偿还的短期借款情况", "paragraph")
     excelTableToWord(document, "已逾期未偿还的短期借款情况", path, style=2,conditions=("期末数",))
@@ -2034,7 +2017,10 @@ def addFsNote(document, path,context,isAll, assetsRecordsCombine, liabilitiesRec
                         funcDict[handleName(item["name"])](document, item["noteNum"], path, context)
                 else:
                     if item["noteNum"] != "":
-                        funcDict[handleName(item["name"])](document, item["noteNum"], path, context)
+                        if item["name"]=="六、其他综合收益的税后净额":
+                            pass
+                        else:
+                            funcDict[handleName(item["name"])](document, item["noteNum"], path, context)
     else:
         for single in singles:
             for item in single:
@@ -2052,7 +2038,10 @@ def addFsNote(document, path,context,isAll, assetsRecordsCombine, liabilitiesRec
                         funcDict[handleName(item["name"])](document, item["noteNum"], path, context)
                 else:
                     if item["noteNum"] != "":
-                        funcDict[handleName(item["name"])](document, item["noteNum"], path, context)
+                        if item["name"]=="六、其他综合收益的税后净额":
+                            pass
+                        else:
+                            funcDict[handleName(item["name"])](document, item["noteNum"], path, context)
 
 
 # 获取单个报表最后一个编号
@@ -2388,67 +2377,73 @@ def addRisksRelatedToFinancialInstruments(document, path,context):
 # 合并范围变更
 def addCombineRangeChange(document, path):
     addTitle(document, "(一）非同一控制下企业合并", 2, True)
-    df = pd.read_excel(path, sheet_name="非同一控制下企业合并上市公司")
+    # df = pd.read_excel(path, sheet_name="非同一控制下企业合并上市公司")
+    df = filterDateFrame("非同一控制下企业合并上市公司",path,conditions=("股权取得成本",))
 
     if len(df)>0:
         addTitle(document, "1、本期发生的非同一控制下企业合并", 2, True)
         dfToWord(document,df,style=2)
         addTitle(document, "2、合并成本及商誉", 2, True)
-        df = pd.read_excel(path, sheet_name="合并成本及商誉")
+        df = pd.read_excel(path, sheet_name="合并成本及商誉上市公司")
         dfToWord(document, df, style=2)
         addTitle(document, "3、被购买方于购买日可辨认资产、负债", 2, True)
-        df = pd.read_excel(path, sheet_name="被购买方于购买日可辨认资产负债")
+        df = pd.read_excel(path, sheet_name="被购买方于购买日可辨认资产负债上市公司")
         dfToWord(document, df, style=2)
     else:
         addParagraph(document, "不适用", "paragraph")
 
 
     addTitle(document, "(二）同一控制下企业合并", 2, True)
-    df = pd.read_excel(path, sheet_name="同一控制下企业合并")
+    df = filterDateFrame("同一控制下企业合并上市公司", path, conditions=("合并当年年初至合并日被合并方的净利润",))
+    # df = pd.read_excel(path, sheet_name="同一控制下企业合并")
     if len(df)>0:
         addTitle(document, "1、本期发生的同一控制下企业合并", 2, True)
         dfToWord(document,df,style=2)
         addTitle(document, "2、合并成本", 2, True)
-        df = pd.read_excel(path, sheet_name="合并成本")
+        df = pd.read_excel(path, sheet_name="合并成本上市公司")
         dfToWord(document, df, style=2)
         addTitle(document, "3、合并日被合并方资产、负债的账面价值", 2, True)
-        df = pd.read_excel(path, sheet_name="合并日被合并方资产负债的账面价值")
+        df = pd.read_excel(path, sheet_name="合并日被合并方资产负债的账面价值上市公司")
         dfToWord(document, df, style=2)
     else:
         addParagraph(document, "不适用", "paragraph")
 
     addTitle(document, "(三）处置子公司", 2, True)
-    df = pd.read_excel(path,sheet_name="单次处置对子公司投资即丧失控制权")
+    df = filterDateFrame("单次处置对子公司投资即丧失控制权上市公司", path, conditions=("丧失控制权之日剩余股权的账面价值",))
+    # df = pd.read_excel(path,sheet_name="单次处置对子公司投资即丧失控制权上市公司")
     if len(df)>0:
         addTitle(document, "1、单次处置对子公司投资即丧失控制权", 2, True)
         dfToWord(document,df,style=2)
-        df = pd.read_excel(path,sheet_name="多次处置构成一揽子交易")
+        df = filterDateFrame("多次处置构成一揽子交易上市公司", path, conditions=("丧失控制权之日剩余股权的账面价值",))
+        # df = pd.read_excel(path,sheet_name="多次处置构成一揽子交易上市公司")
         if len(df)>0:
             addTitle(document, "2、通过多次交易分步处置对子公司投资且在本期丧失控制权", 2, True)
             addTitle(document, "（1）构成一揽子交易", 2, True)
             dfToWord(document, df, style=2)
-            df = pd.read_excel(path,sheet_name="多次处置不构成一揽子交易")
+            df = filterDateFrame("多次处置不构成一揽子交易上市公司", path, conditions=("丧失控制权之日剩余股权的账面价值",))
+            # df = pd.read_excel(path,sheet_name="多次处置不构成一揽子交易上市公司")
             if len(df)>0:
                 addTitle(document, "（2）不构成一揽子交易", 2, True)
                 dfToWord(document, df, style=2)
         else:
-            df = pd.read_excel(path, sheet_name="多次处置不构成一揽子交易")
+            df = filterDateFrame("多次处置不构成一揽子交易上市公司", path, conditions=("丧失控制权之日剩余股权的账面价值",))
+            # df = pd.read_excel(path, sheet_name="多次处置不构成一揽子交易")
             if len(df) > 0:
                 addTitle(document, "2、通过多次交易分步处置对子公司投资且在本期丧失控制权", 2, True)
                 addTitle(document, "（1）不构成一揽子交易", 2, True)
                 dfToWord(document, df, style=2)
     else:
-        df = pd.read_excel(path, sheet_name="多次处置构成一揽子交易")
+        df = filterDateFrame("多次处置构成一揽子交易上市公司", path, conditions=("丧失控制权之日剩余股权的账面价值",))
         if len(df)>0:
             addTitle(document, "1、通过多次交易分步处置对子公司投资且在本期丧失控制权", 2, True)
             addTitle(document, "（1）构成一揽子交易", 2, True)
             dfToWord(document, df, style=2)
-            df = pd.read_excel(path,sheet_name="多次处置不构成一揽子交易")
+            df = filterDateFrame("多次处置不构成一揽子交易上市公司", path, conditions=("丧失控制权之日剩余股权的账面价值",))
             if len(df)>0:
                 addTitle(document, "（2）不构成一揽子交易", 2, True)
                 dfToWord(document, df, style=2)
         else:
-            df = pd.read_excel(path, sheet_name="多次处置不构成一揽子交易")
+            df = filterDateFrame("多次处置不构成一揽子交易上市公司", path, conditions=("丧失控制权之日剩余股权的账面价值",))
             if len(df) > 0:
                 addTitle(document, "1、通过多次交易分步处置对子公司投资且在本期丧失控制权", 2, True)
                 addTitle(document, "（1）不构成一揽子交易", 2, True)
@@ -2459,8 +2454,8 @@ def addCombineRangeChange(document, path):
 
 
     addTitle(document, "(四）其他原因的合并范围变动", 2, True)
-    df1 = filterDateFrame("其他合并范围增加",path,conditions=("出资额",))
-    df2 = filterDateFrame("其他合并范围减少",path,conditions=("处置日净资产",))
+    df1 = filterDateFrame("其他合并范围增加上市公司",path,conditions=("出资额",))
+    df2 = filterDateFrame(" 其他合并范围减少上市公司",path,conditions=("处置日净资产",))
     if len(df1)==0 and len(df2)==0:
         addParagraph(document, "不适用", "paragraph")
     else:
@@ -2480,7 +2475,8 @@ def addEquityInOtherEntities(document, path, context):
     addTitle(document, "（一）在子公司中的权益", 2, True)
 
     addParagraph(document, "1、企业集团的构成", "paragraph")
-    df = pd.read_excel(path, sheet_name="企业集团的构成上市公司")
+    df = filterDateFrame("企业集团的构成上市公司",path,conditions=("直接持股比例",))
+    # df = pd.read_excel(path, sheet_name="企业集团的构成上市公司")
     if len(df)>0:
         dc = df.to_dict("split")
         titles = [["子公司名称", "主要经营地", "注册地", "业务性质", "持股比例（%）", "nan", "取得方式"],
@@ -2563,7 +2559,8 @@ def addEquityInOtherEntities(document, path, context):
 
     addTitle(document, "（三）在合营企业或联营企业中的权益", 2, True)
     addParagraph(document, "1、重要的合营企业或联营企业", "paragraph")
-    df = pd.read_excel(path, sheet_name="重要的合营企业或联营企业上市公司")
+    df = filterDateFrame("重要的合营企业或联营企业上市公司",path,conditions=("直接持股比例（%）",))
+    # df = pd.read_excel(path, sheet_name="重要的合营企业或联营企业上市公司")
     if len(df)>0:
         dc = df.to_dict("split")
         titles = [["合营企业或联营企业名称", "主要经营地", "注册地", "业务性质", "持股比例（%）", "nan", "对合营企业或联营企业投资的会计处理方法"],
@@ -2577,6 +2574,7 @@ def addEquityInOtherEntities(document, path, context):
 
     addParagraph(document, "2、重要合营企业的主要财务信息", "paragraph")
 
+    # df = filterDateFrame("重要合营企业财务信息本期数上市公司", path, conditions=("直接持股比例（%）",))
     df = pd.read_excel(path,sheet_name="重要合营企业财务信息本期数上市公司")
     if len(df)>0:
         addParagraph(document, "本期数：", "paragraph")
@@ -2608,11 +2606,13 @@ def addEquityInOtherEntities(document, path, context):
     dfToWord(document,df,style=2)
 
     addParagraph(document, "5、合营企业或联营企业发生的超额亏损", "paragraph")
-    df = pd.read_excel(path, sheet_name="合营企业或联营企业发生的超额亏损上市公司")
+    df = filterDateFrame("合营企业或联营企业发生的超额亏损上市公司",path,conditions=("本期未确认的损失(或本期分享的净利润)",))
+    # df = pd.read_excel(path, sheet_name="合营企业或联营企业发生的超额亏损上市公司")
     dfToWord(document, df, style=2)
 
     addTitle(document, "（四）重要的共同经营", 2, True)
-    df = pd.read_excel(path, sheet_name="重要的共同经营上市公司")
+    df = filterDateFrame("重要的共同经营上市公司", path, conditions=("直接持股比例",))
+    # df = pd.read_excel(path, sheet_name="重要的共同经营上市公司")
     if len(df)>0:
         dc = df.to_dict("split")
         titles = [["共同经营名称", "主要经营地", "注册地", "业务性质", "持股比例（%）", "nan"],
@@ -2665,13 +2665,13 @@ def addRelatedParties(document, path, context, assetsRecordsCombine):
                 addParagraph(document, "本公司重要的合营和联营企业详见附注八、3、在合营企业或联营企业中的权益。", "paragraph")
                 df = pd.read_excel(path, sheet_name="其他关联方情况")
                 if len(df) > 0:
-                    addTitle(document, "4、其他关联方情况", 2, True)
+                    addTitle(document, "4、其他关联方情况", 3, True)
                     dfToWord(document, df, style=2)
 
             else:
                 df = pd.read_excel(path, sheet_name="其他关联方情况")
                 if len(df) > 0:
-                    addTitle(document, "3、其他关联方情况", 2, True)
+                    addTitle(document, "3、其他关联方情况", 3, True)
                     dfToWord(document, df, style=2)
 
         else:
@@ -2682,18 +2682,18 @@ def addRelatedParties(document, path, context, assetsRecordsCombine):
                 addParagraph(document, "详见附注八、（{}）、长期股权投资。".format(to_chinese(item["noteNum"])), "paragraph")
                 df = pd.read_excel(path, sheet_name="其他关联方情况")
                 if len(df) > 0:
-                    addTitle(document, "4、其他关联方情况", 2, True)
+                    addTitle(document, "4、其他关联方情况", 3, True)
                     dfToWord(document, df, style=2)
 
             else:
                 df = pd.read_excel(path, sheet_name="其他关联方情况")
                 if len(df) > 0:
-                    addTitle(document, "3、其他关联方情况", 2, True)
+                    addTitle(document, "3、其他关联方情况", 3, True)
                     dfToWord(document, df, style=2)
     else:
         df = pd.read_excel(path, sheet_name="其他关联方情况")
         if len(df) > 0:
-            addTitle(document, "2、其他关联方情况", 2, True)
+            addTitle(document, "2、其他关联方情况", 3, True)
             dfToWord(document, df, style=2)
 
 
@@ -2757,7 +2757,21 @@ def addRelatedPartyTransactions(document, path, context):
     if companyType == "上市公司":
         addTitle(document, "6、关键管理人员薪酬", 2, True)
         excelTableToWord(document, "关键管理人员薪酬", path, style=2,conditions=("本期数","上年同期数"))
-
+        try:
+            df1 = filterDateFrame("其他关联交易", path, conditions=("本期数", "上年同期数"))
+            if len(df1) > 0:
+                addTitle(document, "7、其他关联交易", 2, True)
+                dfToWord(document, df1, style=2)
+        except Exception as e:
+            print("没有其他交易表格")
+    else:
+        try:
+            df1 = filterDateFrame("其他关联交易", path, conditions=("本期数", "上年同期数"))
+            if len(df1) > 0:
+                addTitle(document, "6、其他关联交易", 2, True)
+                dfToWord(document, df1, style=2)
+        except Exception as e:
+            print("没有其他交易表格")
 
 # 关联方应收应付款项
 def addBalanceOfRelatedParties(document, path):

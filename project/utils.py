@@ -566,23 +566,37 @@ def replace_doc_table(titles,table):
 # 为表格添加合并标题，指定列向上合并,合并所有者权益变动表表头
 def combineTitles(titles, table, combineCells,lastLine):
     for i, row in enumerate(titles):
-
         for j, cellText in enumerate(row):
             cell = table.cell(i, j)
             if cellText == "":
                 if lastLine and i==len(titles)-1:
-                    cell.merge(table.cell(i - 1, j))
+                    try:
+                        cell.merge(table.cell(i - 1, j))
+                    except Exception as e:
+                        print("合并单元格错误", e, i, j)
                 # 最后一列，最后一行
                 if isCombine(i, j, combineCells):
-                    cell.merge(table.cell(i - 1, j))
-                    continue
-                if j >= 1:
-                    if checkTableLeftSpace(row, j):
+                    try:
                         cell.merge(table.cell(i - 1, j))
+                    except Exception as e:
+                        print("合并单元格错误", e, i, j)
+                    continue
+                if j >1:
+                    if checkTableLeftSpace(row, j):
+                        try:
+                            cell.merge(table.cell(i - 1, j))
+                        except Exception as e:
+                            print("合并单元格错误",e,i,j)
                     else:
-                        cell.merge(table.cell(i, j - 1))
+                        try:
+                            cell.merge(table.cell(i, j - 1))
+                        except Exception as e:
+                            print("合并单元格错误", e, i, j)
                 else:
-                    cell.merge(table.cell(i - 1, j))
+                    try:
+                        cell.merge(table.cell(i - 1, j))
+                    except Exception as e:
+                        print("合并单元格错误", e, i, j)
     replace_doc_table(titles,table)
     set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
 
@@ -611,4 +625,21 @@ def df_sort(df,index_name="项目",column_name="本期数",last_names=("其他",
     df_all = pd.concat([df_first, df_last], ignore_index=True)
     return df_all
 
-
+# 根据条件过滤df
+def filterDateFrame(sheetName, xlsxPath,conditions=("期末数","期初数")):
+    df = pd.read_excel(xlsxPath, sheet_name=sheetName)
+    if len(conditions)==0:
+        return df
+    s = False
+    values_dict = dict()
+    for condition in conditions:
+        values_dict[condition] = 0.00
+    df = df.fillna(value=values_dict)
+    for condition in conditions:
+        try:
+            s = s | (df[condition].abs() > 0)
+        except Exception as e:
+            print(e)
+            return df
+    df1 = df[s]
+    return df1

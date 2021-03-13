@@ -2,6 +2,7 @@
 import os
 import sys
 import shutil
+import re
 import xlrd
 import pandas as pd
 from openpyxl import load_workbook
@@ -435,7 +436,6 @@ def add_detail_combine_rows(path,combine_excel):
                 dfs.append(df)
         if len(dfs)>0:
             df_res = pd.concat(dfs, ignore_index=True)
-
             book = load_workbook(combine_path)
             writer = pd.ExcelWriter(combine_path, engine='openpyxl')
             writer.book = book
@@ -455,7 +455,7 @@ def add_column_link(all_files,max_rows,combine_sheet,sheetname,combine_column,is
             if i==1:
                 combine_sheet.cell(i,key+2).value = filename.replace(".xlsx","")
             else:
-                combine_sheet.cell(i,key+2).value="=[{}]{}!${}${}".format(filename,sheetname,combine_column,i)
+                combine_sheet.cell(i,key+2).value="='[{}]{}'!${}${}".format(filename,sheetname,combine_column,i)
             i = i + 1
     if is_add_total:
         i = 1
@@ -468,12 +468,119 @@ def add_column_link(all_files,max_rows,combine_sheet,sheetname,combine_column,is
             i = i + 1
 
 
+# 获取改表格的列数
+def get_table_column_num(path,sheetname):
+    wb = load_workbook(path)
+    ws = wb[sheetname]
+    return ws.max_column
+
+# 获取链接列配置表
+def get_row_link_setting(path):
+    df = pd.read_excel(path, sheet_name="setting")
+    records = df.to_dict(orient='records')
+    return records
+
+# 获取某表格配置的最大链接行数
+def get_table_max_link_row_num(sheetname,settings):
+    for setting in settings:
+        if setting["sheetname"]==sheetname:
+            return setting["link_column_num"]
+    return 100
+
+# 将行合并也改为链接方式
+def add_row_combine_link(path,combine_excel):
+    '''
+
+    :param path: 合并文件夹
+    :param combine_excel: 合并excel
+    :return:
+    '''
+    allow_suffix = ".xlsx"
+    all_files = [f for f in os.listdir(path) if (f.endswith(allow_suffix) and not f.startswith(combine_excel) and not f.startswith("~$"))]
+    target = os.path.join(path, combine_excel)
+    settings = get_row_link_setting(target)
+    wb = load_workbook(target)
+
+    for sheetname in rows_combine:
+        combine_sheet = wb[sheetname]
+        link_rows_num = get_table_max_link_row_num(sheetname, settings)
+        column_num = get_table_column_num(target, sheetname)
+        for key, filename in enumerate(all_files):
+            i = 2
+            while i < link_rows_num:
+                j=1
+                while j<column_num+1:
+                    combine_column = get_column_alpha(j)
+                    combine_sheet.cell(i+key*link_rows_num,j).value = "='[{}]{}'!${}${}".format(filename,sheetname,combine_column,i)
+                    j = j+1
+                i = i + 1
+    wb.save(target)
+
+# 替换TB和数字
+def filter_filename(filename):
+    filename = filename.replace("TB","")
+    filename = filename.replace(".xlsx","")
+    pattern = re.compile("\d+")
+    res = pattern.sub("",filename)
+    return res
+
+# 将增加单位名称统计也改为link
+def add_detail_link(path,combine_excel):
+    allow_suffix = ".xlsx"
+    all_files = [f for f in os.listdir(path) if
+                 (f.endswith(allow_suffix) and not f.startswith(combine_excel) and not f.startswith("~$"))]
+    # 合并工作表
+    combine_path = os.path.join(path, combine_excel)
+    settings = get_row_link_setting(combine_path)
+    wb = load_workbook(combine_path)
+
+    # 创建合并明细表
+    create_all_combine_tables(wb)
+    wb.save(combine_path)
+    # 获取所有明细表并合并
+    for sheetname in add_detail_combine:
+        if wb[sheetname].sheet_state=="hidden":
+            continue
+        # 获取最大行和最大列
+        column_num = wb[sheetname].max_column
+        link_rows_num = get_table_max_link_row_num(sheetname, settings)
+        # 合并明细表
+        combine_sheet_name = "{}明细表".format(sheetname)
+        combine_sheet = wb[combine_sheet_name]
+        # 添加标题
+        t = 0
+        while t < column_num+1:
+            if t==0:
+                combine_sheet.cell(1, t+1).value = "单位简称"
+            else:
+                combine_sheet.cell(1, t + 1).value = wb[sheetname].cell(1,t).value
+            t = t+1
+
+        # 添加内容
+        for key, filename in enumerate(all_files):
+            companyname = filter_filename(filename)
+            i = 2
+            while i < link_rows_num:
+                j = 1
+                while j <= column_num + 1:
+                    if j==1:
+                        combine_sheet.cell(i + key * link_rows_num, j).value = companyname
+                    else:
+                        combine_column = get_column_alpha(j-1)
+                        combine_sheet.cell(i + key * link_rows_num, j).value = "='[{}]{}'!${}${}".format(filename,
+                                                                                                         sheetname,
+                                                                                                     combine_column, i)
+                    j = j + 1
+                i = i + 1
+    wb.save(combine_path)
+
 # 添加列合并链接，不能增减行
 def add_link_columns_combine(source,path):
     # 合并工作表
     allow_suffix = ".xlsx"
-    combine_excel = "nationalmodel.xlsx"
-    all_files = [f for f in os.listdir(path) if (f.endswith(allow_suffix) and not f.startswith(combine_excel))]
+    combine_excel = os.path.basename(source)
+    all_files = [f for f in os.listdir(path) if
+                 (f.endswith(allow_suffix) and not f.startswith(combine_excel) and not f.startswith("~$"))]
 
     # 复制文件到合并文件夹中
     try:
@@ -487,9 +594,10 @@ def add_link_columns_combine(source,path):
     wb = load_workbook(target)
     contrast_names = [
         {"name": "本期TB", "combinename": "合并TB", "column": "H", "addtotal": True},
+        {"name": "现金流量表", "combinename": "合并现金流量表", "column": "B", "addtotal": True},
         {"name": "会计利润与所得税费用调整过程", "combinename": "合并会计利润与所得税费用调整过程", "column": "B", "addtotal": True},
         {"name": "本期支付的取得子公司的现金净额", "combinename": "合并本期支付的取得子公司的现金净额", "column": "B", "addtotal": True},
-        {"name": "现金流量表补充资料", "combinename": "合并现金流量表补充资料", "column": "B", "addtotal": True},
+        {"name": "将净利润调节为经营活动现金流量", "combinename": "合并将净利润调节为经营活动现金流量", "column": "B", "addtotal": True},
         {"name": "本期收到的处置子公司的现金净额", "combinename": "合并本期收到的处置子公司的现金净额", "column": "B", "addtotal": True},
         {"name": "非经常性损益上市公司", "combinename": "合并非经常性损益上市公司", "column": "B", "addtotal": True},
         {"name": "现金及现金等价物的构成", "combinename": "合并现金及现金等价物的构成", "column": "B", "addtotal": True},
@@ -506,10 +614,14 @@ def test_add_detail():
 if __name__ == '__main__':
     # check_is_not_exist()
     model = 'D:/auditReport/project/combinetbandnote/nationalmodel.xlsx'
-    combinepath = 'd:/我的文件2021/义务2020年审/义乌市粮食收储有限公司TB及附注'
-    combine_excel = "义乌市粮食收储有限公司合并.xlsx"
-    # add_link_columns_combine(model,combinepath)
-    combine_rows(combinepath,combine_excel)
-    # test_add_detail()
-    add_detail_combine_rows(combinepath,combine_excel)
+    combinepath = 'D:/我的文件2021/东投/东投审计2020/东投2020TB/杭州东部城市建设投资集团有限公司合并'
+    # combine_excel = "杭州东部资产管理有限公司合并.xlsx"
+    # 1、复制模板，并添加列合并链接
+    add_link_columns_combine(model,combinepath)
+    # path = "D:/我的文件2021/发展集团2020年审/发展集团2020TB"
+    # combine_excel = "杭州市城市建设发展集团有限公司合并TB.xlsx"
+    #2、添加行链接
+    # add_row_combine_link(path, combine_excel)
+    # 3、添加明细表链接
+    # add_detail_link(path, combine_excel)
 

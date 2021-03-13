@@ -4,27 +4,31 @@ from docx import Document
 import pandas as pd
 
 from project.settings import setStyle
-from project.utils import addTitle, addParagraph,addTable,addLandscapeContent,createBorderedTable,addContentToCombineTitle,addCombineTableTitle
+from project.utils import addTitle, addParagraph,addTable,addLandscapeContent,createBorderedTable,\
+    addContentToCombineTitle,addCombineTableTitle,filterDateFrame
 
 # （一）	子企业情况
 def addContent1(document,context,startYear,path):
     addTitle(document, "七、企业合并及合并财务报表", 1, False)
     addTitle(document, "（一）子企业情况", 2, True)
-    df = pd.read_excel(path, sheet_name="子企业情况-国有企业")
+    df = filterDateFrame("子企业情况-国有企业",path,conditions=("持股比例（%）",))
+    # df = pd.read_excel(path, sheet_name="子企业情况-国有企业")
     dc = df.to_dict("split")
     addTable(document, dc, style=6)
 
 # （二）母公司拥有被投资单位表决权不足半数但能对被投资单位形成控制的原因
 def addContent2(document,context,startYear,path):
     addTitle(document, "（二）母公司拥有被投资单位表决权不足半数但能对被投资单位形成控制的原因", 2, True)
-    df = pd.read_excel(path, sheet_name="表决权不足半数但能形成控制-国有企业")
+    df = filterDateFrame("表决权不足半数但能形成控制-国有企业", path, conditions=("持股比例（%）",))
+    # df = pd.read_excel(path, sheet_name="表决权不足半数但能形成控制-国有企业")
     dc = df.to_dict("split")
     addTable(document, dc, style=6)
 
 # （三）母公司直接或通过其他子公司间接拥有被投资单位半数以上表决权但未能对其形成控制的原因
 def addContent3(document,context,startYear,path):
     addTitle(document, "（三）母公司直接或通过其他子公司间接拥有被投资单位半数以上表决权但未能对其形成控制的原因", 2, True)
-    df = pd.read_excel(path, sheet_name="半数以上表决权但未控制-国有企业")
+    df = filterDateFrame("半数以上表决权但未控制-国有企业", path, conditions=("持股比例（%）",))
+    # df = pd.read_excel(path, sheet_name="半数以上表决权但未控制-国有企业")
     dc = df.to_dict("split")
     addTable(document, dc, style=6)
 
@@ -105,7 +109,8 @@ def addContent5(document,context,startYear,path):
     addParagraph(document,context["combine"]["statementOnInconsistencyOfAccountingPeriodBetweenSubsidiaryCompanyAndParentCompany"],"paragraph")
 # （六）本年不再纳入合并范围的原子公司
 def addContent6(document,context,startYear,path):
-    df = pd.read_excel(path, sheet_name="本年不再纳入合并范围原子公司的情况-国有企业")
+    df = filterDateFrame("本年不再纳入合并范围原子公司的情况-国有企业", path, conditions=("持股比例（%）",))
+    # df = pd.read_excel(path, sheet_name="本年不再纳入合并范围原子公司的情况-国有企业")
     dc = df.to_dict("split")
     addTitle(document, "（六）本年不再纳入合并范围的原子公司", 2, True)
     if len(dc["data"])==0:
@@ -114,7 +119,8 @@ def addContent6(document,context,startYear,path):
         addParagraph(document,"1、本年不再纳入合并范围原子公司的情况","paragraph")
         addTable(document, dc, style=6)
         addParagraph(document,"2、原子公司在处置日和上一会计期间资产负债表日的财务状况","paragraph")
-        df = pd.read_excel(path, sheet_name="原子公司在处置日和上一会计期间资产负债表日的财务状况-国有企业")
+        df = filterDateFrame("原子公司在处置日和上一会计期间资产负债表日的财务状况-国有企业", path, conditions=("处置日资产总额"),)
+        # df = pd.read_excel(path, sheet_name="原子公司在处置日和上一会计期间资产负债表日的财务状况-国有企业")
         dc = df.to_dict("split")
         if len(dc["data"])==0:
             addParagraph(document, "不适用", "paragraph")
@@ -127,7 +133,8 @@ def addContent6(document,context,startYear,path):
             addCombineTableTitle(table,titles)
             addContentToCombineTitle(document, dc, table, titleLength, style=3)
         addParagraph(document,"3、原子公司本年年初至处置日的经营成果","paragraph")
-        df = pd.read_excel(path, sheet_name="原子公司本年年初至处置日的经营成果-国有企业")
+        df = filterDateFrame("原子公司本年年初至处置日的经营成果-国有企业", path, conditions=("本年初至处置日净利润"), )
+        # df = pd.read_excel(path, sheet_name="原子公司本年年初至处置日的经营成果-国有企业")
         dc = df.to_dict("split")
         if len(dc["data"])==0:
             addParagraph(document, "不适用", "paragraph")
@@ -142,13 +149,15 @@ def addContent6(document,context,startYear,path):
 # （七）本年新纳入合并范围的主体
 def addContent7(document,context,startYear,path):
     addTitle(document, "（七）本年新纳入合并范围的主体", 2, True)
-    df = pd.read_excel(path, sheet_name="本年新纳入合并范围的主体-国有企业")
+    df = filterDateFrame("本年新纳入合并范围的主体-国有企业", path, conditions=("年末净资产",))
+    # df = pd.read_excel(path, sheet_name="本年新纳入合并范围的主体-国有企业")
     dc = df.to_dict("split")
     addTable(document, dc, style=6)
 # （八）本年发生的同一控制下企业合并情况
 def addContent8(document,context,startYear,path):
     addTitle(document, "（八）本年发生的同一控制下企业合并情况", 2, True)
-    df = pd.read_excel(path, sheet_name="本年发生的同一控制下企业合并情况-国有企业")
+    df = filterDateFrame("本年发生的同一控制下企业合并情况-国有企业", path, conditions=("合并日账面净资产",))
+    # df = pd.read_excel(path, sheet_name="本年发生的同一控制下企业合并情况-国有企业")
     dc = df.to_dict("split")
     if len(dc["data"])==0:
         addParagraph(document, "不适用", "paragraph")
@@ -163,19 +172,22 @@ def addContent8(document,context,startYear,path):
 # （九）本年发生的非同一控制下企业合并情况
 def addContent9(document,context,startYear,path):
     addTitle(document, "（九）本年发生的非同一控制下企业合并情况", 2, True)
-    df = pd.read_excel(path, sheet_name="本年发生的非同一控制下企业合并情况-国有企业")
+    df = filterDateFrame("本年发生的非同一控制下企业合并情况-国有企业", path, conditions=("账面净资产",))
+    # df = pd.read_excel(path, sheet_name="本年发生的非同一控制下企业合并情况-国有企业")
     dc = df.to_dict("split")
     addTable(document, dc, style=6)
 # （十）本年发生的反向购买
 def addContent10(document,context,startYear,path):
     addTitle(document, "（十）本年发生的反向购买", 2, True)
-    df = pd.read_excel(path, sheet_name="本年发生的反向购买-国有企业")
+    df = filterDateFrame("本年发生的反向购买-国有企业", path, conditions=("合并成本的确定方法",))
+    # df = pd.read_excel(path, sheet_name="本年发生的反向购买-国有企业")
     dc = df.to_dict("split")
     addTable(document, dc, style=6)
 # （十一）本年发生的吸收合并
 def addContent11(document,context,startYear,path):
     addTitle(document, "（十一）本年发生的吸收合并", 2, True)
-    df = pd.read_excel(path, sheet_name="本年发生的吸收合并-国有企业")
+    df = filterDateFrame("本年发生的吸收合并-国有企业", path, conditions=("资产金额",))
+    # df = pd.read_excel(path, sheet_name="本年发生的吸收合并-国有企业")
     dc = df.to_dict("split")
     addTable(document, dc, style=6)
 # （十二）子公司向母公司转移资金的能力受到严格限制的情况
@@ -228,7 +240,8 @@ def addCombine(document,path,context):
 
 def test():
     from project.data import testcontext
-    from project.constants import CURRENTPATH
+    # from project.constants import CURRENTPATH
+    CURRENTPATH = "D:/auditReport/project/combinetbandnote/tbs/杭州市地下管道开发有限公司合并TB.xlsx"
     document = Document()
     setStyle(document)
     addCombine(document,CURRENTPATH,testcontext)
