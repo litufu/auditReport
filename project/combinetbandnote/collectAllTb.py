@@ -613,15 +613,15 @@ def test_add_detail():
 
 if __name__ == '__main__':
     # check_is_not_exist()
-    model = 'D:/auditReport/project/combinetbandnote/nationalmodel.xlsx'
-    combinepath = 'D:/我的文件2021/东投/东投审计2020/东投2020TB/杭州东部城市建设投资集团有限公司合并'
+    # model = 'E:/auditReport/project/combinetbandnote/nationalmodel.xlsx'
+    # combinepath = 'E:/审计/我的文件2021/台州路桥金融2020年审/台州路桥TB/合并范围内/恒金实业合并报表'
     # combine_excel = "杭州东部资产管理有限公司合并.xlsx"
     # 1、复制模板，并添加列合并链接
-    add_link_columns_combine(model,combinepath)
-    # path = "D:/我的文件2021/发展集团2020年审/发展集团2020TB"
-    # combine_excel = "杭州市城市建设发展集团有限公司合并TB.xlsx"
-    #2、添加行链接
-    # add_row_combine_link(path, combine_excel)
+    # add_link_columns_combine(model,combinepath)
+    path = "E:/审计/我的文件2021/台州路桥金融2020年审/台州路桥TB/合并范围内"
+    combine_excel = "0台州市路桥区金融投资有限公司合并TB.xlsx"
+    # 2、添加行链接
+    add_row_combine_link(path, combine_excel)
     # 3、添加明细表链接
-    # add_detail_link(path, combine_excel)
+    add_detail_link(path, combine_excel)
 
