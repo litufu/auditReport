@@ -1158,16 +1158,12 @@ def addInvestmentRealEstate(document, num, path, context):
 
 
 def addFixedAssets(document, num, path, context):
-    companyType = context["report_params"]["companyType"]
 
     addTitle(document, "（{}）固定资产".format(to_chinese(num)), 2, True)
     excelTableToWord(document, "固定资产汇总", path, style=2,conditions=())
     addParagraph(document, "1、固定资产", "paragraph")
     addParagraph(document, "（1）固定资产情况", "paragraph")
-    if companyType == "上市公司":
-        excelTableToWord(document, "固定资产情况上市公司", path, style=3,conditions=("合计",))
-    else:
-        excelTableToWord(document, "固定资产情况国有企业", path, style=3)
+    excelTableToWord(document, "固定资产情况", path, style=3, conditions=())
     addParagraph(document, "（2）暂时闲置的固定资产情况", "paragraph")
     excelTableToWord(document, "暂时闲置的固定资产情况", path, style=2,conditions=("账面原值",))
     addParagraph(document, "（3）通过经营租赁租出的固定资产", "paragraph")
@@ -1219,44 +1215,28 @@ def addConstructionInProgress(document, num, path, context):
 
 
 def addProductiveBiologicalAssets(document, num, path, context):
-    companyType = context["report_params"]["companyType"]
 
     addTitle(document, "（{}）生产性生物资产".format(to_chinese(num)), 2, True)
-    if companyType == "上市公司":
-        excelTableToWord(document, "生产性生物资产上市公司", path, style=3,conditions=("合计",))
-    else:
-        excelTableToWord(document, "生产性生物资产国有企业", path, style=3)
+    excelTableToWord(document, "生产性生物资产", path, style=3, conditions=("合计",))
+
 
 
 def addOilAndGasAssets(document, num, path, context):
-    companyType = context["report_params"]["companyType"]
-
     addTitle(document, "（{}）油气资产".format(to_chinese(num)), 2, True)
-    if companyType == "上市公司":
-        excelTableToWord(document, "油气资产上市公司", path, style=3,conditions=("合计",))
-    else:
-        excelTableToWord(document, "油气资产国有企业", path, style=3)
+    excelTableToWord(document, "油气资产", path, style=3, conditions=("合计",))
+
 
 
 def addRightToUseAssets(document, num, path, context):
-    companyType = context["report_params"]["companyType"]
-
     addTitle(document, "（{}）使用权资产".format(to_chinese(num)), 2, True)
-    if companyType == "上市公司":
-        excelTableToWord(document, "使用权资产上市公司", path, style=3,conditions=("合计",))
-    else:
-        excelTableToWord(document, "使用权资产国有企业", path, style=3)
+    excelTableToWord(document, "使用权资产", path, style=3, conditions=())
 
 
 def addIntangibleAssets(document, num, path, context):
-    companyType = context["report_params"]["companyType"]
 
     addTitle(document, "（{}）无形资产".format(to_chinese(num)), 2, True)
     addParagraph(document, "1、明细情况", "paragraph")
-    if companyType == "上市公司":
-        excelTableToWord(document, "无形资产上市公司", path, style=3,conditions=("合计",))
-    else:
-        excelTableToWord(document, "无形资产国有企业", path, style=3)
+    excelTableToWord(document, "无形资产", path, style=3, conditions=())
     addParagraph(document, "2、未办妥产权证书的土地使用权情况", "paragraph")
     excelTableToWord(document, "未办妥产权证书的土地使用权情况", path, style=2,conditions=("账面价值",))
 
@@ -1615,6 +1595,8 @@ def addOtherComprehensiveIncome(document, num, path, context):
         titleLength = len(titles)
         rowLength = len(dc["index"]) + titleLength
         columnLength = len(dc["columns"])
+        if columnLength>len(titles[0]):
+            addParagraph(document, "不适用", "paragraph")
         table = createBorderedTable(document, rowLength, columnLength)
         addCombineTitleSpecialReceivable(titles, table, [[1, 8]])
         addContentToCombineTitle(document, dc, table, titleLength, style=2)

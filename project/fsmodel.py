@@ -31,10 +31,10 @@ def fillData(companyType, fsType, comparativeTable, path, tables, contrastSubjec
             #TODO:与财务费用利息收入相区分
             name = handleName(item[0])
             record = searchRecordItemByName(name, model, fillNum=True)
-            if companyType == "上市公司":
-                if record is None:
-                    if name in contrastSubjects:
-                        record = searchRecordItemByName(contrastSubjects[name], model, fillNum=True)
+            # if companyType == "上市公司":
+            if record is None:
+                if name in contrastSubjects:
+                    record = searchRecordItemByName(contrastSubjects[name], model, fillNum=True)
             if not record is None:
                 if "所有者权益变动表" in table:
                     record["paidInCapital"] = item[1]

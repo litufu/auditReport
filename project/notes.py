@@ -591,7 +591,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
         "本公司按照固定的周期性利率计算并确认租赁期内各个期间的利息收入。未纳入租赁投资净额计量的可变租赁付款额在实际发生时计入当期损益。",
         "经营租赁的租赁收款额在租赁期内按直线法确认为租金收入。本公司将其发生的与经营租赁有关的初始直接费用予以资本化，在租赁期内按照与租金收入确认相同的基础进行分摊，分期计入当期损益。未计入租赁收款额的可变租赁付款额在实际发生时计入当期损益。"]
     # 部分新租赁准则
-    partNewLease = ["“尚未执行新租赁准则的公司”的相关会计政策如下：", *oldLease, "“已经执行新租赁准则的公司”的相关会计政策如下：", *newLease]
+    partNewLease = ["2020年及之前的相关会计政策如下：", *oldLease, "自2021年1月1日起的相关会计政策如下：", *newLease]
     # 持有待售
     heldForSale = ["本公司若主要通过出售（包括具有商业实质的非货币性资产交换，下同）而非持续使用一项非流动资产或处置组收回其账面价值的，则将其划分为持有待售类别。具体标准为同时满足以下条件：某项非流动资产或处置组根据类似交易中出售此类资产或处置组的惯例，在当前状况下即可立即出售；本公司已经就出售计划作出决议且获得确定的购买承诺；预计出售将在一年内完成。其中，处置组是指在一项交易中作为整体通过出售或其他方式一并处置的一组资产，以及在该交易中转让的与这些资产直接相关的负债。处置组所属的资产组或资产组组合按照《企业会计准则第 8 号——资产减值》分摊了企业合并中取得的商誉的，该处置组应当包含分摊至处置组的商誉。","本公司初始计量或在资产负债表日重新计量划分为持有待售的非流动资产和处置组时，其账面价值高于公允价值减去出售费用后的净额的，将账面价值减记至公允价值减去出售费用后的净额，减记的金额确认为资产减值损失，计入当期损益，同时计提持有待售资产减值准备。对于处置组，所确认的资产减值损失先抵减处置组中商誉的账面价值，再按比例抵减该处置组内适用《企业会计准则第42号——持有待售的非流动资产、处置组和终止经营》（以下简称“持有待售准则”）的计量规定的各项非流动资产的账面价值。后续资产负债表日持有待售的处置组公允价值减去出售费用后的净额增加的，以前减记的金额应当予以恢复，并在划分为持有待售类别后适用持有待售准则计量规定的非流动资产确认的资产减值损失金额内转回，转回金额计入当期损益，并根据处置组中除商誉外适用持有待售准则计量规定的各项非流动资产账面价值所占比重按比例增加其账面价值；已抵减的商誉账面价值，以及适用持有待售准则计量规定的非流动资产在划分为持有待售类别前确认的资产减值损失不得转回。","持有待售的非流动资产或处置组中的非流动资产不计提折旧或摊销，持有待售的处置组中负债的利息和其他费用继续予以确认。","非流动资产或处置组不再满足持有待售类别的划分条件时，本公司不再将其继续划分为持有待售类别或将非流动资产从持有待售的处置组中移除，并按照以下两者孰低计量：（1）划分为持有待售类别前的账面价值，按照假定不划分为持有待售类别情况下本应确认的折旧、摊销或减值等进行调整后的金额；（2）可收回金额。"]
     # 安全生产费
@@ -671,12 +671,21 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "condition": {"type": "IsEqual", "value": "老金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
+        # {
+        #     "title": "金融工具",
+        #     "level": 2,
+        #     "type": "text",  # 内容形式：text/table
+        #     "single": newFinancial,
+        #     "combine": newFinancial,
+        #     "condition": {"type": "IsEqual", "value": "新金融工具准则",
+        #                   "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
+        # },
         {
             "title": "金融工具",
             "level": 2,
             "type": "text",  # 内容形式：text/table
-            "single": newFinancial,
-            "combine": newFinancial,
+            "single": ["2020年度及以前的相关会计政策如下：", *oldFinancial, "自2021年1月1日起的相关会计政策如下：", *newFinancial],
+            "combine": ["2020年度及以前的相关会计政策如下：", *oldFinancial, "自2021年1月1日起的相关会计政策如下：", *newFinancial],
             "condition": {"type": "IsEqual", "value": "新金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
@@ -693,11 +702,11 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "title": "应收款项",
             "level": 2,
             "type": "text",  # 内容形式：text/table
-            "single": ["应收款项包括应收账款、其他应收款等。", "1、单项金额重大并单独计提坏账准备的应收款项",
+            "single": ["以下应收款项会计政策适用2020及以前年度。", "应收款项包括应收账款、其他应收款等。", "1、单项金额重大并单独计提坏账准备的应收款项",
                        "对于单项金额重大的应收款项，单独进行减值测试。当存在客观证据表明本公司将无法按应收款项的原有条款收回款项时，计提坏账准备。"],
-            "combine": ["应收款项包括应收账款、其他应收款等。", "1、单项金额重大并单独计提坏账准备的应收款项",
+            "combine": ["以下应收款项会计政策适用2020及以前年度。", "应收款项包括应收账款、其他应收款等。", "1、单项金额重大并单独计提坏账准备的应收款项",
                         "对于单项金额重大的应收款项，单独进行减值测试。当存在客观证据表明本公司将无法按应收款项的原有条款收回款项时，计提坏账准备。"],
-            "condition": {"type":"IsEqual","value":"老金融工具准则","origin":context["notes_params"]["tandardssForFinancialInstruments"]}
+            "condition": {"type":"IsEqual","value":"新金融工具准则","origin":context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
             "title": "",
@@ -709,7 +718,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
                 ["单项金额重大的判断依据或金额标准", context["notes_params"]["judgmentStandardOfSignificantSingleAmount"]],
                 ["单项金额重大并单独计提坏账准备的计提方法", "根据应收款项的预计未来现金流量现值低于其账面价值的差额进行计提。"],
             ]},
-            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+            "condition": {"type": "IsEqual", "value": "新金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
@@ -723,7 +732,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
                         "对于单项金额不重大的应收款项，与经单独测试后未减值的应收款项一起按信用风险特征划分为若干组合，根据以前年度与之具有类似信用风险特征的应收款项组合的实际损失率为基础，结合现时情况确定应计提的坏账准备。",
                         "确定组合的依据如下："],
             "table": [],
-            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+            "condition": {"type": "IsEqual", "value": "新金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
@@ -733,7 +742,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "single": [],
             "combine": [],
             "table": {"columns": [], "data": [[item[0], item[1]] for item in context["notes_params"]["combinationClassification"]]} if len(context["notes_params"]["combinationClassification"])>0 else {},
-            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+            "condition": {"type": "IsEqual", "value": "新金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
@@ -743,7 +752,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "single": ["按组合计提坏账准备的计提方法如下："],
             "combine": ["按组合计提坏账准备的计提方法如下："],
             "table": {},
-            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+            "condition": {"type": "IsEqual", "value": "新金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
@@ -753,7 +762,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "single": [],
             "combine": [],
             "table": {"columns": [], "data": [[item[0], item[2]] for item in context["notes_params"]["combinationClassification"]]} if len(context["notes_params"]["combinationClassification"])>0 else {},
-            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+            "condition": {"type": "IsEqual", "value": "新金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
@@ -763,7 +772,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "single": ["组合中，采用账龄分析法的计提比例列示如下："],
             "combine": ["组合中，采用账龄分析法的计提比例列示如下："],
             "table": {},
-            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+            "condition": {"type": "IsEqual", "value": "新金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
@@ -774,7 +783,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "combine": [],
             "table": {"columns": context["notes_params"]["badDebtProvisionRatio"][0],
                       "data": context["notes_params"]["badDebtProvisionRatio"][1:]} if len(context["notes_params"]["badDebtProvisionRatio"])>0 else {},
-            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+            "condition": {"type": "IsEqual", "value": "新金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
@@ -784,7 +793,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "single": ["3、单项金额虽不重大但单独计提坏账准备的应收款项"],
             "combine": ["3、单项金额虽不重大但单独计提坏账准备的应收款项"],
             "table": {},
-            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+            "condition": {"type": "IsEqual", "value": "新金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
@@ -795,7 +804,7 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "combine": ["单项金额虽不重大但单独计提坏账准备的应收款项"],
             "table": {"columns": [], "data": [["单独计提坏账准备的理由", "存在客观证据表明本公司将无法按应收款项的原有条款收回的款项"],
                                              ["单项金额虽不重大但单独计提坏账准备的计提方法", "根据应收款项的预计未来现金流量现值低于其账面价值的差额进行计提"]]},
-            "condition": {"type": "IsEqual", "value": "老金融工具准则",
+            "condition": {"type": "IsEqual", "value": "新金融工具准则",
                           "origin": context["notes_params"]["tandardssForFinancialInstruments"]}
         },
         {
@@ -1011,16 +1020,16 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "table": {},
             "condition": {"type": "moreThanZero", "origin": "liabilities", "name": ["其他权益工具"]},
         },
-        {
-            "title": "收入",
-            "level": 2,
-            "type": "text",  # 内容形式：text/table
-            "single": [*newIncomeCriteria, *newSpecificMethodsOfRevenueRecognition],
-            "combine": [*newIncomeCriteria, *newSpecificMethodsOfRevenueRecognition],
-            "table": {},
-            "condition": {"type": "IsEqual", "value": "新收入准则",
-                          "origin": context["notes_params"]["incomeriteria"]}
-        },
+        # {
+        #     "title": "收入",
+        #     "level": 2,
+        #     "type": "text",  # 内容形式：text/table
+        #     "single": [*newIncomeCriteria, *newSpecificMethodsOfRevenueRecognition],
+        #     "combine": [*newIncomeCriteria, *newSpecificMethodsOfRevenueRecognition],
+        #     "table": {},
+        #     "condition": {"type": "IsEqual", "value": "新收入准则",
+        #                   "origin": context["notes_params"]["incomeriteria"]}
+        # },
         {
             "title": "收入",
             "level": 2,
@@ -1031,6 +1040,20 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
                         *oldSpecificMethodsOfRevenueRecognition],
             "table": {},
             "condition": {"type": "IsEqual", "value": "老收入准则",
+                          "origin": context["notes_params"]["incomeriteria"]}
+        },
+        {
+            "title": "收入",
+            "level": 2,
+            "type": "text",  # 内容形式：text/table
+             "single": ["2020年及之前的相关会计政策如下：", *sellingGoods, *renderingOfServices, *transferOfTheRightToUseAssets,
+                       *oldSpecificMethodsOfRevenueRecognition, "自2021年1月1日起的相关会计政策如下：", *newIncomeCriteria,
+                       *newSpecificMethodsOfRevenueRecognition],
+            "combine": ["2020年及之前的相关会计政策如下：", *sellingGoods, *renderingOfServices, *transferOfTheRightToUseAssets,
+                        *oldSpecificMethodsOfRevenueRecognition, "自2021年1月1日起的相关会计政策如下：", *newIncomeCriteria,
+                        *newSpecificMethodsOfRevenueRecognition],
+            "table": {},
+            "condition": {"type": "IsEqual", "value": "新收入准则",
                           "origin": context["notes_params"]["incomeriteria"]}
         },
         {
@@ -1081,12 +1104,22 @@ def addImportantAccountingPoliciesAndAccountingEstimates(document,title,context,
             "condition": {"type": "IsEqual", "value": "老租赁准则",
                           "origin": context["notes_params"]["leasingriteria"]}
         },
+        # {
+        #     "title": "租赁",
+        #     "level": 2,
+        #     "type": "text",  # 内容形式：text/table
+        #     "single": newLease,
+        #     "combine": newLease,
+        #     "table": {},
+        #     "condition": {"type": "IsEqual", "value": "新租赁准则",
+        #                   "origin": context["notes_params"]["leasingriteria"]}
+        # },
         {
             "title": "租赁",
             "level": 2,
             "type": "text",  # 内容形式：text/table
-            "single": newLease,
-            "combine": newLease,
+            "single": partNewLease,
+            "combine": partNewLease,
             "table": {},
             "condition": {"type": "IsEqual", "value": "新租赁准则",
                           "origin": context["notes_params"]["leasingriteria"]}

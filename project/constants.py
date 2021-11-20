@@ -3062,7 +3062,7 @@ contrastSubjects = {
 tables = ["资产表", "负债表", "利润表", "现金流量表", "本期所有者权益变动表", "上期所有者权益变动表"]
 # 根据pandas读取的excle表格数据导入word
 MODELPATH = "D:/auditReport/project/nationalmodel.xlsx"
-CURRENTPATH = "D:/auditReport/project/nationalmodel.xlsx"
+CURRENTPATH = r"E:\auditReport\project\combinetbandnote\nationalmodel.xlsx"
 PARENTPATH = "D:/auditReport/project/nationalmodel.xlsx"
 # 国有企业资产负债表标题行
 balanceTitlesState = ["项            目", "行次", "年末余额", "年初余额", "注释号"]

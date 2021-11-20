@@ -15,8 +15,8 @@ from project.constants import comparativeTable,tables,contrastSubjects,balanceTi
 
 
 if __name__ == '__main__':
-    CURRENTPATH = r"E:\审计\我的文件2021\东投\东投审计2020\东投2020TB\杭州东部城市建设投资集团有限公司合并-新\杭州东部城市建设投资集团有限公司合并\杭州东部大学科技园建设有限公司TB.xlsx"
-    PARENTPATH = r"E:\审计\我的文件2021\东投\东投审计2020\东投2020TB\杭州东部城市建设投资集团有限公司合并-新\杭州东部城市建设投资集团有限公司合并\杭州东部大学科技园建设有限公司TB.xlsx"
+    CURRENTPATH = r"E:\auditReport\project\model.xlsx"
+    PARENTPATH = r"E:\auditReport\project\model.xlsx"
     parent_path = os.path.dirname(CURRENTPATH)
     filename = os.path.basename(CURRENTPATH)
     new_filename = "{}.docx".format(filename.replace(".xlsx","").replace("TB",""))

@@ -502,6 +502,7 @@ def add_row_combine_link(path,combine_excel):
     wb = load_workbook(target)
 
     for sheetname in rows_combine:
+        print(sheetname)
         combine_sheet = wb[sheetname]
         link_rows_num = get_table_max_link_row_num(sheetname, settings)
         column_num = get_table_column_num(target, sheetname)
@@ -539,6 +540,7 @@ def add_detail_link(path,combine_excel):
     wb.save(combine_path)
     # 获取所有明细表并合并
     for sheetname in add_detail_combine:
+        print(sheetname)
         if wb[sheetname].sheet_state=="hidden":
             continue
         # 获取最大行和最大列
@@ -613,15 +615,15 @@ def test_add_detail():
 
 if __name__ == '__main__':
     # check_is_not_exist()
-    # model = 'E:/auditReport/project/combinetbandnote/nationalmodel.xlsx'
-    # combinepath = 'E:/审计/我的文件2021/台州路桥金融2020年审/台州路桥TB/合并范围内/恒金实业合并报表'
-    # combine_excel = "杭州东部资产管理有限公司合并.xlsx"
+    # model = r'E:\auditReport\project\model.xlsx'
+    # combinepath = r'E:\审计\审计指引\会计师事务所入职培训\excel的使用\使用程序操作EXCEL\tb'
+    # combine_excel = "台州恒金创业投资有限公司合并.xlsx"
     # 1、复制模板，并添加列合并链接
     # add_link_columns_combine(model,combinepath)
-    path = "E:/审计/我的文件2021/台州路桥金融2020年审/台州路桥TB/合并范围内"
-    combine_excel = "0台州市路桥区金融投资有限公司合并TB.xlsx"
+    path = r"E:\审计\审计指引\会计师事务所入职培训\excel的使用\使用程序操作EXCEL\tb"
+    combine_excel = "杭州高新技术产业开发区资产经营有限公司合并TB.xlsx"
     # 2、添加行链接
-    add_row_combine_link(path, combine_excel)
+    # add_row_combine_link(path, combine_excel)
     # 3、添加明细表链接
     add_detail_link(path, combine_excel)
 

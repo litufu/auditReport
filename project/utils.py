@@ -573,30 +573,30 @@ def combineTitles(titles, table, combineCells,lastLine):
                     try:
                         cell.merge(table.cell(i - 1, j))
                     except Exception as e:
-                        print("合并单元格错误", e, i, j)
+                        print("001合并单元格错误", e, i, j)
                 # 最后一列，最后一行
                 if isCombine(i, j, combineCells):
                     try:
                         cell.merge(table.cell(i - 1, j))
                     except Exception as e:
-                        print("合并单元格错误", e, i, j)
+                        print("002合并单元格错误", e, i, j)
                     continue
                 if j >1:
                     if checkTableLeftSpace(row, j):
                         try:
                             cell.merge(table.cell(i - 1, j))
                         except Exception as e:
-                            print("合并单元格错误",e,i,j)
+                            print("003合并单元格错误",e,i,j)
                     else:
                         try:
                             cell.merge(table.cell(i, j - 1))
                         except Exception as e:
-                            print("合并单元格错误", e, i, j)
+                            print("004合并单元格错误", e, i, j)
                 else:
                     try:
                         cell.merge(table.cell(i - 1, j))
                     except Exception as e:
-                        print("合并单元格错误", e, i, j)
+                        print("005合并单元格错误", e, i, j)
     replace_doc_table(titles,table)
     set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
 

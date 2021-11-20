@@ -12,6 +12,9 @@ from project.utils import createBorderedTable,setCell,addLandscapeContent,search
     set_cell_border,checkLeftSpace,combineTitles
 
 
+small = "tableSmallCharacter"
+smaller = "tableSmallerCharacter"
+
 # 获取列标题前部空格数量和排版格式
 def getAlignAndText(alignType,originText):
     if alignType=="center":
@@ -111,11 +114,11 @@ def setFsHeaderState(table,titles):
     table.cell(0, 2).width = Cm(5)
     table.cell(0, 3).width = Cm(5)
     table.cell(0, 4).width = Cm(5)
-    setCell(table.cell(0, 0), titles[0], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    setCell(table.cell(0, 1), titles[1], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    setCell(table.cell(0, 2), titles[2], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    setCell(table.cell(0, 3), titles[3], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    setCell(table.cell(0, 4), titles[4], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
+    setCell(table.cell(0, 0), titles[0], WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    setCell(table.cell(0, 1), titles[1], WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    setCell(table.cell(0, 2), titles[2], WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    setCell(table.cell(0, 3), titles[3], WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    setCell(table.cell(0, 4), titles[4], WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
 # 设置国有企业所有者权益表标题
 
 
@@ -138,7 +141,7 @@ def setOwnerHeaderState(table,period):
     ]
     for i,row in enumerate(values):
         for j,value in enumerate(row):
-            setCell(table.cell(i, j), value, WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
+            setCell(table.cell(i, j), value, WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
     set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
 
 # 设置上市公司报表标题
@@ -147,10 +150,10 @@ def setFsHeaderList(table,titles):
     table.cell(0, 1).width = Cm(5)
     table.cell(0, 2).width = Cm(5)
     table.cell(0, 3).width = Cm(5)
-    setCell(table.cell(0, 0), titles[0], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    setCell(table.cell(0, 1), titles[1], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    setCell(table.cell(0, 2), titles[2], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    setCell(table.cell(0, 3), titles[3], WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
+    setCell(table.cell(0, 0), titles[0], WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    setCell(table.cell(0, 1), titles[1], WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    setCell(table.cell(0, 2), titles[2], WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    setCell(table.cell(0, 3), titles[3], WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
 # 设置上市公司合并所有者权益表标题
 def setOwnerHeaderList(table,period):
     table.cell(0, 0).width = Cm(8)
@@ -174,7 +177,7 @@ def setOwnerHeaderList(table,period):
 
     for i,row in enumerate(values):
         for j,value in enumerate(row):
-            setCell(table.cell(i, j), value, WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
+            setCell(table.cell(i, j), value, WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
     set_cell_border(table.cell(0, len(table.columns) - 1), right={"sz": 0, "val": "", "space": "0"})
  # 设置上市公司单体所有者权益表标题
 def setOwnerHeaderListSingle(table, period):
@@ -193,21 +196,21 @@ def setOwnerHeaderListSingle(table, period):
     ]
     for i,row in enumerate(values):
         for j,value in enumerate(row):
-            setCell(table.cell(i, j), value, WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(0, 0), "项            目", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(0, 1), period, WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(1, 1), "实收资本(或股本)", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(1, 2), "其他权益工具", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(1, 5), "资本公积", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(1, 6), "减:库存股", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(1, 7), "其他综合收益", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(1, 8), "专项储备", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(1, 9), "盈余公积", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(1, 10), "未分配利润", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(1, 11), "所有者权益合计", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(2, 2), "优先股", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(2, 3), "永续债", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
-    # setCell(table.cell(2, 4), "其他", WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
+            setCell(table.cell(i, j), value, WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(0, 0), "项            目", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(0, 1), period, WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(1, 1), "实收资本(或股本)", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(1, 2), "其他权益工具", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(1, 5), "资本公积", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(1, 6), "减:库存股", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(1, 7), "其他综合收益", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(1, 8), "专项储备", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(1, 9), "盈余公积", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(1, 10), "未分配利润", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(1, 11), "所有者权益合计", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(2, 2), "优先股", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(2, 3), "永续债", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
+    # setCell(table.cell(2, 4), "其他", WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
     # # 合并单元格
     # # 第一列
     # for i in range(1, 3):
@@ -241,13 +244,13 @@ def addFsTableLineState(table,key,newRecords,num):
     table.cell(key, 3).width = Cm(5)
     table.cell(key, 4).width = Cm(5)
     setCell(table.cell(key, 0), *getAlignAndText(newRecords[key]["type"], newRecords[key]["name"]), False,
-            "tableSmallCharacter")
-    setCell(table.cell(key, 1), key, WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
+            smaller)
+    setCell(table.cell(key, 1), key, WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
     setCell(table.cell(key, 2), newRecords[key]["endDate"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key, 3), newRecords[key]["startDate"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
-    setCell(table.cell(key, 4),recordNum, WD_PARAGRAPH_ALIGNMENT.CENTER, True, "tableSmallCharacter")
+            smaller)
+    setCell(table.cell(key, 4),recordNum, WD_PARAGRAPH_ALIGNMENT.CENTER, True, smaller)
 # 向上市公司报表中添加一行记录
 def addFsTableLineList(table,key,newRecords,num):
     smallNum = to_chinese(newRecords[key]["noteNum"])
@@ -261,48 +264,48 @@ def addFsTableLineList(table,key,newRecords,num):
     table.cell(key, 2).width = Cm(5)
     table.cell(key, 3).width = Cm(5)
     setCell(table.cell(key, 0), *getAlignAndText(newRecords[key]["type"], newRecords[key]["name"]), False,
-            "tableSmallCharacter")
-    setCell(table.cell(key, 1), recordNum, WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
+            smaller)
+    setCell(table.cell(key, 1), recordNum, WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
     setCell(table.cell(key, 2), newRecords[key]["endDate"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key, 3), newRecords[key]["startDate"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
 # 向国有企业所有者权益变动表中添加一行记录
 def addOsTableLineState(table,key,newRecords):
     table.cell(key + 3, 0).width = Cm(8)
     table.cell(key + 3, 1).width = Cm(1)
 
     setCell(table.cell(key + 3, 0), *getAlignAndText(newRecords[key]["type"], newRecords[key]["name"]), False,
-            "tableSmallCharacter")
-    setCell(table.cell(key + 3, 1), key, WD_PARAGRAPH_ALIGNMENT.CENTER, False, "tableSmallCharacter")
+            smaller)
+    setCell(table.cell(key + 3, 1), key, WD_PARAGRAPH_ALIGNMENT.CENTER, False, smaller)
     setCell(table.cell(key + 3, 2), newRecords[key]["paidInCapital"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 3), newRecords[key]["preferedStock"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 4), newRecords[key]["perpetualDebt"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 5), newRecords[key]["otherEquityInstruments"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 6), newRecords[key]["capitalReserve"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 7), newRecords[key]["treasuryStock"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 8), newRecords[key]["otherComprehensiveIncome"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 9), newRecords[key]["specialReserve"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 10), newRecords[key]["surplusReserve"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 11), newRecords[key]["generalRiskReserve"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 12), newRecords[key]["undistributedProfit"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 13), newRecords[key]["subtotal"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 14), newRecords[key]["minorityInterests"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + 3, 15), newRecords[key]["totalOwnerEquity"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
 # 向上市公司所有者权益变动表中添加一行记录
 def addOsTableLineList(table,key,newRecords,reportType):
 
@@ -314,41 +317,41 @@ def addOsTableLineList(table,key,newRecords,reportType):
     table.cell(key + step, 1).width = Cm(1)
 
     setCell(table.cell(key + step, 0), *getAlignAndText(newRecords[key]["type"], newRecords[key]["name"]), False,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + step, 1), newRecords[key]["paidInCapital"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + step, 2), newRecords[key]["preferedStock"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + step, 3), newRecords[key]["perpetualDebt"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + step, 4), newRecords[key]["otherEquityInstruments"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + step, 5), newRecords[key]["capitalReserve"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + step, 6), newRecords[key]["treasuryStock"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + step, 7), newRecords[key]["otherComprehensiveIncome"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + step, 8), newRecords[key]["specialReserve"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     setCell(table.cell(key + step, 9), newRecords[key]["surplusReserve"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-            "tableSmallCharacter")
+            smaller)
     if reportType == "合并":
         setCell(table.cell(key + step, 10), newRecords[key]["generalRiskReserve"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-                "tableSmallCharacter")
+                smaller)
         setCell(table.cell(key + step, 11), newRecords[key]["undistributedProfit"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-                "tableSmallCharacter")
+                smaller)
         setCell(table.cell(key + step, 12), newRecords[key]["subtotal"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-                "tableSmallCharacter")
+                smaller)
         setCell(table.cell(key + step, 13), newRecords[key]["minorityInterests"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-                "tableSmallCharacter")
+                smaller)
         setCell(table.cell(key + step, 14), newRecords[key]["totalOwnerEquity"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-                "tableSmallCharacter")
+                smaller)
     else:
         setCell(table.cell(key + step, 10), newRecords[key]["undistributedProfit"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-                "tableSmallCharacter")
+                smaller)
         setCell(table.cell(key + step, 11), newRecords[key]["subtotal"], WD_PARAGRAPH_ALIGNMENT.RIGHT, True,
-                "tableSmallCharacter")
+                smaller)
 
 
 # 获取记录中全部为0的列编号
@@ -653,8 +656,8 @@ def test():
     from project.fsmodel import fillTable
     from project.computeNo import computeNo
 
-    CURRENTPATH = "D:/我的文件2021/义务2020年审/义乌市粮食收储有限公司TB及附注/0义乌市粮食收储有限公司.xlsx"
-    PARENTPATH = "D:/我的文件2021/义务2020年审/义乌市粮食收储有限公司TB及附注/0义乌市粮食收储有限公司.xlsx"
+    CURRENTPATH = r"E:\审计\我的文件2021\义务2020年审\义乌市粮食收储有限公司TB及附注\0义乌市粮食收储有限公司.xlsx"
+    PARENTPATH = r"E:\审计\我的文件2021\义务2020年审\义乌市粮食收储有限公司TB及附注\0义乌市粮食收储有限公司.xlsx"
 
     document = Document()
     # 设置中文标题
