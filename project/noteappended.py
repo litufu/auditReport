@@ -2818,6 +2818,13 @@ def addFormNote(document, path, isAll, assetsRecordsCombine, liabilitiesRecordsC
         lastNum = lastNum + 1
         addAssetsWithLimitedOwnershipOrRightOfUse(document, lastNum, path)
 
+# 给报告添加单位署名和日期
+def add_tail(document,context):
+    for i in range(4):
+        addParagraph(document,"",paragraphStyle="paragraph")
+    addParagraph(document, context["report_params"]["companyName"], "paragraphRight")
+    addParagraph(document, context["report_params"]["issuanceDate"], "paragraphRight")
+
 
 # 添加报表附注
 # isAll显示所有的报表项目,主要用于测试环境，生产环境设置为False
@@ -2840,6 +2847,8 @@ def addNoteAppended(document, currentpath,parentpath,context, comparativeTable,i
 
     # 添加其他注释
     addOtherNoteAppended(document, currentpath,parentpath, context, assetsRecordsCombine,comparativeTable)
+    # 添加公司名称和日期
+    add_tail(document, context)
 
 def test():
     from project.data import testcontext
@@ -2849,7 +2858,7 @@ def test():
     from project.settings import setStyle
 
     # # 根据pandas读取的excle表格数据导入word
-    MODELPATH = "D:/auditReport/project/nationalmodel.xlsx"
+    MODELPATH = r"D:\auditReport\project\model.xlsx"
     # 计算附注编码
     computeNo(testcontext, comparativeTable)
 
@@ -2857,9 +2866,9 @@ def test():
     # 设置中文标题
     setStyle(document)
     df = pd.DataFrame()
-    addLongTermEquityInvestmentOther(document, df)
+    # addLongTermEquityInvestmentOther(document, df)
     # addInvestmentRealEstate(document, 1, MODELPATH, testcontext)
-    # addNoteAppended(document, MODELPATH, MODELPATH,testcontext,comparativeTable,isAll=True)
+    addNoteAppended(document, MODELPATH, MODELPATH,testcontext,comparativeTable,isAll=True)
     document.save("noteappended.docx")
 
 if __name__ == '__main__':

@@ -87,3 +87,10 @@ def setStyle(document):
     paragraph_format.line_spacing = 1.5
     paragraph_format.space_after = Pt(0)
     paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.JUSTIFY
+
+    # 定义段落样式:靠右对齐
+    paragraph_style = document.styles.add_style('paragraphRight', WD_STYLE_TYPE.PARAGRAPH)
+    paragraph_format = paragraph_style.paragraph_format
+    paragraph_format.line_spacing = 1.5
+    paragraph_format.space_after = Pt(0)
+    paragraph_format.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
