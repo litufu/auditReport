@@ -1144,12 +1144,12 @@ def addInvestmentRealEstate(document, num, path, context):
 
     addTitle(document, "（{}）投资性房地产".format(to_chinese(num)), 2, True)
     if context["notes_params"]["measurementModeOfInvestmentRealEstate"] == "成本模式":
-        if companyType == "国有企业":
-            addParagraph(document, "1、采用成本计量模式的投资性房地产", "paragraph")
-            excelTableToWord(document, "采用成本计量模式的投资性房地产国有企业", path, style=3)
-        else:
-            addParagraph(document, "1、采用成本计量模式的投资性房地产", "paragraph")
-            excelTableToWord(document, "采用成本计量模式的投资性房地产上市公司", path, style=3,conditions=("合计",))
+        # if companyType == "国有企业":
+        #     addParagraph(document, "1、采用成本计量模式的投资性房地产", "paragraph")
+        #     excelTableToWord(document, "采用成本计量模式的投资性房地产国有企业", path, style=3)
+        # else:
+        addParagraph(document, "1、采用成本计量模式的投资性房地产", "paragraph")
+        excelTableToWord(document, "采用成本计量模式的投资性房地产上市公司", path, style=3,conditions=("合计",))
     else:
         addParagraph(document, "1、采用公允价值计量模式的投资性房地产", "paragraph")
         excelTableToWord(document, "采用公允价值计量模式的投资性房地产", path, style=3,conditions=("合计",))
