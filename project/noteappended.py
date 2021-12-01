@@ -173,264 +173,363 @@ def addNotesReceivable(document, num, path, context):
 
 
 # 应收账款其他项目路
-def addAccountsReceivableOther(document,path):
-    addParagraph(document, "4、本期重要的坏账准备收回或转回情况", "paragraph")
-    excelTableToWord(document, "收回或转回的坏账准备情况", path, style=2, conditions=("转回或收回金额",))
-
-    addParagraph(document, "5、本期实际核销的应收账款情况", "paragraph")
-    excelTableToWord(document, "本年实际核销的应收账款情况", path, style=2, conditions=("核销金额",))
-
-    addParagraph(document, "6、按欠款方归集的年末余额前五名的应收账款情况", "paragraph")
-    excelTableToWord(document, "按欠款方归集的年末余额前五名的应收账款情况", path, style=2, conditions=("账面余额",))
-
-    addParagraph(document, "7、由金融资产转移而终止确认的应收账款", "paragraph")
-    excelTableToWord(document, "由金融资产转移而终止确认的应收账款", path, style=2, conditions=("终止确认金额",))
-
-    addParagraph(document, "8、转移应收账款且继续涉入形成的资产、负债", "paragraph")
-    excelTableToWord(document, "转移应收账款且继续涉入形成的资产负债", path, style=2, conditions=("期末数",))
+# def addAccountsReceivableOther(document,path):
+#     addParagraph(document, "4、本期重要的坏账准备收回或转回情况", "paragraph")
+#     excelTableToWord(document, "收回或转回的坏账准备情况", path, style=2, conditions=("转回或收回金额",))
+#
+#     addParagraph(document, "5、本期实际核销的应收账款情况", "paragraph")
+#     excelTableToWord(document, "本年实际核销的应收账款情况", path, style=2, conditions=("核销金额",))
+#
+#     addParagraph(document, "6、按欠款方归集的年末余额前五名的应收账款情况", "paragraph")
+#     excelTableToWord(document, "按欠款方归集的年末余额前五名的应收账款情况", path, style=2, conditions=("账面余额",))
+#
+#     addParagraph(document, "7、由金融资产转移而终止确认的应收账款", "paragraph")
+#     excelTableToWord(document, "由金融资产转移而终止确认的应收账款", path, style=2, conditions=("终止确认金额",))
+#
+#     addParagraph(document, "8、转移应收账款且继续涉入形成的资产、负债", "paragraph")
+#     excelTableToWord(document, "转移应收账款且继续涉入形成的资产负债", path, style=2, conditions=("期末数",))
 
 # 老准则
 # 非首次执行新准则
 # 本期首次执行新准则
 def addAccountsReceivable(document, num, path, context):
     addTitle(document, "（{}）应收账款".format(to_chinese(num)), 2, True)
-    if context["notes_params"]["tandardssForFinancialInstruments"] == "老金融工具准则":
-        # 原金融工具准则
-        df = filterDateFrame("应收账款期末数原金融工具准则",path,("期末账面余额",))
-        if len(df)>0:
-            dc = df.to_dict("split")
-            titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
-                      ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                      ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                      ]
-            titleLength = len(titles)
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-            addContentToCombineTitle(document, dc, table, titleLength, style=2)
-            addParagraph(document, "（续）", "paragraph")
-        df = filterDateFrame("应收账款期初数原金融工具准则", path, ("期初账面余额",))
-        if len(df)>0:
-            dc = df.to_dict("split")
-            titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
-                      ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                      ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                      ]
-            titleLength = len(titles)
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-            addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    # 新金融工具准则
+    df = filterDateFrame("应收账款期末数", path, conditions=("期末账面余额",))
+    if len(df) > 0:
+        dc = df.to_dict("split")
+        titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
+                  ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+                  ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+                  ]
+        titleLength = len(titles)
+        rowLength = len(dc["index"]) + titleLength
+        columnLength = len(dc["columns"])
+        table = createBorderedTable(document, rowLength, columnLength)
+        addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+        addContentToCombineTitle(document, dc, table, titleLength, style=2)
+        addParagraph(document, "（续）", "paragraph")
 
-        addParagraph(document, "1、期末单项金额重大并单项计提坏账准备的应收账款", "paragraph")
-        excelTableToWord(document, "期末单项计提坏账准备的应收账款", path, style=2,conditions=("账面余额",))
+    df = filterDateFrame("应收账款期初数", path, conditions=("期初账面余额",))
+    if len(df) > 0:
+        titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
+                  ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+                  ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+                  ]
+        titleLength = len(titles)
+        dc = df.to_dict("split")
+        rowLength = len(dc["index"]) + titleLength
+        columnLength = len(dc["columns"])
+        table = createBorderedTable(document, rowLength, columnLength)
+        addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+        addContentToCombineTitle(document, dc, table, titleLength, style=2)
 
-        addParagraph(document, "2、按信用风险特征组合计提坏账准备的应收账款", "paragraph")
-        addParagraph(document, "（1）采用账龄分析法计提坏账准备的应收账款", "paragraph")
-        df = filterDateFrame("采用账龄分析法计提坏账准备的应收账款原准则",path,conditions=("期末账面余额","期初数账面余额"))
-        if len(df)>0:
-            dc = df.to_dict("split")
-            titles = [["账龄", "期末数", "nan", "nan", "期初数", "nan", "nan"],
-                      ["nan", "账面余额", "nan", "坏账准备", "账面余额", "nan", "坏账准备"],
-                      ["nan", "金额", "比例(%)", "nan", "金额", "比例(%)", "nan"],
-                      ]
-            titleLength = len(titles)
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTitleSpecialReceivable(titles, table, [[2, 3], [2, 6]])
-            addContentToCombineTitle(document, dc, table, titleLength, style=2)
-        else:
-            addParagraph(document, "不适用", "paragraph")
+    addParagraph(document, "1、期末单项计提坏账准备的应收账款", "paragraph")
+    excelTableToWord(document, "期末单项计提坏账准备的应收账款", path, style=2, conditions=("账面余额",))
 
-        addParagraph(document, "（2）采用其他组合方法计提坏账准备的应收账款", "paragraph")
-        df = filterDateFrame("采用其他组合方法计提坏账准备的应收账款原准则",path,("期末余额","期初余额"))
-        if len(df)>0:
-            dc = df.to_dict("split")
-            titles = [["组合名称", "期末数", "nan", "nan", "期初数", "nan", "nan"],
-                      ["nan", "账面余额", "计提比例（%）", "坏账准备", "账面余额", "计提比例（%）", "坏账准备"],
-                      ]
-            titleLength = len(titles)
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTitleSpecialReceivable(titles, table, [])
-            addContentToCombineTitle(document, dc, table, titleLength, style=2)
-        else:
-            addParagraph(document, "不适用", "paragraph")
+    addParagraph(document, "2、采用组合计提坏账准备的应收账款", "paragraph")
+    df = filterDateFrame("采用组合计提坏账准备的应收账款", path, conditions=("期末余额",))
+    if len(df) > 0:
+        dc = df.to_dict("split")
+        titles = [["组合名称", "期末数", "nan", "nan"],
+                  ["nan", "账面余额", "坏账准备", "计提比例(%)"],
+                  ]
+        titleLength = len(titles)
+        rowLength = len(dc["index"]) + titleLength
+        columnLength = len(dc["columns"])
+        table = createBorderedTable(document, rowLength, columnLength)
+        addCombineTitleSpecialReceivable(titles, table, [])
+        addContentToCombineTitle(document, dc, table, titleLength, style=2)
 
-        addParagraph(document, "3、期末单项金额虽不重大但单项计提坏账准备的应收账款", "paragraph")
-        excelTableToWord(document, "期末单项金额虽不重大但单项计提坏账准备的应收账款原准则", path, style=2,conditions=("账面余额",))
-        # 添加4/5/6/7/8
-        addAccountsReceivableOther(document, path)
+        # for row in dc["data"][:-1]:
+        #     if pd.isna(row[0]):
+        #         break
+        #     combinationName = "{}首次执行".format(row[0])
+        #     addParagraph(document, "{}:".format(row[0]), "paragraph")
+        #     df = pd.read_excel(path, sheet_name=combinationName)
+        #     dc = df.to_dict("split")
+        #     titles = [["项目", "期末数", "nan", "nan"],
+        #               ["nan", "账面余额", "坏账准备", "计提比例(%)"],
+        #               ]
+        #     titleLength = len(titles)
+        #     rowLength = len(dc["index"]) + titleLength
+        #     columnLength = len(dc["columns"])
+        #     table = createBorderedTable(document, rowLength, columnLength)
+        #     addCombineTitleSpecialReceivable(titles, table, [])
+        #     addContentToCombineTitle(document, dc, table, titleLength, style=2)
     else:
-        if "新金融工具准则" in context["standardChange"]["implementationOfNewStandardsInThisPeriod"]:
-            # 首次执行新金融工具准则
-            df = filterDateFrame("应收账款期末数首次新金融工具准则", path, ("期末账面余额",))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
-                          ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                          ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                          ]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-                addParagraph(document, "（续）", "paragraph")
-            df = filterDateFrame("应收账款期初数首次新金融工具准则", path, ("期初账面余额",))
-            if len(df)>0:
-                titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
-                          ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                          ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                          ]
-                titleLength = len(titles)
-                dc = df.to_dict("split")
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-            else:
-                addParagraph(document, "不适用", "paragraph")
+        addParagraph(document, "不适用", "paragraph")
 
-            addParagraph(document, "1、期末单项计提坏账准备的应收账款", "paragraph")
-            excelTableToWord(document, "期末单项计提坏账准备的应收账款", path, style=2,conditions=("账面余额",))
+    addParagraph(document, "3、账龄情况", "paragraph")
+    excelTableToWord(document, "应收账款账龄情况", path, style=2, conditions=("期末余额",))
 
-            addParagraph(document, "2、采用组合计提坏账准备的应收账款", "paragraph")
-            df = filterDateFrame("采用组合计提坏账准备的应收账款首次执行",path,conditions=("期末余额",))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["组合名称", "期末数", "nan", "nan"],
-                          ["nan", "账面余额", "坏账准备", "计提比例(%)"],
-                          ]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    addParagraph(document, "4、坏账准备变动明细情况", "paragraph")
+    df = filterDateFrame("应收账款坏账准备变动明细情况", path, conditions=("期初数", "期末数"))
+    if len(df) > 0:
+        dc = df.to_dict("split")
+        titles = [["项目", "期初数", "本期增加", "nan", "本期减少", "nan", "nan", "期末数"],
+                  ["nan", "nan", "计提", "其他", "转回", "核销", "其他", "nan"]]
+        titleLength = len(titles)
+        rowLength = len(dc["index"]) + titleLength
+        columnLength = len(dc["columns"])
+        table = createBorderedTable(document, rowLength, columnLength)
+        addCombineTitleSpecialLast(titles, table)
+        addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    else:
+        addParagraph(document, "不适用", "paragraph")
 
-                for row in dc["data"][:-1]:
-                    if pd.isna(row[0]):
-                        break
-                    combinationName = "{}首次执行".format(row[0])
-                    addParagraph(document, "{}:".format(row[0]), "paragraph")
-                    df = pd.read_excel(path, sheet_name=combinationName)
-                    dc = df.to_dict("split")
-                    titles = [["项目", "期末数", "nan", "nan"],
-                              ["nan", "账面余额", "坏账准备", "计提比例(%)"],
-                              ]
-                    titleLength = len(titles)
-                    rowLength = len(dc["index"]) + titleLength
-                    columnLength = len(dc["columns"])
-                    table = createBorderedTable(document, rowLength, columnLength)
-                    addCombineTitleSpecialReceivable(titles, table, [])
-                    addContentToCombineTitle(document, dc, table, titleLength, style=2)
-            else:
-                addParagraph(document, "不适用", "paragraph")
+    addParagraph(document, "5、本期重要的坏账准备收回或转回情况", "paragraph")
+    excelTableToWord(document, "收回或转回的坏账准备情况", path, style=2, conditions=("转回或收回金额",))
 
-            addParagraph(document, "3、坏账准备变动明细情况", "paragraph")
-            df = filterDateFrame("应收账款坏账准备变动明细情况新金融工具准则",path,conditions=("期初数","期末数"))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["项目", "期初数", "本期增加", "nan", "本期减少", "nan", "nan", "期末数"],
-                          ["nan", "nan", "计提", "其他", "转回", "核销", "其他", "nan"]]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialLast(titles, table)
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-            else:
-                addParagraph(document, "不适用", "paragraph")
-            # 添加4/5/6/7/8
-            addAccountsReceivableOther(document, path)
-        else:
-            # 新金融工具准则
-            df = filterDateFrame("应收账款期末数新金融工具准则",path,conditions=("期末账面余额",))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
-                          ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                          ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                          ]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-                addParagraph(document, "（续）", "paragraph")
+    addParagraph(document, "6、本期实际核销的应收账款情况", "paragraph")
+    excelTableToWord(document, "本年实际核销的应收账款情况", path, style=2, conditions=("核销金额",))
 
-            df = filterDateFrame("应收账款期初数新金融工具准则", path, conditions=("期初账面余额",))
-            if len(df)>0:
-                titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
-                          ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                          ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                          ]
-                titleLength = len(titles)
-                dc = df.to_dict("split")
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    addParagraph(document, "7、按欠款方归集的年末余额前五名的应收账款情况", "paragraph")
+    excelTableToWord(document, "按欠款方归集的年末余额前五名的应收账款情况", path, style=2, conditions=("账面余额",))
 
-            addParagraph(document, "1、期末单项计提坏账准备的应收账款", "paragraph")
-            excelTableToWord(document, "期末单项计提坏账准备的应收账款", path, style=2,conditions=("账面余额",))
+    # addParagraph(document, "8、由金融资产转移而终止确认的应收账款", "paragraph")
+    # excelTableToWord(document, "由金融资产转移而终止确认的应收账款", path, style=2, conditions=("终止确认金额",))
+    #
+    # addParagraph(document, "9、转移应收账款且继续涉入形成的资产、负债", "paragraph")
+    # excelTableToWord(document, "转移应收账款且继续涉入形成的资产负债", path, style=2, conditions=("期末数",))
 
-            addParagraph(document, "2、采用组合计提坏账准备的应收账款", "paragraph")
-            df = filterDateFrame("采用组合计提坏账准备的应收账款新金融工具",path,conditions=("期末余额","期初余额"))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["组合名称", "期末数", "nan", "nan", "期初数", "nan", "nan"],
-                          ["nan", "账面余额", "坏账准备", "计提比例(%)", "账面余额", "坏账准备", "计提比例(%)"],
-                          ]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-
-                for row in dc["data"][:-1]:
-                    combinationName = row[0]
-                    addParagraph(document, "{}新金融工具:".format(row[0]), "paragraph")
-                    df = pd.read_excel(path, sheet_name=combinationName)
-                    dc = df.to_dict("split")
-                    titles = [["项目", "期末数", "nan", "nan", "期初数", "nan", "nan"],
-                              ["nan", "账面余额", "坏账准备", "计提比例(%)", "账面余额", "坏账准备", "计提比例(%)"],
-                              ]
-                    titleLength = len(titles)
-                    rowLength = len(dc["index"]) + titleLength
-                    columnLength = len(dc["columns"])
-                    table = createBorderedTable(document, rowLength, columnLength)
-                    addCombineTitleSpecialReceivable(titles, table, [])
-                    addContentToCombineTitle(document, dc, table, titleLength, style=2)
-            else:
-                addParagraph(document, "不适用", "paragraph")
-
-            addParagraph(document, "3、坏账准备变动明细情况", "paragraph")
-            df = filterDateFrame("应收账款坏账准备变动明细情况新金融工具准则",path,conditions=("期初数","期末数"))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["项目", "期初数", "本期增加", "nan", "本期减少", "nan", "nan", "期末数"],
-                          ["nan", "nan", "计提", "其他", "转回", "核销", "其他", "nan"]]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialLast(titles, table)
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-            else:
-                addParagraph(document, "不适用", "paragraph")
-            # 添加4/5/6/7/8
-            addAccountsReceivableOther(document, path)
+    # if context["notes_params"]["tandardssForFinancialInstruments"] == "老金融工具准则":
+    #     # 原金融工具准则
+    #     df = filterDateFrame("应收账款期末数原金融工具准则",path,("期末账面余额",))
+    #     if len(df)>0:
+    #         dc = df.to_dict("split")
+    #         titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
+    #                   ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                   ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                   ]
+    #         titleLength = len(titles)
+    #         rowLength = len(dc["index"]) + titleLength
+    #         columnLength = len(dc["columns"])
+    #         table = createBorderedTable(document, rowLength, columnLength)
+    #         addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #         addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #         addParagraph(document, "（续）", "paragraph")
+    #     df = filterDateFrame("应收账款期初数原金融工具准则", path, ("期初账面余额",))
+    #     if len(df)>0:
+    #         dc = df.to_dict("split")
+    #         titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
+    #                   ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                   ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                   ]
+    #         titleLength = len(titles)
+    #         rowLength = len(dc["index"]) + titleLength
+    #         columnLength = len(dc["columns"])
+    #         table = createBorderedTable(document, rowLength, columnLength)
+    #         addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #         addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #
+    #     addParagraph(document, "1、期末单项金额重大并单项计提坏账准备的应收账款", "paragraph")
+    #     excelTableToWord(document, "期末单项计提坏账准备的应收账款", path, style=2,conditions=("账面余额",))
+    #
+    #     addParagraph(document, "2、按信用风险特征组合计提坏账准备的应收账款", "paragraph")
+    #     addParagraph(document, "（1）采用账龄分析法计提坏账准备的应收账款", "paragraph")
+    #     df = filterDateFrame("采用账龄分析法计提坏账准备的应收账款原准则",path,conditions=("期末账面余额","期初数账面余额"))
+    #     if len(df)>0:
+    #         dc = df.to_dict("split")
+    #         titles = [["账龄", "期末数", "nan", "nan", "期初数", "nan", "nan"],
+    #                   ["nan", "账面余额", "nan", "坏账准备", "账面余额", "nan", "坏账准备"],
+    #                   ["nan", "金额", "比例(%)", "nan", "金额", "比例(%)", "nan"],
+    #                   ]
+    #         titleLength = len(titles)
+    #         rowLength = len(dc["index"]) + titleLength
+    #         columnLength = len(dc["columns"])
+    #         table = createBorderedTable(document, rowLength, columnLength)
+    #         addCombineTitleSpecialReceivable(titles, table, [[2, 3], [2, 6]])
+    #         addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #     else:
+    #         addParagraph(document, "不适用", "paragraph")
+    #
+    #     addParagraph(document, "（2）采用其他组合方法计提坏账准备的应收账款", "paragraph")
+    #     df = filterDateFrame("采用其他组合方法计提坏账准备的应收账款原准则",path,("期末余额","期初余额"))
+    #     if len(df)>0:
+    #         dc = df.to_dict("split")
+    #         titles = [["组合名称", "期末数", "nan", "nan", "期初数", "nan", "nan"],
+    #                   ["nan", "账面余额", "计提比例（%）", "坏账准备", "账面余额", "计提比例（%）", "坏账准备"],
+    #                   ]
+    #         titleLength = len(titles)
+    #         rowLength = len(dc["index"]) + titleLength
+    #         columnLength = len(dc["columns"])
+    #         table = createBorderedTable(document, rowLength, columnLength)
+    #         addCombineTitleSpecialReceivable(titles, table, [])
+    #         addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #     else:
+    #         addParagraph(document, "不适用", "paragraph")
+    #
+    #     addParagraph(document, "3、期末单项金额虽不重大但单项计提坏账准备的应收账款", "paragraph")
+    #     excelTableToWord(document, "期末单项金额虽不重大但单项计提坏账准备的应收账款原准则", path, style=2,conditions=("账面余额",))
+    #     # 添加4/5/6/7/8
+    #     addAccountsReceivableOther(document, path)
+    # else:
+    #     if "新金融工具准则" in context["standardChange"]["implementationOfNewStandardsInThisPeriod"]:
+    #         # 首次执行新金融工具准则
+    #         df = filterDateFrame("应收账款期末数首次新金融工具准则", path, ("期末账面余额",))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
+    #                       ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                       ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #             addParagraph(document, "（续）", "paragraph")
+    #         df = filterDateFrame("应收账款期初数首次新金融工具准则", path, ("期初账面余额",))
+    #         if len(df)>0:
+    #             titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
+    #                       ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                       ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             dc = df.to_dict("split")
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #         else:
+    #             addParagraph(document, "不适用", "paragraph")
+    #
+    #         addParagraph(document, "1、期末单项计提坏账准备的应收账款", "paragraph")
+    #         excelTableToWord(document, "期末单项计提坏账准备的应收账款", path, style=2,conditions=("账面余额",))
+    #
+    #         addParagraph(document, "2、采用组合计提坏账准备的应收账款", "paragraph")
+    #         df = filterDateFrame("采用组合计提坏账准备的应收账款首次执行",path,conditions=("期末余额",))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["组合名称", "期末数", "nan", "nan"],
+    #                       ["nan", "账面余额", "坏账准备", "计提比例(%)"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #
+    #             for row in dc["data"][:-1]:
+    #                 if pd.isna(row[0]):
+    #                     break
+    #                 combinationName = "{}首次执行".format(row[0])
+    #                 addParagraph(document, "{}:".format(row[0]), "paragraph")
+    #                 df = pd.read_excel(path, sheet_name=combinationName)
+    #                 dc = df.to_dict("split")
+    #                 titles = [["项目", "期末数", "nan", "nan"],
+    #                           ["nan", "账面余额", "坏账准备", "计提比例(%)"],
+    #                           ]
+    #                 titleLength = len(titles)
+    #                 rowLength = len(dc["index"]) + titleLength
+    #                 columnLength = len(dc["columns"])
+    #                 table = createBorderedTable(document, rowLength, columnLength)
+    #                 addCombineTitleSpecialReceivable(titles, table, [])
+    #                 addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #         else:
+    #             addParagraph(document, "不适用", "paragraph")
+    #
+    #         addParagraph(document, "3、坏账准备变动明细情况", "paragraph")
+    #         df = filterDateFrame("应收账款坏账准备变动明细情况新金融工具准则",path,conditions=("期初数","期末数"))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["项目", "期初数", "本期增加", "nan", "本期减少", "nan", "nan", "期末数"],
+    #                       ["nan", "nan", "计提", "其他", "转回", "核销", "其他", "nan"]]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialLast(titles, table)
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #         else:
+    #             addParagraph(document, "不适用", "paragraph")
+    #         # 添加4/5/6/7/8
+    #         addAccountsReceivableOther(document, path)
+    #     else:
+    #         # 新金融工具准则
+    #         df = filterDateFrame("应收账款期末数新金融工具准则",path,conditions=("期末账面余额",))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
+    #                       ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                       ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #             addParagraph(document, "（续）", "paragraph")
+    #
+    #         df = filterDateFrame("应收账款期初数新金融工具准则", path, conditions=("期初账面余额",))
+    #         if len(df)>0:
+    #             titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
+    #                       ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                       ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             dc = df.to_dict("split")
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #
+    #         addParagraph(document, "1、期末单项计提坏账准备的应收账款", "paragraph")
+    #         excelTableToWord(document, "期末单项计提坏账准备的应收账款", path, style=2,conditions=("账面余额",))
+    #
+    #         addParagraph(document, "2、采用组合计提坏账准备的应收账款", "paragraph")
+    #         df = filterDateFrame("采用组合计提坏账准备的应收账款新金融工具",path,conditions=("期末余额","期初余额"))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["组合名称", "期末数", "nan", "nan", "期初数", "nan", "nan"],
+    #                       ["nan", "账面余额", "坏账准备", "计提比例(%)", "账面余额", "坏账准备", "计提比例(%)"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #
+    #             for row in dc["data"][:-1]:
+    #                 combinationName = row[0]
+    #                 addParagraph(document, "{}新金融工具:".format(row[0]), "paragraph")
+    #                 df = pd.read_excel(path, sheet_name=combinationName)
+    #                 dc = df.to_dict("split")
+    #                 titles = [["项目", "期末数", "nan", "nan", "期初数", "nan", "nan"],
+    #                           ["nan", "账面余额", "坏账准备", "计提比例(%)", "账面余额", "坏账准备", "计提比例(%)"],
+    #                           ]
+    #                 titleLength = len(titles)
+    #                 rowLength = len(dc["index"]) + titleLength
+    #                 columnLength = len(dc["columns"])
+    #                 table = createBorderedTable(document, rowLength, columnLength)
+    #                 addCombineTitleSpecialReceivable(titles, table, [])
+    #                 addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #         else:
+    #             addParagraph(document, "不适用", "paragraph")
+    #
+    #         addParagraph(document, "3、坏账准备变动明细情况", "paragraph")
+    #         df = filterDateFrame("应收账款坏账准备变动明细情况新金融工具准则",path,conditions=("期初数","期末数"))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["项目", "期初数", "本期增加", "nan", "本期减少", "nan", "nan", "期末数"],
+    #                       ["nan", "nan", "计提", "其他", "转回", "核销", "其他", "nan"]]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialLast(titles, table)
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #         else:
+    #             addParagraph(document, "不适用", "paragraph")
+    #         # 添加4/5/6/7/8
+    #         addAccountsReceivableOther(document, path)
 
 
 def addReceivablesFinancing(document, num, path, context):
@@ -493,252 +592,302 @@ def addOtherReceivablesOthers(document,path):
     addParagraph(document, "10、按应收金额确认的政府补助", "paragraph")
     excelTableToWord(document, "按应收金额确认的政府补助", path, style=2, conditions=("期末余额",))
 
-    addParagraph(document, "11、由金融资产转移而终止确认的应收账款", "paragraph")
-    excelTableToWord(document, "由金融资产转移而终止确认的应收账款", path, style=2, conditions=("终止确认金额",))
-
-    addParagraph(document, "12、转移应收账款且继续涉入形成的资产、负债", "paragraph")
-    excelTableToWord(document, "转移应收账款且继续涉入形成的资产负债", path, style=2, conditions=("期末数",))
+    # addParagraph(document, "11、由金融资产转移而终止确认的应收账款", "paragraph")
+    # excelTableToWord(document, "由金融资产转移而终止确认的应收账款", path, style=2, conditions=("终止确认金额",))
+    #
+    # addParagraph(document, "12、转移应收账款且继续涉入形成的资产、负债", "paragraph")
+    # excelTableToWord(document, "转移应收账款且继续涉入形成的资产负债", path, style=2, conditions=("期末数",))
 
 def addOtherReceivables(document, num, path, context):
     addTitle(document, "（{}）其他应收款".format(to_chinese(num)), 2, True)
-    if context["notes_params"]["tandardssForFinancialInstruments"] == "老金融工具准则":
-        # 原金融工具准则
-        excelTableToWord(document, "其他应收款原准则", path, style=2)
-        addParagraph(document, "1、应收利息", "paragraph")
-        addParagraph(document, "（1）应收利息分类", "paragraph")
-        excelTableToWord(document, "应收利息分类", path, style=2)
-        addParagraph(document, "（2）重要逾期利息", "paragraph")
-        excelTableToWord(document, "重要逾期利息", path, style=2,conditions=("期末余额",))
+    excelTableToWord(document, "其他应收款", path, style=2)
+    addParagraph(document, "1、应收利息", "paragraph")
+    addParagraph(document, "（1）应收利息分类", "paragraph")
+    excelTableToWord(document, "应收利息分类", path, style=2, conditions=("期末余额","期初余额"))
+    addParagraph(document, "（2）重要逾期利息", "paragraph")
+    excelTableToWord(document, "重要逾期利息", path, style=2, conditions=("期末余额",))
 
-        addParagraph(document, "2、应收股利", "paragraph")
-        excelTableToWord(document, "应收股利明细", path, style=2)
+    addParagraph(document, "2、应收股利", "paragraph")
+    addParagraph(document, "（1）明细情况", "paragraph")
+    excelTableToWord(document, "应收股利明细", path, style=2, conditions=("期末余额","期初余额"))
+    addParagraph(document, "（2）重要的账龄超过1年的应收股利 ", "paragraph")
+    excelTableToWord(document, "账龄一年以上重要的应收股利", path, style=2, conditions=("期末余额",))
 
-        addParagraph(document, "3、其他应收款项", "paragraph")
-        df = filterDateFrame("其他应收款项期末明细原准则",path,conditions=("期末账面余额",))
-        if len(df)>0:
-            dc = df.to_dict("split")
-            titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
-                      ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                      ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                      ]
-            titleLength = len(titles)
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-            addContentToCombineTitle(document, dc, table, titleLength, style=2)
-            addParagraph(document, "（续）", "paragraph")
-        df = filterDateFrame("其他应收款项期初明细原准则", path, conditions=("期初账面余额",))
-        if len(df)>0:
-            titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
-                      ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                      ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                      ]
-            titleLength = len(titles)
-            dc = df.to_dict("split")
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-            addContentToCombineTitle(document, dc, table, titleLength, style=2)
-
-        addParagraph(document, "（1）年末单项金额重大并单项计提坏账准备的其他应收款项", "paragraph")
-        excelTableToWord(document, "期末单项计提坏账准备的其他应收款", path, style=2,conditions=("账面余额",))
-
-        addParagraph(document, "（2）按信用风险特征组合计提坏账准备的其他应收款项", "paragraph")
-        addParagraph(document, "①采用账龄分析法计提坏账准备的其他应收款项", "paragraph")
-        df = filterDateFrame("采用账龄分析法计提坏账准备的其他应收款项原准则",path,conditions=("期末账面余额","期初数账面余额"))
-        if len(df)>0:
-            dc = df.to_dict("split")
-            titles = [["账龄", "期末数", "nan", "nan", "期初数", "nan", "nan"],
-                      ["nan", "账面余额", "nan", "坏账准备", "账面余额", "nan", "坏账准备"],
-                      ["nan", "金额", "比例(%)", "nan", "金额", "比例(%)", "nan"],
-                      ]
-            titleLength = len(titles)
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTitleSpecialReceivable(titles, table, [[2, 3], [2, 6]])
-            addContentToCombineTitle(document, dc, table, titleLength, style=2)
-        else:
-            addParagraph(document, "不适用", "paragraph")
-
-        addParagraph(document, "②采用余额百分比法或其他组合方法计提坏账准备的其他应收款项", "paragraph")
-        df = filterDateFrame("采用其他组合方法计提坏账准备的其他应收款原准则", path, conditions=("期末余额", "期初余额"))
-        if len(df)>0:
-            dc = df.to_dict("split")
-            titles = [["组合名称", "期末数", "nan", "nan", "期初数", "nan", "nan"],
-                      ["nan", "账面余额", "计提比例（%）", "坏账准备", "账面余额", "计提比例（%）", "坏账准备"],
-                      ]
-            titleLength = len(titles)
-            rowLength = len(dc["index"]) + titleLength
-            columnLength = len(dc["columns"])
-            table = createBorderedTable(document, rowLength, columnLength)
-            addCombineTitleSpecialReceivable(titles, table, [])
-            addContentToCombineTitle(document, dc, table, titleLength, style=2)
-        else:
-            addParagraph(document, "不适用", "paragraph")
-
-        addParagraph(document, "（3）期末单项金额虽不重大但单项计提坏账准备的其他应收款项", "paragraph")
-        excelTableToWord(document, "期末单项金额虽不重大但单项计提坏账准备的其他应收款原准则", path, style=2,conditions=("账面余额",))
-
-        addParagraph(document, "（4）本期重要的坏账准备收回或转回情况", "paragraph")
-        excelTableToWord(document, "其他应收款收回或转回的坏账准备情况", path, style=2,conditions=("转回或收回金额",))
-
-        addParagraph(document, "（5）本期实际核销的其他应收款情况", "paragraph")
-        excelTableToWord(document, "本年实际核销的其他应收款情况", path, style=2,conditions=("核销金额",))
-
-        addParagraph(document, "（6）按欠款方归集的年末金额前五名的其他应收款项情况", "paragraph")
-        excelTableToWord(document, "按欠款方归集的年末金额前五名的其他应收款项情况", path, style=2,conditions=("账面余额",))
-
-        addParagraph(document, "（7）由金融资产转移而终止确认的其他应收款项", "paragraph")
-        excelTableToWord(document, "由金融资产转移而终止确认的其他应收款项", path, style=2,conditions=("终止确认金额",))
-
-        addParagraph(document, "（8）转移其他应收款且继续涉入形成的资产、负债", "paragraph")
-        excelTableToWord(document, "转移其他应收款且继续涉入形成的资产负债", path, style=2,conditions=("期末数",))
-
-        addParagraph(document, "（9）按应收金额确认的政府补助", "paragraph")
-        excelTableToWord(document, "按应收金额确认的政府补助", path, style=2,conditions=("期末余额",))
+    addParagraph(document, "3、其他应收款", "paragraph")
+    addParagraph(document, "（1）其他应收款款项性质分类情况", "paragraph")
+    excelTableToWord(document, "其他应收款按性质分类情况", path, style=2, conditions=("期末余额","期初余额"))
+    addParagraph(document, "（2）账龄情况", "paragraph")
+    excelTableToWord(document, "其他应收款账龄情况", path, style=2, conditions=("期末余额",))
+    addParagraph(document, "（3）坏账准备变动明细情况", "paragraph")
+    df = filterDateFrame("其他应收款坏账准备变动情况", path, conditions=("第一阶段", "第二阶段", "第三阶段"))
+    if len(df) > 0:
+        dc = df.to_dict("split")
+        titles = [["项目", "第一阶段", "第二阶段", "第三阶段", "合  计"],
+                  ["nan", "未来12个月预期信用损失", "整个存续期预期信用损失(未发生信用减值)", "整个存续期预期信用损失(已发生信用减值)", "nan"]]
+        titleLength = len(titles)
+        rowLength = len(dc["index"]) + titleLength
+        columnLength = len(dc["columns"])
+        table = createBorderedTable(document, rowLength, columnLength)
+        addCombineTitleSpecialLast(titles, table)
+        addContentToCombineTitle(document, dc, table, titleLength, style=2)
     else:
-        if "新金融工具准则" in context["standardChange"]["implementationOfNewStandardsInThisPeriod"]:
-            # 首次执行新金融工具准则
-            addParagraph(document, "1、明细情况", "paragraph")
-            addParagraph(document, "（1）类别明细情况", "paragraph")
-            df = filterDateFrame("其他应收款期末数首次新金融工具准则",path,conditions=("期末账面余额",))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
-                          ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                          ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                          ]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-                addParagraph(document, "（续）", "paragraph")
+        addParagraph(document, "不适用", "paragraph")
+    addParagraph(document, "（4）坏账准备的情况", "paragraph")
+    excelTableToWord(document, "坏账准备的情况", path, style=2)
+    addParagraph(document, "（5）本期重要的坏账准备收回或转回情况", "paragraph")
+    excelTableToWord(document, "其他应收款收回或转回的坏账准备情况", path, style=2, conditions=("转回或收回金额",))
+    addParagraph(document, "（6）本期实际核销的其他应收款情况", "paragraph")
+    excelTableToWord(document, "本年实际核销的应收账款情况", path, style=2, conditions=("核销金额",))
+    addParagraph(document, "（7）按欠款方归集的年末余额前五名的其他应收款情况", "paragraph")
+    excelTableToWord(document, "按欠款方归集的年末金额前五名的其他应收款项情况", path, style=2, conditions=("账面余额",))
+    addParagraph(document, "（8）按应收金额确认的政府补助", "paragraph")
+    excelTableToWord(document, "按应收金额确认的政府补助", path, style=2, conditions=("期末余额",))
 
-            df = filterDateFrame("其他应收款期初数首次新金融工具准则", path, conditions=("期初账面余额",))
-            if len(df)>0:
-                titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
-                          ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                          ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                          ]
-                titleLength = len(titles)
-                dc = df.to_dict("split")
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    # addParagraph(document, "（9）由金融资产转移而终止确认的应收账款", "paragraph")
+    # excelTableToWord(document, "由金融资产转移而终止确认的应收账款", path, style=2, conditions=("终止确认金额",))
+    #
+    # addParagraph(document, "（10）转移应收账款且继续涉入形成的资产、负债", "paragraph")
+    # excelTableToWord(document, "转移应收账款且继续涉入形成的资产负债", path, style=2, conditions=("期末数",))
 
-            addParagraph(document, "（2）期末单项计提坏账准备的其他应收款", "paragraph")
-            excelTableToWord(document, "期末单项计提坏账准备的其他应收款", path, style=2,conditions=("账面余额",))
 
-            addParagraph(document, "（3）采用组合计提坏账准备的其他应收款", "paragraph")
-            df = filterDateFrame("采用组合计提坏账准备的其他应收款首次执行",path,conditions=("期末余额",))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["组合名称", "期末数", "nan", "nan"],
-                          ["nan", "账面余额", "坏账准备", "计提比例(%)"],
-                          ]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-            else:
-                addParagraph(document, "不适用", "paragraph")
-
-            addParagraph(document, "2、账龄情况", "paragraph")
-            excelTableToWord(document, "其他应收款账龄情况新金融工具准则", path, style=2,conditions=("期末余额","期初余额"))
-
-            addParagraph(document, "3、坏账准备变动明细情况", "paragraph")
-            df = filterDateFrame("其他应收款坏账准备变动情况新金融工具准则",path,conditions=("第一阶段","第二阶段","第三阶段"))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["项目", "第一阶段", "第二阶段", "第三阶段", "合  计"],
-                          ["nan", "未来12个月预期信用损失", "整个存续期预期信用损失(未发生信用减值)", "整个存续期预期信用损失(已发生信用减值)", "nan"]]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialLast(titles, table)
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-            else:
-                addParagraph(document, "不适用", "paragraph")
-
-            addOtherReceivablesOthers(document, path)
-        else:
-            # 新金融工具准则
-            addParagraph(document, "1、明细情况", "paragraph")
-            addParagraph(document, "（1）类别明细情况", "paragraph")
-            df = filterDateFrame("其他应收款期末数新金融工具准则",path,conditions=("期末账面余额",))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
-                          ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                          ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                          ]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-                addParagraph(document, "（续）", "paragraph")
-            df = filterDateFrame("其他应收款期初数新金融工具准则", path, conditions=("期初账面余额",))
-            if len(df)>0:
-                titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
-                          ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
-                          ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
-                          ]
-                titleLength = len(titles)
-                dc = df.to_dict("split")
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-
-            addParagraph(document, "（2）期末单项计提坏账准备的其他应收款", "paragraph")
-            excelTableToWord(document, "期末单项计提坏账准备的其他应收款", path, style=2, conditions=("账面余额",))
-
-            addParagraph(document, "（3）采用组合计提坏账准备的其他应收款", "paragraph")
-            df = filterDateFrame("采用组合计提坏账准备的其他应收款新金融工具准则", path, conditions=("期末余额","期初余额"))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["组合名称", "期末数", "nan", "nan", "期初数", "nan", "nan"],
-                          ["nan", "账面余额", "计提比例（%）", "坏账准备", "账面余额", "计提比例（%）", "坏账准备"],
-                          ]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialReceivable(titles, table, [])
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-
-            addParagraph(document, "2、账龄情况", "paragraph")
-            excelTableToWord(document, "其他应收款账龄情况新金融工具准则", path, style=2,conditions=("期末余额","期初余额"))
-
-            addParagraph(document, "3、坏账准备变动明细情况", "paragraph")
-            df = filterDateFrame("其他应收款坏账准备变动情况新金融工具准则", path, conditions=("第一阶段", "第二阶段", "第三阶段"))
-            if len(df)>0:
-                dc = df.to_dict("split")
-                titles = [["项目", "第一阶段", "第二阶段", "第三阶段", "合  计"],
-                          ["nan", "未来12个月预期信用损失", "整个存续期预期信用损失(未发生信用减值)", "整个存续期预期信用损失(已发生信用减值)", "nan"]]
-                titleLength = len(titles)
-                rowLength = len(dc["index"]) + titleLength
-                columnLength = len(dc["columns"])
-                table = createBorderedTable(document, rowLength, columnLength)
-                addCombineTitleSpecialLast(titles, table)
-                addContentToCombineTitle(document, dc, table, titleLength, style=2)
-            else:
-                addParagraph(document, "不适用", "paragraph")
-
-            addOtherReceivablesOthers(document, path)
+    # if context["notes_params"]["tandardssForFinancialInstruments"] == "老金融工具准则":
+    #     # 原金融工具准则
+    #     excelTableToWord(document, "其他应收款原准则", path, style=2)
+    #     addParagraph(document, "1、应收利息", "paragraph")
+    #     addParagraph(document, "（1）应收利息分类", "paragraph")
+    #     excelTableToWord(document, "应收利息分类", path, style=2)
+    #     addParagraph(document, "（2）重要逾期利息", "paragraph")
+    #     excelTableToWord(document, "重要逾期利息", path, style=2,conditions=("期末余额",))
+    #
+    #     addParagraph(document, "2、应收股利", "paragraph")
+    #     excelTableToWord(document, "应收股利明细", path, style=2)
+    #
+    #     addParagraph(document, "3、其他应收款项", "paragraph")
+    #     df = filterDateFrame("其他应收款项期末明细原准则",path,conditions=("期末账面余额",))
+    #     if len(df)>0:
+    #         dc = df.to_dict("split")
+    #         titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
+    #                   ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                   ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                   ]
+    #         titleLength = len(titles)
+    #         rowLength = len(dc["index"]) + titleLength
+    #         columnLength = len(dc["columns"])
+    #         table = createBorderedTable(document, rowLength, columnLength)
+    #         addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #         addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #         addParagraph(document, "（续）", "paragraph")
+    #     df = filterDateFrame("其他应收款项期初明细原准则", path, conditions=("期初账面余额",))
+    #     if len(df)>0:
+    #         titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
+    #                   ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                   ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                   ]
+    #         titleLength = len(titles)
+    #         dc = df.to_dict("split")
+    #         rowLength = len(dc["index"]) + titleLength
+    #         columnLength = len(dc["columns"])
+    #         table = createBorderedTable(document, rowLength, columnLength)
+    #         addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #         addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #
+    #     addParagraph(document, "（1）年末单项金额重大并单项计提坏账准备的其他应收款项", "paragraph")
+    #     excelTableToWord(document, "期末单项计提坏账准备的其他应收款", path, style=2,conditions=("账面余额",))
+    #
+    #     addParagraph(document, "（2）按信用风险特征组合计提坏账准备的其他应收款项", "paragraph")
+    #     addParagraph(document, "①采用账龄分析法计提坏账准备的其他应收款项", "paragraph")
+    #     df = filterDateFrame("采用账龄分析法计提坏账准备的其他应收款项原准则",path,conditions=("期末账面余额","期初数账面余额"))
+    #     if len(df)>0:
+    #         dc = df.to_dict("split")
+    #         titles = [["账龄", "期末数", "nan", "nan", "期初数", "nan", "nan"],
+    #                   ["nan", "账面余额", "nan", "坏账准备", "账面余额", "nan", "坏账准备"],
+    #                   ["nan", "金额", "比例(%)", "nan", "金额", "比例(%)", "nan"],
+    #                   ]
+    #         titleLength = len(titles)
+    #         rowLength = len(dc["index"]) + titleLength
+    #         columnLength = len(dc["columns"])
+    #         table = createBorderedTable(document, rowLength, columnLength)
+    #         addCombineTitleSpecialReceivable(titles, table, [[2, 3], [2, 6]])
+    #         addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #     else:
+    #         addParagraph(document, "不适用", "paragraph")
+    #
+    #     addParagraph(document, "②采用余额百分比法或其他组合方法计提坏账准备的其他应收款项", "paragraph")
+    #     df = filterDateFrame("采用其他组合方法计提坏账准备的其他应收款原准则", path, conditions=("期末余额", "期初余额"))
+    #     if len(df)>0:
+    #         dc = df.to_dict("split")
+    #         titles = [["组合名称", "期末数", "nan", "nan", "期初数", "nan", "nan"],
+    #                   ["nan", "账面余额", "计提比例（%）", "坏账准备", "账面余额", "计提比例（%）", "坏账准备"],
+    #                   ]
+    #         titleLength = len(titles)
+    #         rowLength = len(dc["index"]) + titleLength
+    #         columnLength = len(dc["columns"])
+    #         table = createBorderedTable(document, rowLength, columnLength)
+    #         addCombineTitleSpecialReceivable(titles, table, [])
+    #         addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #     else:
+    #         addParagraph(document, "不适用", "paragraph")
+    #
+    #     addParagraph(document, "（3）期末单项金额虽不重大但单项计提坏账准备的其他应收款项", "paragraph")
+    #     excelTableToWord(document, "期末单项金额虽不重大但单项计提坏账准备的其他应收款原准则", path, style=2,conditions=("账面余额",))
+    #
+    #     addParagraph(document, "（4）本期重要的坏账准备收回或转回情况", "paragraph")
+    #     excelTableToWord(document, "其他应收款收回或转回的坏账准备情况", path, style=2,conditions=("转回或收回金额",))
+    #
+    #     addParagraph(document, "（5）本期实际核销的其他应收款情况", "paragraph")
+    #     excelTableToWord(document, "本年实际核销的其他应收款情况", path, style=2,conditions=("核销金额",))
+    #
+    #     addParagraph(document, "（6）按欠款方归集的年末金额前五名的其他应收款项情况", "paragraph")
+    #     excelTableToWord(document, "按欠款方归集的年末金额前五名的其他应收款项情况", path, style=2,conditions=("账面余额",))
+    #
+    #     addParagraph(document, "（7）由金融资产转移而终止确认的其他应收款项", "paragraph")
+    #     excelTableToWord(document, "由金融资产转移而终止确认的其他应收款项", path, style=2,conditions=("终止确认金额",))
+    #
+    #     addParagraph(document, "（8）转移其他应收款且继续涉入形成的资产、负债", "paragraph")
+    #     excelTableToWord(document, "转移其他应收款且继续涉入形成的资产负债", path, style=2,conditions=("期末数",))
+    #
+    #     addParagraph(document, "（9）按应收金额确认的政府补助", "paragraph")
+    #     excelTableToWord(document, "按应收金额确认的政府补助", path, style=2,conditions=("期末余额",))
+    # else:
+    #     if "新金融工具准则" in context["standardChange"]["implementationOfNewStandardsInThisPeriod"]:
+    #         # 首次执行新金融工具准则
+    #         addParagraph(document, "1、明细情况", "paragraph")
+    #         addParagraph(document, "（1）类别明细情况", "paragraph")
+    #         df = filterDateFrame("其他应收款期末数首次新金融工具准则",path,conditions=("期末账面余额",))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
+    #                       ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                       ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #             addParagraph(document, "（续）", "paragraph")
+    #
+    #         df = filterDateFrame("其他应收款期初数首次新金融工具准则", path, conditions=("期初账面余额",))
+    #         if len(df)>0:
+    #             titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
+    #                       ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                       ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             dc = df.to_dict("split")
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #
+    #         addParagraph(document, "（2）期末单项计提坏账准备的其他应收款", "paragraph")
+    #         excelTableToWord(document, "期末单项计提坏账准备的其他应收款", path, style=2,conditions=("账面余额",))
+    #
+    #         addParagraph(document, "（3）采用组合计提坏账准备的其他应收款", "paragraph")
+    #         df = filterDateFrame("采用组合计提坏账准备的其他应收款首次执行",path,conditions=("期末余额",))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["组合名称", "期末数", "nan", "nan"],
+    #                       ["nan", "账面余额", "坏账准备", "计提比例(%)"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #         else:
+    #             addParagraph(document, "不适用", "paragraph")
+    #
+    #         addParagraph(document, "2、账龄情况", "paragraph")
+    #         excelTableToWord(document, "其他应收款账龄情况新金融工具准则", path, style=2,conditions=("期末余额","期初余额"))
+    #
+    #         addParagraph(document, "3、坏账准备变动明细情况", "paragraph")
+    #         df = filterDateFrame("其他应收款坏账准备变动情况新金融工具准则",path,conditions=("第一阶段","第二阶段","第三阶段"))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["项目", "第一阶段", "第二阶段", "第三阶段", "合  计"],
+    #                       ["nan", "未来12个月预期信用损失", "整个存续期预期信用损失(未发生信用减值)", "整个存续期预期信用损失(已发生信用减值)", "nan"]]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialLast(titles, table)
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #         else:
+    #             addParagraph(document, "不适用", "paragraph")
+    #
+    #         addOtherReceivablesOthers(document, path)
+    #     else:
+    #         # 新金融工具准则
+    #         addParagraph(document, "1、明细情况", "paragraph")
+    #         addParagraph(document, "（1）类别明细情况", "paragraph")
+    #         df = filterDateFrame("其他应收款期末数新金融工具准则",path,conditions=("期末账面余额",))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["种类", "期末数", "nan", "nan", "nan", "nan"],
+    #                       ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                       ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #             addParagraph(document, "（续）", "paragraph")
+    #         df = filterDateFrame("其他应收款期初数新金融工具准则", path, conditions=("期初账面余额",))
+    #         if len(df)>0:
+    #             titles = [["种类", "期初数", "nan", "nan", "nan", "nan"],
+    #                       ["nan", "账面余额", "nan", "坏账准备", "nan", "账面价值"],
+    #                       ["nan", "金额", "比例(%)", "金额", "计提比例(%)", "nan"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             dc = df.to_dict("split")
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [[2, 5]])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #
+    #         addParagraph(document, "（2）期末单项计提坏账准备的其他应收款", "paragraph")
+    #         excelTableToWord(document, "期末单项计提坏账准备的其他应收款", path, style=2, conditions=("账面余额",))
+    #
+    #         addParagraph(document, "（3）采用组合计提坏账准备的其他应收款", "paragraph")
+    #         df = filterDateFrame("采用组合计提坏账准备的其他应收款新金融工具准则", path, conditions=("期末余额","期初余额"))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["组合名称", "期末数", "nan", "nan", "期初数", "nan", "nan"],
+    #                       ["nan", "账面余额", "计提比例（%）", "坏账准备", "账面余额", "计提比例（%）", "坏账准备"],
+    #                       ]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialReceivable(titles, table, [])
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #
+    #         addParagraph(document, "2、账龄情况", "paragraph")
+    #         excelTableToWord(document, "其他应收款账龄情况新金融工具准则", path, style=2,conditions=("期末余额","期初余额"))
+    #
+    #         addParagraph(document, "3、坏账准备变动明细情况", "paragraph")
+    #         df = filterDateFrame("其他应收款坏账准备变动情况新金融工具准则", path, conditions=("第一阶段", "第二阶段", "第三阶段"))
+    #         if len(df)>0:
+    #             dc = df.to_dict("split")
+    #             titles = [["项目", "第一阶段", "第二阶段", "第三阶段", "合  计"],
+    #                       ["nan", "未来12个月预期信用损失", "整个存续期预期信用损失(未发生信用减值)", "整个存续期预期信用损失(已发生信用减值)", "nan"]]
+    #             titleLength = len(titles)
+    #             rowLength = len(dc["index"]) + titleLength
+    #             columnLength = len(dc["columns"])
+    #             table = createBorderedTable(document, rowLength, columnLength)
+    #             addCombineTitleSpecialLast(titles, table)
+    #             addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    #         else:
+    #             addParagraph(document, "不适用", "paragraph")
+    #
+    #         addOtherReceivablesOthers(document, path)
 
 # 存货
 def addInventory(document, num, path, context):
@@ -1568,15 +1717,18 @@ def addEquity(document, num, path, context):
 def addOtherEquityInstruments(document, num, path, context):
     addTitle(document, "（{}）其他权益工具".format(to_chinese(num)), 2, True)
     df = filterDateFrame("其他权益工具",path,conditions=("期初账面价值","期末账面价值"))
-    dc = df.to_dict("split")
-    titles = [["项  目", "期初余额", "nan", "本期增加", "nan", "本期减少", "nan", "期末余额", "nan"],
-              ["nan", "数量", "账面价值", "数量", "账面价值", "数量", "账面价值", "数量", "账面价值"]]
-    titleLength = len(titles)
-    rowLength = len(dc["index"]) + titleLength
-    columnLength = len(dc["columns"])
-    table = createBorderedTable(document, rowLength, columnLength)
-    addCombineTitleSpecialReceivable(titles, table, [[1, 7]])
-    addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    if len(df)>0:
+        dc = df.to_dict("split")
+        titles = [["项  目", "期初余额", "nan", "本期增加", "nan", "本期减少", "nan", "期末余额", "nan"],
+                  ["nan", "数量", "账面价值", "数量", "账面价值", "数量", "账面价值", "数量", "账面价值"]]
+        titleLength = len(titles)
+        rowLength = len(dc["index"]) + titleLength
+        columnLength = len(dc["columns"])
+        table = createBorderedTable(document, rowLength, columnLength)
+        addCombineTitleSpecialReceivable(titles, table, [[1, 7]])
+        addContentToCombineTitle(document, dc, table, titleLength, style=2)
+    else:
+        addParagraph(document, "不适用", "paragraph")
 
 
 def addCapitalReserve(document, num, path, context):
@@ -1817,11 +1969,17 @@ def addCashFlowReplenishment(document, num, path, context):
     addParagraph(document, "1、现金流量表补充资料", "paragraph")
     try:
         addParagraph(document, "将净利润调节为经营活动现金流量", "paragraph")
-        excelTableToWord(document, "将净利润调节为经营活动现金流量", path, style=2, conditions=("本期数","上年同期数"))
-        addParagraph(document, "不涉及现金收支的重大投资和筹资活动", "paragraph")
-        excelTableToWord(document, "不涉及现金收支的重大投资和筹资活动", path, style=2, conditions=("本期数", "上年同期数"))
+        excelTableToWord(document, "将净利润调节为经营活动现金流量", path, style=3, conditions=("本期数","上年同期数"))
+
+        df = filterDateFrame("不涉及现金收支的重大投资和筹资活动", path, conditions=("本期数", "上年同期数"))
+        if len(df) > 0:
+            addParagraph(document, "不涉及现金收支的重大投资和筹资活动", "paragraph")
+            dfToWord(document, df, style=2)
+        # addParagraph(document, "不涉及现金收支的重大投资和筹资活动", "paragraph")
+        # excelTableToWord(document, "不涉及现金收支的重大投资和筹资活动", path, style=2, conditions=("本期数", "上年同期数"))
+
         addParagraph(document, "现金及现金等价物净变动情况", "paragraph")
-        excelTableToWord(document, "现金及现金等价物净变动情况", path, style=2, conditions=("本期数", "上年同期数"))
+        excelTableToWord(document, "现金及现金等价物净变动情况", path, style=3, conditions=("本期数", "上年同期数"))
     except Exception as e:
         excelTableToWord(document, "现金流量表补充资料", path, style=2, conditions=("本期数", "上年同期数"))
 
