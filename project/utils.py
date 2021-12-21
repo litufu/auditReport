@@ -664,18 +664,28 @@ def set_docx_table_row_height(path, reportType,height="370"):
 
     for key, table in enumerate(tables[:]):
         if reportType=="合并":
-            if key < 12:
+            if key < 36:
                 continue
             else:
                 for i, row in enumerate(table.rows[:]):  # 读每行
                     set_row_height(row,height)
+                    for cell in row.cells:
+                        print(cell.text)
         else:
-            if key < 6:
+            if key < 18:
                 continue
             else:
                 for i, row in enumerate(table.rows[:]):  # 读每行
                     set_row_height(row,height)
+                    for cell in row.cells:
+                        print(cell.text)
+    document.save(path)
 
 
 
+if __name__ == '__main__':
+    # 设置所有表格的行高
+    # 数据初始化
 
+    # 报告类型：合并、单体
+    set_docx_table_row_height("model.docx", "单体", height="370")
