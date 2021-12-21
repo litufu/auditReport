@@ -12,11 +12,12 @@ from project.noteappended import addNoteAppended
 from project.fsmodel import fillTable
 from project.computeNo import computeNo
 from project.constants import comparativeTable,tables,contrastSubjects,balanceTitlesState,balanceTitlesList,profitTitlesState,profitTitlesList
+from project.utils import set_docx_table_row_height
 
 
 if __name__ == '__main__':
-    CURRENTPATH = r"E:\auditReport\project\model.xlsx"
-    PARENTPATH = r"E:\auditReport\project\model.xlsx"
+    CURRENTPATH = r"D:\auditReport\project\model.xlsx"
+    PARENTPATH = r"D:\auditReport\project\model.xlsx"
     parent_path = os.path.dirname(CURRENTPATH)
     filename = os.path.basename(CURRENTPATH)
     new_filename = "{}.docx".format(filename.replace(".xlsx","").replace("TB",""))
@@ -48,3 +49,15 @@ if __name__ == '__main__':
     addNoteAppended(document, CURRENTPATH,PARENTPATH,context, comparativeTable, isAll=False)
 
     document.save(new_path)
+
+    # 设置所有表格的行高
+    # 数据初始化
+    context = initData(CURRENTPATH)
+    # 报告类型：合并、单体
+    reportType = context["report_params"]["type"]
+    set_docx_table_row_height(new_path, reportType, height="370")
+
+
+
+
+

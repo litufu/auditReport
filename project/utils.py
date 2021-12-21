@@ -643,3 +643,39 @@ def filterDateFrame(sheetName, xlsxPath,conditions=("期末数","期初数")):
             return df
     df1 = df[s]
     return df1
+
+
+def set_row_height(row,height="370"):
+    from docx.oxml.shared import OxmlElement, qn
+
+    # https://stackoverflow.com/questions/37532283/python-how-to-adjust-row-height-of-table-in-docx
+    tr = row._tr
+    trPr = tr.get_or_add_trPr()
+    trHeight = OxmlElement('w:trHeight')
+    trHeight.set(qn('w:val'), height)
+    trHeight.set(qn('w:hRule'), "atLeast")
+    trPr.append(trHeight)
+
+
+def set_docx_table_row_height(path, reportType,height="370"):
+    from docx import Document  # 导入库
+    document = Document(path)  # 读入文件
+    tables = document.tables  # 获取文件中的表格集
+
+    for key, table in enumerate(tables[:]):
+        if reportType=="合并":
+            if key < 12:
+                continue
+            else:
+                for i, row in enumerate(table.rows[:]):  # 读每行
+                    set_row_height(row,height)
+        else:
+            if key < 6:
+                continue
+            else:
+                for i, row in enumerate(table.rows[:]):  # 读每行
+                    set_row_height(row,height)
+
+
+
+
