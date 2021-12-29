@@ -937,12 +937,12 @@ def addInventory(document, num, path, context):
         addParagraph(document, "3、确定可变现净值的具体依据、本期转回或转销存货跌价准备的原因", "paragraph")
         excelTableToWord(document, "确定可变现净值的具体依据", path, style=2,conditions=())
 
-        df = filterDateFrame("存货期末余额中借款费用资本化情况", path,conditions=("期末借款资本化余额",))
+        df = filterDateFrame("存货期末余额中借款费用资本化情况", path,conditions=("期初数","本期增加","本期减少","期末数"))
         if len(df) > 0:
             addParagraph(document, "4、存货期末余额中借款费用资本化情况：", "paragraph")
             dfToWord(document, df, style=2)
     else:
-        df = filterDateFrame("存货期末余额中借款费用资本化情况", path,conditions=("期末借款资本化余额",))
+        df = filterDateFrame("存货期末余额中借款费用资本化情况", path,conditions=("期初数","本期增加","本期减少","期末数"))
         if len(df) > 0:
             addParagraph(document, "2、存货期末余额中借款费用资本化情况：", "paragraph")
             dfToWord(document, df, style=2)
@@ -1815,6 +1815,12 @@ def addRevenueCost(document, num, path, context):
         addContentToCombineTitle(document, dc, table, titleLength, style=2)
     else:
         addParagraph(document, "不适用", "paragraph")
+    # 添加按照收入确认时间分解情况
+    try:
+        addParagraph(document, "3、营业收入分解情况", "paragraph")
+        excelTableToWord(document, "按收入确认时点分解", path, style=2, conditions=("在某一时点确认", "在某一时段内确认", "租赁收入", "其他收入"), sort=False)
+    except Exception as e:
+        print('没有按照收入确认时点分解')
 
 
 def addTaxesAndSurcharges(document, num, path, context):
@@ -1880,6 +1886,11 @@ def addIncomeFromAssetDisposal(document, num, path, context):
 def addNonOperatingIncome(document, num, path, context):
     addTitle(document, "（{}）营业外收入".format(to_chinese(num)), 2, True)
     excelTableToWord(document, "营业外收入", path, style=2,conditions=("本期数","上年同期数"),sort=True)
+    df = filterDateFrame("计入当期损益的政府补助明细", path, conditions=("本期数", "本期数"))
+    if len(df)>0:
+        addParagraph(document, "注：计入当期损益的政府补助明细：", "paragraph")
+        excelTableToWord(document, "计入当期损益的政府补助明细", path, style=2, conditions=("本期数", "上年同期数"), sort=True)
+
 
 
 def addNonOperatingExpenses(document, num, path, context):
